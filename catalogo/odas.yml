@@ -1,8 +1,8 @@
 repositorios:
-  odas-arquitetura-software: {url: "https://github.com/aulas-marco/odas-arquitetura-software", commit: "bd84630"}
+  odas-arquitetura-software: {url: "https://github.com/aulas-marco/odas-arquitetura-software", commit: "9dc7cdf"}
 
 trilhas:
-  - {numero: 1, titulo: "Módulo 1 — Visão geral de estilos arquiteturais"}
+  - {numero: 1, titulo: "Visão geral de estilos arquiteturais (Módulo 1)"}
 
 odas:
   - id: "01"

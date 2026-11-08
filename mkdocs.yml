@@ -51,5 +51,5 @@ markdown_extensions:
 
 nav:
   - Catálogo de ODAs: index.md
-  - Módulo 0 — Preparar o ambiente: modulo-0/index.md
+  - Preparação do ambiente (Módulo 0): modulo-0/index.md
   - Rastreabilidade: rastreabilidade.md

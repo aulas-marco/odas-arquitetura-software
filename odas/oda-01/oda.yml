@@ -5,67 +5,67 @@ abas:
   titulo: Objetivo
   blocos:
   - tipo: legenda
-    texto: 'Esta ODA mostra, em código Python que você executa sem escrever nenhuma linha, dois estilos de organização interna
-      de um backend. A atividade dura 25 minutos: 2 de Objetivo, 8 de Conceitos, 12 de Laboratório e 3 de Verificação.'
+    texto: Esta ODA apresenta dois estilos de organização interna de um backend por meio de programas Python prontos para
+      execução. A atividade dura 25 minutos distribuídos entre as quatro abas.
   - tipo: glossario
-    texto: Os termos abaixo aparecem nas abas desta ODA, na ordem em que surgem. Cada aba volta a explicá-los no primeiro
-      uso, porque você pode abrir qualquer aba diretamente.
+    texto: Os termos abaixo aparecem nas abas desta ODA na ordem em que surgem. Cada aba repete a explicação do termo no primeiro
+      uso, porque o aluno pode abrir qualquer aba diretamente.
     itens:
     - termo: Estilo arquitetural
-      definicao: 'Forma conhecida de organizar as partes de um sistema: os elementos, as ligações entre eles e as regras sobre
-        o que pode depender de quê. Camadas e monólito modular são dois estilos.'
+      definicao: Forma conhecida de organizar as partes de um sistema e as regras de dependência entre elas. Camadas e monólito
+        modular são estilos arquiteturais.
       referencia:
         rotulo: Material oficial · Estilos arquiteturais
         url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/conceitos/#estilos-arquiteturais
     - termo: Camada
-      definicao: Grupo de código com uma única responsabilidade técnica, como apresentação, serviço, domínio ou repositório.
-        A regra do estilo diz que cada camada só chama a camada permitida.
+      definicao: Grupo de código com uma única responsabilidade técnica. O estilo em camadas define quais camadas cada camada
+        pode chamar.
     - termo: Regra de negócio
-      definicao: Condição que o negócio exige, independente de tecnologia. Na agenda clínica desta ODA, a regra é que um médico
-        não pode ter duas consultas no mesmo horário.
+      definicao: Condição exigida pelo negócio que vale para qualquer tecnologia adotada. Na agenda clínica desta ODA, a regra
+        proíbe duas consultas do mesmo médico em horários sobrepostos.
     - termo: HTTP 201 e HTTP 409
-      definicao: Códigos de resposta do protocolo da web. O 201 informa que um recurso foi criado, e o 409 informa que o pedido
-        entrou em conflito com o estado atual, como um horário já ocupado.
+      definicao: Códigos de resposta do protocolo HTTP. O código 201 informa a criação de um recurso, e o código 409 informa
+        que o pedido conflita com o estado atual do recurso.
       referencia:
         rotulo: MDN · Códigos de status HTTP
         url: https://developer.mozilla.org/pt-BR/docs/Web/HTTP/Status
     - termo: Unidade de implantação
-      definicao: Pacote de software que é colocado em produção de uma só vez. Um monólito tem exatamente uma.
+      definicao: Pacote de software colocado em produção numa única operação. Um monólito tem exatamente uma unidade de implantação.
     - termo: Módulo
-      definicao: Parte de um monólito modular que reúne tudo de uma capacidade de negócio, como Agenda ou Faturamento, e é
-        dona dos próprios dados.
+      definicao: Parte de um monólito modular que reúne o código e os dados de uma capacidade de negócio, como a Agenda ou
+        o Faturamento.
     - termo: Contrato público
-      definicao: Conjunto de funções e tipos que um módulo oferece aos outros. Nesta ODA, o contrato da Agenda é o arquivo
-        `agenda/api.py`. Tudo o que fica fora do contrato é interno.
+      definicao: Conjunto de funções e tipos que um módulo oferece aos demais módulos. Nesta ODA o contrato da Agenda é o
+        arquivo `agenda/api.py`.
     - termo: ADR (Architecture Decision Record)
-      definicao: 'Registro de decisão arquitetural: documento curto e versionado que guarda o contexto, a decisão, as alternativas
-        consideradas e as consequências de uma escolha de arquitetura.'
+      definicao: Registro de decisão arquitetural. É um documento curto e versionado que registra uma escolha de arquitetura
+        e os motivos dela.
       referencia: &id001
         rotulo: Material oficial · ADR
         url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#adr-o-mecanismo-para-escolher-estilos
   - tipo: checklist
     titulo: Ao concluir, você poderá
     itens:
-    - Identificar a responsabilidade de cada camada da agenda clínica e o lugar onde a regra de conflito é decidida.
-    - Explicar por que um módulo deve consumir o contrato público de outro módulo, e não o modelo interno dele.
+    - Distinguir a responsabilidade da camada de serviço da responsabilidade da camada de domínio.
+    - Explicar por que um módulo deve consumir o contrato público de outro módulo.
     - Interpretar a saída de um verificador de fronteiras entre módulos.
     - Ler um ADR que registra a escolha entre os dois estilos.
   - tipo: faixa
     estilo: dica
     titulo: 🧭 Como ter o código na sua máquina
-    texto: O código desta ODA está no repositório `odas-arquitetura-software`, na pasta `codigo/`. Se você concluiu o Módulo
-      0, o repositório já está clonado e basta atualizá-lo com `git pull` dentro da pasta dele. Os caminhos de arquivo citados
-      nas abas partem da raiz desse repositório, e os trechos exibidos correspondem ao commit `bd84630`.
+    texto: O código desta ODA está na pasta `codigo/` do repositório `odas-arquitetura-software`. Quem concluiu o Módulo 0
+      já tem o repositório clonado e precisa apenas executar `git pull` dentro da pasta dele. Os caminhos de arquivo citados
+      nas abas partem da raiz do repositório, e os trechos exibidos correspondem ao commit `9dc7cdf`.
     links:
-    - rotulo: Módulo 0 — preparar o ambiente
+    - rotulo: 'Módulo 0: preparação do ambiente'
       url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
-    - rotulo: Repositório no GitHub, commit bd84630
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/bd84630
+    - rotulo: Repositório no GitHub, commit 9dc7cdf
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/9dc7cdf
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
-    texto: Esta ODA cobre as seções Camadas, Monólito modular e ADR da página Padrões e decisões do Módulo 1, e o Experimento
-      1 da Oficina de ferramentas. O código da pasta `camadas/` é cópia do código da oficina.
+    texto: Os links abaixo levam às seções do material oficial cobertas por esta ODA. O código da pasta `camadas/` é cópia
+      do código do Experimento 1 da Oficina de ferramentas.
     links:
     - &id002
       rotulo: Material oficial · Camadas
@@ -81,49 +81,64 @@ abas:
   titulo: Conceitos
   blocos:
   - tipo: legenda
-    texto: Esta aba retoma os conceitos da exposição em aula e mostra cada um no código. Leia os blocos na ordem e use os
-      trechos como referência durante o Laboratório.
+    texto: Esta aba retoma os conceitos expostos em aula e associa cada conceito a um trecho do código. Os trechos servem
+      de referência durante o Laboratório.
   - tipo: faixa
     estilo: dica
     titulo: 📂 Onde está o código
-    texto: Os arquivos desta aba ficam em `codigo/oda-01/camadas/` e `codigo/oda-01/monolito-modular/`, no repositório `odas-arquitetura-software`.
-      O botão Ver no GitHub de cada trecho abre o arquivo completo no navegador, e no VS Code o atalho Ctrl+P, ou Cmd+P no
-      macOS, encontra o arquivo pelo caminho mostrado.
+    texto: Os arquivos desta aba ficam em `codigo/oda-01/camadas/` e `codigo/oda-01/monolito-modular/` no repositório `odas-arquitetura-software`,
+      e o botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P (Cmd+P no macOS)
+      localiza qualquer arquivo pelo caminho exibido no trecho.
     links:
-    - rotulo: Repositório no GitHub, commit bd84630
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/bd84630
+    - rotulo: Repositório no GitHub, commit 9dc7cdf
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/9dc7cdf
   - tipo: conceito
     titulo: Estilo arquitetural
-    texto: Um estilo arquitetural é uma forma conhecida de organizar as partes de um sistema. Ele define os elementos, as
-      ligações entre eles e as restrições sobre o que pode depender de quê. Camadas e monólito modular pertencem à família
-      de organização interna, que trata de como as responsabilidades colaboram dentro de uma única aplicação.
-    analogia: Os estilos de planta de casa, como sobrado, casa térrea e loft, organizam os mesmos cômodos de formas diferentes,
-      com vantagens e limites conhecidos.
+    texto: Estilo arquitetural é uma forma conhecida de organizar as partes de um sistema e as regras de dependência entre
+      elas. Camadas e monólito modular pertencem à família de organização interna, que trata da colaboração entre responsabilidades
+      dentro de uma única aplicação.
   - tipo: conceito
     titulo: Camadas
-    texto: No estilo em camadas, cada camada tem uma responsabilidade técnica e só pode chamar a camada permitida. A apresentação
-      traduz a interação com o usuário, por exemplo em códigos HTTP. A camada de serviço coordena o caso de uso. O domínio
-      guarda as regras de negócio. O repositório guarda e recupera os dados. O estilo é uma regra de dependência, e a pilha
-      de caixas é só a representação dela.
-    analogia: 'Os andares de um prédio: cada andar conversa só com o vizinho, sem pular direto para outro.'
+    texto: No estilo em camadas, cada camada tem uma responsabilidade técnica e pode chamar apenas as camadas permitidas.
+      A agenda clínica desta ODA tem quatro camadas, cada uma num arquivo da pasta `camadas/`, conforme a tabela abaixo.
+  - tipo: comparativo
+    colunas:
+    - Arquivo
+    - Responsabilidade
+    linhas:
+    - dimensao: Apresentação
+      valores:
+      - '`apresentacao.py`'
+      - Converte chamadas e erros em códigos HTTP
+    - dimensao: Serviço
+      valores:
+      - '`servicos.py`'
+      - Coordena o caso de uso e delega a decisão ao domínio
+    - dimensao: Domínio
+      valores:
+      - '`dominio.py`'
+      - Guarda as regras de negócio, como a regra de conflito de horários
+    - dimensao: Repositório
+      valores:
+      - '`repositorios.py`'
+      - Guarda e recupera as consultas
   - tipo: diagrama
     id: D-01
     tipo_diagrama: Dependências entre camadas
     titulo: Camadas da agenda clínica
-    mermaid: "flowchart TB\n    A[\"apresentacao.py\\ncódigos HTTP\"] --> S[\"servicos.py\\ncaso de uso agendar\"]\n    S\
-      \ --> D[\"dominio.py\\nregra de conflito\"]\n    S --> R[\"repositorios.py\\nlista em memória\"]\n    A -. \"atalho\
-      \ proibido\" .-> R"
+    mermaid: "flowchart TB\n    A[\"apresentacao.py<br/>códigos HTTP\"] --> S[\"servicos.py<br/>caso de uso\"]\n    S -->\
+      \ D[\"dominio.py<br/>regra de conflito\"]\n    S --> R[\"repositorios.py<br/>armazenamento\"]\n    A -. \"atalho proibido\"\
+      \ .-> R"
   - tipo: conceito
     titulo: Regra de negócio e invariante
-    texto: Regra de negócio é uma condição que o negócio exige, independente de tecnologia. Quando ela precisa valer sempre,
-      recebe o nome de invariante. Na agenda clínica, a invariante é que um médico não pode ter duas consultas sobrepostas.
-      A camada de domínio é o lugar dessa regra, como mostra o método `conflita_com` abaixo.
+    texto: Regra de negócio é uma condição exigida pelo negócio que vale para qualquer tecnologia adotada. A regra que precisa
+      valer em todos os estados do sistema recebe o nome de invariante. Na agenda clínica, a invariante proíbe duas consultas
+      sobrepostas para o mesmo médico, e o método `conflita_com` da camada de domínio a implementa.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-01/camadas/dominio.py
-    commit: bd84630
-    contexto: O arquivo `dominio.py` é a camada de domínio da agenda clínica. Ele define o horário, a consulta e o erro de
-      conflito, e não importa nada de HTTP nem de armazenamento.
+    commit: 9dc7cdf
+    contexto: O arquivo `dominio.py` contém a camada de domínio da agenda clínica, onde fica a regra de conflito de horários.
     inicio: 6
     linhas:
     - '@dataclass(frozen=True)'
@@ -138,17 +153,49 @@ abas:
     - '        return f"{self.inicio}–{self.fim}"'
     anotacoes:
     - linha: 11
-      texto: 'A regra de negócio: dois horários conflitam quando um começa antes de o outro terminar.'
+      texto: Dois horários conflitam quando um deles começa antes do fim do outro.
   - tipo: conceito
-    titulo: Onde o 409 nasce
-    texto: A apresentação devolve `HTTP 409 CONFLICT` quando o horário está ocupado, mas ela não sabe o que é um conflito.
-      Ela apenas captura o erro `ConflitoDeAgenda`, lançado pelo serviço depois de consultar o domínio, e o traduz para um
-      código HTTP. Essa separação permite testar a regra sem servidor web e trocar a apresentação sem tocar na regra.
+    titulo: Regras de negócio na camada de domínio
+    texto: Na organização em camadas, as regras de negócio ficam na camada de domínio. A camada de serviço coordena o caso
+      de uso e delega a decisão ao domínio. No método `agendar`, o serviço obtém do repositório as consultas do médico e usa
+      o método `conflita_com` do domínio para decidir se o novo horário pode ser gravado. Uma regra escrita dentro do serviço
+      ficaria vinculada a um único caso de uso e precisaria ser repetida em outros casos de uso que dependem dela, como uma
+      futura remarcação de consulta.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-01/camadas/servicos.py
+    commit: 9dc7cdf
+    contexto: O arquivo `servicos.py` contém a camada de serviço. O método `agendar` coordena o caso de uso e consulta o domínio
+      antes de gravar a consulta.
+    inicio: 15
+    linhas:
+    - '    def agendar(self, medico: str, paciente: str, inicio: str, fim: str) -> Consulta:'
+    - '        horario = Horario(inicio, fim)'
+    - '        for ocupada in self._repositorio.agendadas_do_medico(medico):'
+    - '            if ocupada.horario.conflita_com(horario):'
+    - '                raise ConflitoDeAgenda('
+    - '                    f"Dr(a). {medico} já tem consulta das {ocupada.horario.inicio} "'
+    - '                    f"às {ocupada.horario.fim}."'
+    - '                )'
+    - '        return self._repositorio.salvar(medico, paciente, horario)'
+    anotacoes:
+    - linha: 17
+      texto: O serviço obtém os dados do repositório.
+    - linha: 18
+      texto: A decisão sobre o conflito pertence ao domínio, no método `conflita_com`.
+    - linha: 23
+      texto: O serviço grava a consulta somente depois da decisão do domínio.
+  - tipo: conceito
+    titulo: Conversão do erro de domínio em HTTP
+    texto: A camada de apresentação devolve `HTTP 409 CONFLICT` quando o horário pedido está ocupado. Antes disso, o serviço
+      consulta a regra do domínio e lança o erro `ConflitoDeAgenda` quando o domínio indica conflito. A apresentação captura
+      esse erro e o converte no código HTTP correspondente, o que permite testar a regra de conflito sem iniciar um servidor
+      web.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-01/camadas/apresentacao.py
-    commit: bd84630
-    contexto: O arquivo `apresentacao.py` é a camada de apresentação. O trecho mostra o único lugar do código que conhece
+    commit: 9dc7cdf
+    contexto: O arquivo `apresentacao.py` contém a camada de apresentação. O trecho abaixo é o único ponto do código que conhece
       os códigos HTTP 201 e 409.
     inicio: 15
     linhas:
@@ -161,35 +208,35 @@ abas:
     - '        print(f"HTTP 201 CREATED → {self._como_dicionario(consulta)}")'
     anotacoes:
     - linha: 18
-      texto: A apresentação traduz o erro de domínio em código HTTP, sem decidir a regra.
+      texto: A apresentação converte o erro de domínio no código HTTP 409.
   - tipo: conceito
-    titulo: Camada fechada, camada aberta e sumidouro
-    texto: Uma camada fechada obriga toda chamada a passar por ela e protege as regras que ela decide. Uma camada aberta permite
-      um atalho deliberado, que precisa ser documentado. O anti-padrão do sumidouro aparece quando a maioria das chamadas
-      atravessa as camadas sem que nenhuma decida, valide ou transforme nada. Richards e Ford sugerem reavaliar o estilo quando
-      mais de 80% das requisições forem assim.
+    titulo: Camada fechada e camada aberta
+    texto: Uma camada fechada obriga toda chamada a passar por ela, o que protege as regras decididas nela. Uma camada aberta
+      admite um atalho deliberado, que precisa ser documentado porque reduz o isolamento entre as camadas.
+  - tipo: conceito
+    titulo: Sumidouro
+    texto: O anti-padrão chamado sumidouro ocorre quando a maioria das chamadas apenas repassa os dados de uma camada para
+      a seguinte. Richards e Ford recomendam reavaliar o estilo quando mais de 80% das requisições seguem esse padrão.
   - tipo: conceito
     titulo: Monólito e monólito modular
-    texto: Monólito é um sistema com exatamente uma unidade de implantação, ou seja, um único pacote colocado em produção
-      de uma vez. Monólito modular é um monólito organizado em módulos por capacidade de negócio, como Agenda e Faturamento.
-      Cada módulo é dono dos próprios dados e oferece aos outros apenas um contrato público. Tudo o que fica fora do contrato
+    texto: Monólito é um sistema com exatamente uma unidade de implantação, isto é, um único pacote colocado em produção numa
+      só operação. O monólito modular divide esse pacote em módulos por capacidade de negócio, como a Agenda e o Faturamento.
+      Cada módulo é dono dos próprios dados e oferece aos outros módulos apenas um contrato público, e o código fora do contrato
       é interno ao módulo.
-    analogia: 'Uma casa com cômodos bem separados: um só teto, paredes claras entre os cômodos.'
   - tipo: diagrama
     id: D-02
     tipo_diagrama: Fronteira entre módulos
     titulo: Agenda e Faturamento numa única implantação
-    mermaid: "flowchart LR\n    subgraph unidade[\"Uma unidade de implantação\"]\n        subgraph ag[\"Módulo agenda\"]\n\
-      \            API[\"api.py\\ncontrato público\"] --> INT[(\"interno/\\nmodelo e dados\")]\n        end\n        subgraph\
-      \ fa[\"Módulo faturamento\"]\n            REL[\"relatorio.py\"]\n            ATA[\"relatorio_com_atalho.py\"]\n    \
-      \    end\n        REL -->|\"permitido\"| API\n        ATA -. \"proibido\" .-> INT\n    end"
+    mermaid: "flowchart LR\n    subgraph fa[\"Módulo faturamento\"]\n        REL[\"relatorio.py\"]\n        ATA[\"relatorio_com_atalho.py\"\
+      ]\n    end\n    subgraph ag[\"Módulo agenda\"]\n        API[\"api.py<br/>contrato público\"] --> INT[(\"interno/<br/>modelo\
+      \ e dados\")]\n    end\n    REL -->|\"permitido\"| API\n    ATA -. \"proibido\" .-> INT"
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-01/monolito-modular/agenda/api.py
-    commit: bd84630
-    contexto: O arquivo `agenda/api.py` é o contrato público do módulo Agenda. Ele devolve um tipo próprio, `ConsultaFaturavel`,
-      e traduz o código interno de situação, que só a Agenda conhece.
-    inicio: 39
+    commit: 9dc7cdf
+    contexto: O arquivo `agenda/api.py` contém o contrato público do módulo Agenda. O método `consultas_faturaveis` devolve
+      o tipo `ConsultaFaturavel` e converte o código interno de situação usado pela Agenda.
+    inicio: 38
     linhas:
     - '    def consultas_faturaveis(self) -> list[ConsultaFaturavel]:'
     - '        return ['
@@ -197,19 +244,18 @@ abas:
     - '            for r in armazenamento.RESERVAS'
     - '            if r.situacao == REALIZADA'
     anotacoes:
-    - linha: 43
-      texto: A tradução do modelo interno fica dentro da Agenda, protegida pelo contrato.
+    - linha: 42
+      texto: A conversão do modelo interno fica dentro do módulo Agenda.
   - tipo: conceito
-    titulo: O atalho que lê dados internos
-    texto: O anti-padrão característico do monólito modular é um módulo importar o interior de outro porque a pasta vizinha
-      está a um `import` de distância. No exemplo, `relatorio_com_atalho.py` lê a lista interna de reservas e compara a situação
-      com o texto `"realizada"`. A Agenda passou a gravar o código `"RE"` na versão 2 do modelo interno, e o atalho deixou
-      de encontrar qualquer consulta, sem nenhum erro.
+    titulo: Leitura de dados internos de outro módulo
+    texto: O anti-padrão característico do monólito modular é a importação do interior de outro módulo. No exemplo, `relatorio_com_atalho.py`
+      lê a lista interna de reservas e compara a situação com o texto `"realizada"`. A versão 2 do modelo interno da Agenda
+      passou a gravar o código `"RE"`, e desde essa mudança o atalho devolve zero consultas sem mensagem de erro.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-01/monolito-modular/faturamento/relatorio_com_atalho.py
-    commit: bd84630
-    contexto: O arquivo `faturamento/relatorio_com_atalho.py` é o exemplo errado, mantido no repositório para comparação.
+    commit: 9dc7cdf
+    contexto: O arquivo `faturamento/relatorio_com_atalho.py` contém a forma errada, mantida no repositório para comparação.
     inicio: 8
     linhas:
     - from agenda.interno.armazenamento import RESERVAS
@@ -221,19 +267,19 @@ abas:
     - '        return len(realizadas), sum(r.valor_centavos for r in realizadas) / 100'
     anotacoes:
     - linha: 8
-      texto: 'Import do interior de outro módulo: é esta linha que o verificador acusa.'
+      texto: Esta linha importa o interior do módulo Agenda e é a linha acusada pelo verificador.
   - tipo: conceito
     titulo: Fronteira verificada por ferramenta
-    texto: Separar pastas não cria fronteira. A fronteira só se mantém quando uma ferramenta a verifica a cada mudança, na
-      esteira de integração contínua. Em Python, a ferramenta import-linter faz isso, em Java o ArchUnit e o Spring Modulith,
-      e em Ruby o Packwerk, usado pela Shopify. O arquivo `verificar_fronteiras.py` aplica a mesma ideia em menos de 50 linhas,
-      e você o executa no Laboratório.
+    texto: A fronteira entre módulos se mantém quando uma ferramenta a verifica a cada mudança, na esteira de integração contínua.
+      Em Python essa verificação é feita pelo import-linter, e o material oficial lista as ferramentas equivalentes de outros
+      ecossistemas. O arquivo `verificar_fronteiras.py` aplica a mesma verificação em menos de 50 linhas e é executado no
+      Laboratório.
   - tipo: comparativo
     colunas:
     - Camadas
     - Monólito modular
     linhas:
-    - dimensao: Divide o código por
+    - dimensao: Critério de divisão do código
       valores:
       - Responsabilidade técnica
       - Capacidade de negócio
@@ -244,7 +290,7 @@ abas:
     - dimensao: Anti-padrão
       valores:
       - Sumidouro ou atalho oculto
-      - Módulo que lê dados internos de outro
+      - Leitura de dados internos de outro módulo
     - dimensao: Custo geral (1 a 5)
       valores:
       - '5'
@@ -258,31 +304,30 @@ abas:
       - '3'
       - '4'
   - tipo: conceito
-    titulo: ADR, o registro da escolha
-    texto: ADR é a sigla de Architecture Decision Record, ou registro de decisão arquitetural. É um documento curto, versionado
-      junto com o código, que guarda o contexto, a decisão, as alternativas consideradas e as consequências. O ADR permite
-      que quem chega depois entenda o motivo da escolha sem depender da memória de quem decidiu. O bloco abaixo é um ADR de
-      exemplo para o sistema desta ODA. Clique nele para abrir.
+    titulo: ADR
+    texto: ADR é a sigla de Architecture Decision Record, em português registro de decisão arquitetural. O ADR é um documento
+      curto e versionado junto com o código que registra uma escolha de arquitetura e os motivos dela. Quem chega ao projeto
+      depois consulta o ADR para conhecer esses motivos. O bloco abaixo contém um ADR de exemplo para o sistema desta ODA,
+      com os campos do template do material oficial.
   - tipo: adr
     id: ADR-001
     titulo: Organizar a plataforma clínica como monólito modular com camadas por módulo
     status: Aceita (exemplo didático)
-    contexto: A plataforma clínica tem as capacidades Agenda e Faturamento, mantidas por uma única equipe que implanta o sistema
-      inteiro de uma vez. A regra de conflito de horários precisa ser testada sem servidor web, e o Faturamento precisa das
-      consultas realizadas da Agenda.
+    contexto: A plataforma clínica tem os módulos Agenda e Faturamento, mantidos por uma única equipe que implanta o sistema
+      inteiro numa só operação. A regra de conflito de horários precisa ser testada sem servidor web, e o Faturamento precisa
+      da lista de consultas realizadas na Agenda.
     decisao: Adotar um monólito modular com os módulos agenda e faturamento, cada um organizado internamente em camadas. Um
-      módulo só consome outro pelo arquivo api.py, e o verificador de fronteiras roda a cada mudança.
-    alternativas: Camadas únicas para o sistema inteiro, descartadas porque não impedem que o Faturamento leia os dados da
-      Agenda. Microsserviços, descartados porque a equipe e a operação ainda são uma unidade e nenhuma necessidade de escala
-      independente foi medida.
-    consequencias: Uma única implantação e transações locais simples. A disciplina de fronteira depende do verificador. A
-      extração de um módulo para serviço fica possível no futuro, se uma medição justificar.
+      módulo consome outro módulo apenas pelo arquivo api.py, e o verificador de fronteiras é executado a cada mudança.
+    alternativas: A organização do sistema inteiro em camadas únicas foi descartada porque permite que o Faturamento leia
+      os dados internos da Agenda. Microsserviços foram descartados porque a equipe e a operação ainda formam uma unidade
+      e nenhuma necessidade de escala independente foi medida.
+    consequencias: O sistema mantém uma única implantação com transações locais, e a manutenção das fronteiras passa a depender
+      do verificador. Um módulo poderá ser extraído para um serviço no futuro se uma medição justificar a extração.
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
-    texto: Os conceitos desta aba seguem a página Padrões e decisões do Módulo 1, nas seções Camadas, Monólito modular, Fronteiras
-      verificadas por ferramenta e ADR. As notas de 1 a 5 do comparativo vêm das tabelas de características arquiteturais
-      dessas seções, que seguem Richards e Ford.
+    texto: As notas de 1 a 5 do comparativo vêm das tabelas de características arquiteturais do material oficial, que seguem
+      Richards e Ford. Os links abaixo levam às seções usadas nesta aba.
     links:
     - *id002
     - *id003
@@ -297,51 +342,54 @@ abas:
   titulo: Laboratório
   blocos:
   - tipo: legenda
-    texto: Você vai executar três programas prontos e ler a saída de cada um. Nenhum arquivo precisa ser alterado. Reserve
-      12 minutos, cerca de 4 por programa.
+    texto: O Laboratório executa três programas prontos e pede a leitura da saída de cada um. Nenhum arquivo precisa ser alterado,
+      e o tempo previsto é de 12 minutos.
   - tipo: glossario
     titulo: 📘 Conceitos usados nesta aba
-    texto: Os termos técnicos desta aba estão explicados abaixo, na ordem em que aparecem.
+    texto: Os termos técnicos desta aba estão explicados abaixo na ordem em que aparecem.
     itens:
     - termo: Terminal
-      definicao: Programa em que você digita comandos de texto. No Windows é o PowerShell, no macOS e no Linux é o Terminal.
-        O VS Code abre um terminal integrado pelo menu Terminal, opção Novo Terminal.
+      definicao: Programa em que se digitam comandos de texto, chamado PowerShell no Windows e Terminal no macOS e no Linux.
+        O VS Code abre um terminal integrado pelo menu Terminal › Novo Terminal.
     - termo: cd
-      definicao: Comando que muda a pasta atual do terminal. Os programas Python desta ODA precisam ser executados de dentro
-        da própria pasta.
+      definicao: Comando que muda a pasta atual do terminal. Cada programa desta ODA precisa ser executado de dentro da própria
+        pasta.
     - termo: Camada
-      definicao: Grupo de código com uma responsabilidade técnica. A agenda clínica tem apresentação, serviço, domínio e repositório.
+      definicao: Grupo de código com uma única responsabilidade técnica. A agenda clínica tem quatro camadas, listadas na
+        aba Conceitos.
     - termo: Contrato público
-      definicao: Funções e tipos que um módulo oferece aos outros. O da Agenda é `agenda/api.py`.
+      definicao: Conjunto de funções e tipos que um módulo oferece aos demais módulos. O contrato da Agenda é o arquivo `agenda/api.py`.
     - termo: Verificador de fronteiras
-      definicao: Programa que lê os imports do código e acusa quando um módulo importa o interior de outro.
+      definicao: Programa que lê os imports do código e acusa todo módulo que importa o interior de outro módulo.
   - tipo: faixa
     estilo: objetivo
-    problema: Na agenda clínica, a regra de conflito poderia estar espalhada pela apresentação e pelo armazenamento. No monólito,
-      o Faturamento pode ler os dados internos da Agenda, porque nada impede o import.
-    impacto: Regra espalhada não pode ser testada isoladamente e muda em vários lugares. Um atalho entre módulos produz resultado
-      errado em silêncio quando o modelo interno muda, como uma cobrança zerada.
-    mecanismo: A agenda separa a regra no domínio e traduz o erro em HTTP só na apresentação. O monólito expõe a Agenda por
-      `agenda/api.py`, e o `verificar_fronteiras.py` acusa qualquer import de `agenda.interno` feito fora da Agenda.
-    comprovacao: A agenda devolve 409 no conflito das 09:15. O relatório pelo contrato fatura 2 consultas e R$ 450,00, o relatório
-      pelo atalho fatura zero, e o verificador aponta a linha 8 de `faturamento/relatorio_com_atalho.py`.
+    problema: Na agenda clínica, a regra de conflito precisa ficar num único lugar do código. No monólito modular, o Faturamento
+      consegue importar os dados internos da Agenda porque a linguagem permite essa importação.
+    impacto: Uma regra repetida em vários arquivos precisa ser alterada em cada um deles. Um atalho entre módulos passa a
+      produzir resultado errado sem mensagem de erro quando o modelo interno muda, como mostra a cobrança zerada do segundo
+      programa.
+    mecanismo: A agenda concentra a regra no domínio e converte o erro em HTTP somente na apresentação. O monólito expõe a
+      Agenda pelo arquivo `agenda/api.py`, e o programa `verificar_fronteiras.py` acusa toda importação de `agenda.interno`
+      feita fora da Agenda.
+    comprovacao: A agenda devolve 409 para o pedido das 09:15, e o relatório pelo contrato fatura 2 consultas no total de
+      R$ 450,00. O relatório pelo atalho fatura R$ 0,00, e o verificador aponta a linha 8 de `faturamento/relatorio_com_atalho.py`.
   - tipo: faixa
     estilo: dica
-    titulo: 💻 Windows, macOS e Linux
-    texto: Os comandos usam `python3`, que é o nome do interpretador no macOS e no Linux. No Windows, use `py` no lugar de
-      `python3`, por exemplo `py main.py`. O comando `cd` funciona igual no PowerShell, inclusive com a barra `/` nos caminhos.
+    titulo: 💻 Comandos por sistema operacional
+    texto: Os comandos desta aba usam `python3`, que é o nome do interpretador Python no macOS e no Linux. No Windows o mesmo
+      programa é executado pelo comando `py`, como em `py main.py`. O comando `cd` funciona da mesma forma no PowerShell e
+      aceita a barra `/` nos caminhos de pasta.
   - tipo: passos
     itens:
     - titulo: Abrir o terminal na raiz do repositório
-      texto: No VS Code, abra a pasta `odas-arquitetura-software` pelo menu Arquivo, opção Abrir Pasta, e depois abra um terminal
-        pelo menu Terminal, opção Novo Terminal. O terminal já começa na raiz do repositório.
+      texto: No VS Code, abra a pasta `odas-arquitetura-software` pelo menu Arquivo › Abrir Pasta. Em seguida, abra um terminal
+        pelo menu Terminal › Novo Terminal, que já começa na raiz do repositório.
       editor:
         rotulo: terminal
         linhas:
         - git pull
     - titulo: Executar a agenda em camadas
-      texto: Entre na pasta da agenda e execute o cenário. Observe as três respostas 201, o 409 do horário das 09:15 e as
-        respostas 200 de realização e cancelamento.
+      texto: Entre na pasta da agenda e execute o cenário, cuja saída esperada aparece abaixo deste passo.
       editor:
         rotulo: terminal
         linhas:
@@ -377,13 +425,14 @@ abas:
       ''agendada''}'
   - tipo: faixa
     estilo: sucesso
-    texto: A linha `HTTP 409 CONFLICT` foi impressa por `apresentacao.py`, mas a decisão de que 09:15 conflita com 09:00 a
-      09:30 foi tomada por `conflita_com`, em `dominio.py`. Abra os dois arquivos no VS Code e confira.
+    texto: A linha `HTTP 409 CONFLICT` foi impressa por `apresentacao.py`. A decisão de que o pedido das 09:15 conflita com
+      a consulta das 09:00 às 09:30 foi tomada pelo método `conflita_com`, em `dominio.py`, e os dois arquivos podem ser conferidos
+      no VS Code.
   - tipo: passos
     itens:
     - titulo: Executar o monólito modular
-      texto: Volte à pasta `oda-01` e entre na pasta do monólito. O programa registra três reservas, realiza duas, cancela
-        uma e gera o relatório de faturamento pelas duas formas.
+      texto: Volte à pasta `oda-01` e entre na pasta do monólito. O programa registra três reservas, marca duas como realizadas
+        e cancela a terceira antes de gerar o relatório de faturamento pelas duas formas.
       editor:
         rotulo: terminal
         linhas:
@@ -403,14 +452,13 @@ abas:
     - '  0 consulta(s) faturável(is), total R$ 0,00'
   - tipo: faixa
     estilo: quebra
-    texto: 'O relatório pelo atalho devolve zero consultas e R$ 0,00 sem nenhuma mensagem de erro. Esse é o risco do atalho
-      entre módulos: o programa continua funcionando e entrega um resultado errado. Abra `agenda/interno/modelos.py` e veja
-      a constante `REALIZADA = "RE"`, que o atalho desconhece.'
+    texto: O relatório pelo atalho devolve R$ 0,00 sem mensagem de erro, e o programa termina normalmente com um resultado
+      errado. A causa está na constante `REALIZADA = "RE"` do arquivo `agenda/interno/modelos.py`, que o atalho desconhece.
   - tipo: passos
     itens:
     - titulo: Executar o verificador de fronteiras
-      texto: Na mesma pasta, execute o verificador. Ele lê os imports de todos os arquivos dos módulos e acusa quem entra
-        em `agenda.interno` sem ser a própria Agenda.
+      texto: Na mesma pasta, execute o verificador. O programa lê os imports de todos os arquivos dos módulos e acusa toda
+        importação de `agenda.interno` feita fora da Agenda.
       editor:
         rotulo: terminal
         linhas:
@@ -423,13 +471,13 @@ abas:
     - '  faturamento/relatorio_com_atalho.py:8 importa agenda.interno.armazenamento'
   - tipo: faixa
     estilo: sucesso
-    texto: O verificador terminou com código de saída 1, que numa esteira de integração contínua bloqueia a mudança. O arquivo
-      correto, `faturamento/relatorio.py`, não aparece na lista porque importa apenas `agenda.api`.
+    texto: O verificador terminou com código de saída 1, valor que bloqueia a mudança numa esteira de integração contínua.
+      O arquivo `faturamento/relatorio.py` está fora da lista porque importa somente `agenda.api`.
   - tipo: faixa
     estilo: dica
-    titulo: 🖥️ Sem Python na máquina?
-    texto: Se o seu ambiente falhou, digite os comandos nos terminais simulados abaixo. As saídas são as mesmas da execução
-      real, capturadas no commit citado na aba Objetivo.
+    titulo: 🖥️ Terminal simulado
+    texto: Quem não conseguiu preparar o ambiente pode digitar os comandos nos terminais simulados abaixo. As saídas simuladas
+      são as saídas reais dos programas no commit citado na aba Objetivo.
   - tipo: terminal
     titulo: terminal simulado · pasta codigo/oda-01/camadas
     comandos:
@@ -458,11 +506,11 @@ abas:
         \ (faturamento/relatorio.py) ==\n  2 consulta(s) faturável(is), total R$ 450,00\n\n== Faturamento pelo atalho (faturamento/relatorio_com_atalho.py)\
         \ ==\n  0 consulta(s) faturável(is), total R$ 0,00"
       origem: executado
-      dica: Gera o faturamento pelas duas formas.
+      dica: Gera o relatório de faturamento pelas duas formas.
     - entrada: python3 verificar_fronteiras.py
       saida: "1 violação(ões) de fronteira:\n  faturamento/relatorio_com_atalho.py:8 importa agenda.interno.armazenamento"
       origem: executado
-      dica: Acusa imports proibidos.
+      dica: Acusa as importações proibidas.
     cenarios:
     - rotulo: Executar main.py
       comando: python3 main.py
@@ -471,19 +519,19 @@ abas:
   - tipo: faixa
     estilo: erro
     sintoma: 'O terminal mostra `ModuleNotFoundError: No module named ''dominio''` ou `No module named ''agenda''`.'
-    causa: O programa foi executado fora da própria pasta, e o Python não encontra os arquivos vizinhos.
-    correcao: Entre na pasta do programa com `cd` antes de executá-lo, como nos passos acima, e repita o comando.
+    causa: O programa foi executado fora da própria pasta, e o Python não localiza os arquivos vizinhos.
+    correcao: Entre na pasta do programa com `cd` antes de executá-lo, conforme os passos acima, e repita o comando.
   - tipo: checklist
     titulo: Checklist final
     itens:
-    - A agenda devolveu 409 no conflito das 09:15.
-    - Localizei a regra de conflito em `dominio.py` e a tradução para HTTP em `apresentacao.py`.
-    - O relatório pelo contrato faturou R$ 450,00 e o relatório pelo atalho faturou R$ 0,00.
+    - A agenda devolveu 409 para o pedido das 09:15.
+    - A regra de conflito está em `dominio.py`, e a conversão para HTTP está em `apresentacao.py`.
+    - O relatório pelo contrato faturou R$ 450,00, e o relatório pelo atalho faturou R$ 0,00.
     - O verificador apontou a linha 8 de `faturamento/relatorio_com_atalho.py`.
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
-    texto: Os três programas materializam o Experimento 1 da Oficina de ferramentas e os exemplos de código das seções Monólito
+    texto: Os programas desta aba correspondem ao Experimento 1 da Oficina de ferramentas e aos exemplos das seções Monólito
       modular e Fronteiras verificadas por ferramenta.
     links:
     - *id004
@@ -493,75 +541,138 @@ abas:
   titulo: Verificação
   blocos:
   - tipo: legenda
-    texto: Responda às cinco perguntas. Cada alternativa traz uma explicação depois da escolha, com referência ao que você
-      viu nas abas anteriores.
+    texto: As perguntas abaixo tratam do conteúdo do Módulo 1 do material oficial. Cada alternativa exibe uma explicação depois
+      da escolha.
   - tipo: quiz
     perguntas:
-    - enunciado: Na agenda clínica em camadas, qual arquivo decide que dois horários conflitam?
+    - enunciado: Em qual camada deve ficar uma regra de negócio como a proibição de consultas sobrepostas?
       alternativas:
-      - texto: '`apresentacao.py`'
+      - texto: Na camada de serviço, porque o serviço executa o caso de uso.
         correta: false
-        explicacao: A apresentação só traduz o erro `ConflitoDeAgenda` em HTTP 409.
-      - texto: '`dominio.py`'
+        explicacao: A camada de serviço, chamada de aplicação no material oficial, coordena o caso de uso e delega a decisão
+          ao domínio. Uma regra escrita no serviço precisaria ser repetida em cada caso de uso que depende dela.
+      - texto: Na camada de domínio, que preserva as regras e as invariantes do negócio.
         correta: true
-        explicacao: O método `conflita_com` da classe `Horario` é a regra de negócio, na camada de domínio.
-      - texto: '`repositorios.py`'
+        explicacao: Na agenda clínica, o método `agendar` do serviço chama o método `conflita_com` de `dominio.py` para decidir
+          o conflito.
+      - texto: Na camada de apresentação, porque ela devolve o código HTTP 409.
         correta: false
-        explicacao: O repositório apenas guarda e recupera consultas.
-    - enunciado: O que caracteriza o anti-padrão do sumidouro no estilo em camadas?
+        explicacao: A apresentação traduz a interação e o formato e converte o erro de domínio no código HTTP correspondente.
+    - enunciado: O que o material oficial chama de invariante?
       alternativas:
-      - texto: Uma camada que acessa o banco de dados.
-        correta: false
-        explicacao: Acessar o banco é a responsabilidade do repositório.
-      - texto: A maioria das chamadas atravessa as camadas sem que nenhuma decida, valide ou transforme nada.
+      - texto: Uma condição que precisa valer sempre, como um saldo que nunca pode ficar negativo.
         correta: true
-        explicacao: Richards e Ford sugerem reavaliar o estilo quando mais de 80% das requisições forem assim.
-      - texto: Uma camada que lança exceções.
+        explicacao: A camada de domínio preserva as invariantes do negócio.
+      - texto: Uma configuração de infraestrutura que não muda entre ambientes.
         correta: false
-        explicacao: Lançar erro de domínio é legítimo, como faz `ConflitoDeAgenda`.
-    - enunciado: Por que o relatório pelo atalho faturou R$ 0,00 sem nenhum erro?
+        explicacao: Configuração de ambiente pertence à camada de infraestrutura.
+      - texto: Uma camada que nunca pode ser alterada depois da primeira versão.
+        correta: false
+        explicacao: A invariante é uma condição do negócio, e as camadas continuam sujeitas a mudanças.
+    - enunciado: Qual é o efeito de declarar uma camada como fechada?
       alternativas:
-      - texto: Porque a Agenda cancelou todas as consultas.
+      - texto: A camada deixa de ser chamada por outras camadas.
         correta: false
-        explicacao: Duas consultas foram realizadas, como mostra o relatório pelo contrato.
-      - texto: Porque o atalho compara a situação com o texto "realizada", e o modelo interno passou a gravar o código "RE".
+        explicacao: A camada fechada continua sendo chamada pela camada de cima.
+      - texto: Toda requisição passa obrigatoriamente pela camada, o que protege as regras decididas nela.
         correta: true
-        explicacao: O modelo interno mudou legitimamente, e só o contrato público traduz a mudança.
-      - texto: Porque o verificador de fronteiras bloqueou a execução.
+        explicacao: O material oficial registra o custo dessa escolha, que é a travessia obrigatória mesmo em requisições
+          simples.
+      - texto: A camada passa a acessar o banco de dados diretamente.
         correta: false
-        explicacao: O verificador é um programa separado e não interfere no relatório.
-    - enunciado: O que define um monólito, segundo a definição adotada no material oficial?
+        explicacao: O acesso direto da apresentação à camada de dados é o exemplo de camada aberta.
+    - enunciado: Segundo a regra prática de Richards e Ford, quando o estilo em camadas provavelmente não é o adequado?
+      alternativas:
+      - texto: Quando o sistema tem mais de quatro camadas.
+        correta: false
+        explicacao: A regra prática trata da proporção de requisições, sem limite de camadas.
+      - texto: Quando mais de 80% das requisições apenas repassam os dados de uma camada para a seguinte.
+        correta: true
+        explicacao: Essa situação corresponde ao anti-padrão do sumidouro.
+      - texto: Quando a equipe usa um framework MVC.
+        correta: false
+        explicacao: O MVC é uma especialização do estilo em camadas para o ciclo requisição-resposta HTTP.
+    - enunciado: A Lei de Conway explica por que o estilo em camadas surge com frequência sem decisão deliberada. O que essa
+        lei afirma?
+      alternativas:
+      - texto: Organizações produzem arquiteturas que espelham a estrutura de comunicação delas.
+        correta: true
+        explicacao: Uma equipe dividida por especialidade técnica tende a produzir um sistema em camadas com a mesma divisão.
+      - texto: Todo sistema em camadas acaba se tornando um sumidouro.
+        correta: false
+        explicacao: O sumidouro é um anti-padrão do estilo em camadas, descrito em outra seção do material oficial.
+      - texto: A quantidade de camadas dobra a cada versão do sistema.
+        correta: false
+        explicacao: A Lei de Conway relaciona a estrutura da organização à estrutura do sistema.
+    - enunciado: Um sistema com responsabilidades misturadas entre camadas passa a rodar em três servidores, um por camada.
+        Qual é o efeito sobre o acoplamento lógico?
+      alternativas:
+      - texto: O acoplamento desaparece, porque as camadas ficam em processos separados.
+        correta: false
+        explicacao: Camadas físicas são uma decisão separada da estrutura lógica.
+      - texto: O acoplamento permanece, porque a distribuição física não corrige responsabilidades mal definidas.
+        correta: true
+        explicacao: O material oficial afirma que um sistema com responsabilidades misturadas continua acoplado mesmo em servidores
+          separados.
+      - texto: O acoplamento aumenta somente na camada de apresentação.
+        correta: false
+        explicacao: A distribuição física acrescenta latência de rede e mantém o acoplamento lógico existente.
+    - enunciado: Como o princípio aberto-fechado (OCP) se aplica à fronteira entre a camada de negócios e os dados?
+      alternativas:
+      - texto: A camada de negócios depende de uma abstração de repositório, e a troca de banco de dados não altera o serviço
+          de negócio.
+        correta: true
+        explicacao: No exemplo do material oficial, `AgendamentoServico` depende de `RepositorioConsulta`, e a implementação
+          concreta fica na infraestrutura.
+      - texto: A camada de negócios abre conexões com o banco e as fecha ao fim de cada requisição.
+        correta: false
+        explicacao: O OCP trata da extensão de comportamento sem modificação do código existente.
+      - texto: Cada camada pode ser aberta ou fechada conforme o volume de requisições.
+        correta: false
+        explicacao: A escolha entre camada aberta e fechada é outro conceito do mesmo capítulo.
+    - enunciado: Qual é a definição de monólito adotada no material oficial, atribuída a Kamil Grzybek?
       alternativas:
       - texto: Um sistema sem organização interna.
         correta: false
-        explicacao: Um monólito pode ser bem organizado, como o monólito modular.
+        explicacao: Um monólito pode ter boa organização interna, como o monólito modular.
       - texto: Um sistema com exatamente uma unidade de implantação.
         correta: true
-        explicacao: A definição, de Kamil Grzybek, separa implantação de organização interna.
-      - texto: Um sistema escrito numa única linguagem.
+        explicacao: A definição separa a decisão de implantação da decisão de organização interna.
+      - texto: Um sistema escrito numa única linguagem de programação.
         correta: false
-        explicacao: A linguagem não faz parte da definição.
-    - enunciado: Qual campo de um ADR registra as opções que foram consideradas e descartadas?
+        explicacao: A linguagem de programação está fora da definição.
+    - enunciado: No monólito modular, qual regra de comunicação preserva a autonomia de cada módulo?
       alternativas:
-      - texto: Contexto
+      - texto: Os módulos compartilham as mesmas tabelas para evitar duplicação de dados.
         correta: false
-        explicacao: O contexto descreve a situação e as restrições.
-      - texto: Alternativas
+        explicacao: O material oficial permite compartilhar o banco físico e proíbe compartilhar tabelas ou modelos de escrita.
+      - texto: Um módulo consome outro apenas pela API pública, e cada conjunto de dados tem um único escritor.
         correta: true
-        explicacao: No ADR-001 desta ODA, camadas únicas e microsserviços são as alternativas descartadas.
-      - texto: Consequências
+        explicacao: O anti-padrão correspondente é o módulo que lê dados internos de outro módulo.
+      - texto: Cada módulo roda num processo separado.
         correta: false
-        explicacao: As consequências registram os efeitos da decisão tomada.
+        explicacao: O monólito modular mantém uma única unidade de implantação.
+    - enunciado: Segundo o material oficial, quando a extração de um módulo para um serviço separado se justifica?
+      alternativas:
+      - texto: Desde o início do projeto, como plano principal.
+        correta: false
+        explicacao: O material oficial trata a extração como uma opção que a boa modularidade torna possível.
+      - texto: Quando há evidência medida, como um módulo quente que domina os recursos do processo.
+        correta: true
+        explicacao: Outros gatilhos citados são a coordenação frequente entre módulos e cadências de mudança muito diferentes.
+      - texto: Quando o módulo passa de mil linhas de código.
+        correta: false
+        explicacao: O tamanho do código está fora dos gatilhos listados no material oficial.
   - tipo: resumo
   - tipo: checklist
     titulo: Para revisar depois da aula
     itens:
     - Ler as seções Quando usar camadas e Quando usar monólito modular no material oficial.
-    - Abrir o template de ADR do material oficial e comparar com o ADR-001 desta ODA.
+    - Comparar o template de ADR do material oficial com o ADR-001 desta ODA.
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
-    texto: As perguntas cobrem as seções Camadas, Monólito modular e ADR da página Padrões e decisões.
+    texto: Os links abaixo levam às seções do material oficial cobertas pelas perguntas.
     links:
     - rotulo: Material oficial · Quando usar camadas
       url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#quando-usar-e-quando-nao-usar

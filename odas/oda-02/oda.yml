@@ -5,66 +5,65 @@ abas:
   titulo: Objetivo
   blocos:
   - tipo: legenda
-    texto: 'Esta ODA mostra, em código Python que você executa sem escrever nenhuma linha, dois estilos que acomodam mudança
-      sem alterar as partes existentes. A atividade dura 25 minutos: 2 de Objetivo, 8 de Conceitos, 12 de Laboratório e 3
-      de Verificação.'
+    texto: Esta ODA apresenta dois estilos que acomodam mudanças sem alteração das partes existentes, por meio de programas
+      Python prontos para execução. A atividade dura 25 minutos distribuídos entre as quatro abas.
   - tipo: glossario
-    texto: Os termos abaixo aparecem nas abas desta ODA, na ordem em que surgem. Cada aba volta a explicá-los no primeiro
-      uso, porque você pode abrir qualquer aba diretamente.
+    texto: Os termos abaixo aparecem nas abas desta ODA na ordem em que surgem. Cada aba repete a explicação do termo no primeiro
+      uso, porque o aluno pode abrir qualquer aba diretamente.
     itens:
     - termo: Estilo arquitetural
-      definicao: 'Forma conhecida de organizar as partes de um sistema: os elementos, as ligações entre eles e as regras sobre
-        o que pode depender de quê. Pipes and Filters e Microkernel são dois estilos.'
+      definicao: Forma conhecida de organizar as partes de um sistema e as regras de dependência entre elas. Pipes and Filters
+        e Microkernel são estilos arquiteturais.
       referencia:
         rotulo: Material oficial · Estilos arquiteturais
         url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/conceitos/#estilos-arquiteturais
     - termo: Filtro
-      definicao: Etapa de processamento que recebe um item, faz uma única coisa com ele e o devolve, ou o descarta. Na triagem
-        de currículos, cada critério é um filtro.
+      definicao: Etapa de processamento que recebe um item e o devolve ao fluxo ou o descarta. Na triagem de currículos desta
+        ODA, cada critério de seleção é um filtro.
     - termo: Pipe
-      definicao: Ligação que leva a saída de um filtro à entrada do próximo. Na triagem, o pipe é a lista que a classe `Pipeline`
-        passa de um filtro ao seguinte.
+      definicao: Ligação que entrega a saída de um filtro como entrada do filtro seguinte. Na triagem, a classe `Pipeline`
+        faz esse papel.
     - termo: Contrato
-      definicao: Conjunto de métodos que uma parte do sistema promete oferecer. Todo filtro cumpre o contrato `processar`,
-        e todo plugin cumpre o contrato `aplica_se` e `executar`.
+      definicao: Conjunto de métodos que uma parte do sistema se compromete a oferecer. Todo filtro implementa o método `processar`,
+        e todo plugin implementa os métodos `aplica_se` e `executar`.
     - termo: Núcleo
-      definicao: No Microkernel, a parte que contém só o mínimo para o sistema funcionar e que muda pouco. No faturamento,
-        o núcleo conhece a ordem das categorias e nada sobre impostos.
+      definicao: Parte estável de um sistema em Microkernel, com o mínimo necessário para o funcionamento. No faturamento
+        desta ODA, o núcleo conhece a ordem das categorias de plugin.
     - termo: Plugin
       definicao: Extensão que implementa o contrato do núcleo e acrescenta um comportamento variável, como o imposto de um
         estado.
     - termo: Registro
-      definicao: Componente do núcleo que guarda quais plugins existem e em que categoria cada um atua.
+      definicao: Componente do núcleo que guarda os plugins disponíveis e a categoria de cada um.
     - termo: ADR (Architecture Decision Record)
-      definicao: 'Registro de decisão arquitetural: documento curto e versionado que guarda o contexto, a decisão, as alternativas
-        consideradas e as consequências de uma escolha de arquitetura.'
+      definicao: Registro de decisão arquitetural. É um documento curto e versionado que registra uma escolha de arquitetura
+        e os motivos dela.
       referencia: &id001
         rotulo: Material oficial · ADR
         url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#adr-o-mecanismo-para-escolher-estilos
   - tipo: checklist
     titulo: Ao concluir, você poderá
     itens:
-    - Identificar os quatro tipos de filtro na triagem de currículos.
-    - Explicar por que a ordem dos filtros faz parte da arquitetura.
-    - Explicar como um estado novo entra no faturamento sem alterar o núcleo.
-    - Reconhecer o anti-padrão core creep e ler um ADR que registra a escolha de um dos estilos.
+    - Identificar os tipos de filtro presentes na triagem de currículos.
+    - Explicar a dependência entre filtros criada pela ordem do pipeline.
+    - Explicar como um estado novo entra no faturamento sem alteração do núcleo.
+    - Reconhecer o anti-padrão core creep e ler um ADR sobre a escolha de um dos estilos.
   - tipo: faixa
     estilo: dica
     titulo: 🧭 Como ter o código na sua máquina
-    texto: O código desta ODA está no repositório `odas-arquitetura-software`, na pasta `codigo/`. Se você concluiu o Módulo
-      0, o repositório já está clonado e basta atualizá-lo com `git pull` dentro da pasta dele. Os caminhos de arquivo citados
-      nas abas partem da raiz desse repositório, e os trechos exibidos correspondem ao commit `bd84630`.
+    texto: O código desta ODA está na pasta `codigo/` do repositório `odas-arquitetura-software`. Quem concluiu o Módulo 0
+      já tem o repositório clonado e precisa apenas executar `git pull` dentro da pasta dele. Os caminhos de arquivo citados
+      nas abas partem da raiz do repositório, e os trechos exibidos correspondem ao commit `9dc7cdf`.
     links:
-    - rotulo: Módulo 0 — preparar o ambiente
+    - rotulo: 'Módulo 0: preparação do ambiente'
       url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
-    - rotulo: Repositório no GitHub, commit bd84630
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/bd84630
+    - rotulo: Repositório no GitHub, commit 9dc7cdf
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/9dc7cdf
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
-    texto: Esta ODA cobre as seções Pipes and Filters, Microkernel e ADR da página Padrões e decisões do Módulo 1, e os Experimentos
-      2 e 3 da Oficina de ferramentas. Os códigos de `pipes-and-filters/` e `microkernel/` são cópias do código da oficina,
-      com três arquivos acrescentados para o Laboratório.
+    texto: Os links abaixo levam às seções do material oficial cobertas por esta ODA. Os códigos das pastas `pipes-and-filters/`
+      e `microkernel/` são cópias do código dos Experimentos 2 e 3 da Oficina de ferramentas, acrescidas de quatro arquivos
+      criados para o Laboratório.
     links:
     - &id002
       rotulo: Material oficial · Pipes and Filters
@@ -83,44 +82,62 @@ abas:
   titulo: Conceitos
   blocos:
   - tipo: legenda
-    texto: Esta aba retoma os conceitos da exposição em aula e mostra cada um no código. Leia os blocos na ordem e use os
-      trechos como referência durante o Laboratório.
+    texto: Esta aba retoma os conceitos expostos em aula e associa cada conceito a um trecho do código. Os trechos servem
+      de referência durante o Laboratório.
   - tipo: faixa
     estilo: dica
     titulo: 📂 Onde está o código
-    texto: Os arquivos desta aba ficam em `codigo/oda-02/pipes-and-filters/` e `codigo/oda-02/microkernel/`, no repositório
-      `odas-arquitetura-software`. O botão Ver no GitHub de cada trecho abre o arquivo completo no navegador, e no VS Code
-      o atalho Ctrl+P, ou Cmd+P no macOS, encontra o arquivo pelo caminho mostrado.
+    texto: Os arquivos desta aba ficam em `codigo/oda-02/pipes-and-filters/` e `codigo/oda-02/microkernel/` no repositório
+      `odas-arquitetura-software`, e o botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code,
+      o atalho Ctrl+P (Cmd+P no macOS) localiza qualquer arquivo pelo caminho exibido no trecho.
     links:
-    - rotulo: Repositório no GitHub, commit bd84630
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/bd84630
+    - rotulo: Repositório no GitHub, commit 9dc7cdf
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/9dc7cdf
   - tipo: conceito
     titulo: Pipes and Filters
-    texto: Pipes and Filters decompõe um processamento em filtros ligados por pipes. Filtro é uma etapa que recebe um item,
-      faz uma única coisa e o devolve, ou o descarta. Pipe é a ligação que leva a saída de um filtro à entrada do próximo.
-      Os filtros não se conhecem e não compartilham estado, por isso podem ser acrescentados, removidos ou reordenados sem
-      alterar os vizinhos. Richards e Ford chamam o estilo de Pipeline Architecture.
-    analogia: 'Uma esteira de fábrica: cada etapa faz uma coisa e passa o resultado adiante.'
+    texto: O estilo Pipes and Filters decompõe um processamento em filtros ligados por pipes. Filtro é uma etapa que recebe
+      um item e o devolve ao fluxo ou o descarta, e pipe é a ligação que entrega a saída de um filtro ao filtro seguinte.
+      Cada filtro desconhece os demais e trabalha sem estado compartilhado, o que permite acrescentar ou retirar um filtro
+      sem alterar os outros. Richards e Ford chamam o estilo de Pipeline Architecture.
   - tipo: conceito
-    titulo: Os quatro tipos de filtro
-    texto: O producer é a entrada do fluxo e entrega os dados iniciais. O transformer altera o item sem descartá-lo. O tester
-      avalia o item contra um critério e descarta os que não passam. O consumer é o fim do fluxo e grava ou apresenta o resultado.
-      Na triagem de currículos, o leitor é o producer, o normalizador e o calculador de score são transformers, os validadores
-      de nome, experiência e pretensão são testers, e o relatório é o consumer.
+    titulo: Tipos de filtro
+    texto: O material oficial classifica os filtros em quatro tipos. A tabela abaixo associa cada tipo às classes da triagem
+      de currículos.
+  - tipo: comparativo
+    colunas:
+    - Função
+    - Classes na triagem
+    linhas:
+    - dimensao: Producer
+      valores:
+      - Entrega os dados iniciais ao fluxo
+      - '`LeitorDeCurriculos`'
+    - dimensao: Tester
+      valores:
+      - Descarta os itens que não atendem a um critério
+      - '`ValidadorDeCurriculo`, `FiltroPorExperienciaMinima`, `FiltroPorPretensaoSalarial`'
+    - dimensao: Transformer
+      valores:
+      - Altera o item e o mantém no fluxo
+      - '`NormalizadorDeCampos`, `CalculadorDeScore`'
+    - dimensao: Consumer
+      valores:
+      - Encerra o fluxo e apresenta o resultado
+      - '`RelatorioDeTriagem`'
   - tipo: diagrama
     id: D-01
     tipo_diagrama: Fluxo
     titulo: Pipeline da triagem de currículos
-    mermaid: "flowchart LR\n    L([\"LeitorDeCurriculos\\nproducer\"]) --> V{\"ValidadorDeCurriculo\\ntester\"}\n    V -->\
-      \ N[\"NormalizadorDeCampos\\ntransformer\"] --> E{\"FiltroPorExperienciaMinima\\ntester\"}\n    E --> P{\"FiltroPorPretensaoSalarial\\\
-      ntester\"} --> C[\"CalculadorDeScore\\ntransformer\"]\n    C --> R([\"RelatorioDeTriagem\\nconsumer\"])\n    V -. descartado\
-      \ .-> X[/\"fora do fluxo\"/]"
+    mermaid: "flowchart TB\n    L([\"LeitorDeCurriculos<br/>producer\"]) --> V[\"ValidadorDeCurriculo<br/>tester\"]\n    V\
+      \ --> N[\"NormalizadorDeCampos<br/>transformer\"]\n    N --> E[\"FiltroPorExperienciaMinima<br/>tester\"]\n    E -->\
+      \ P[\"FiltroPorPretensaoSalarial<br/>tester\"]\n    P --> C[\"CalculadorDeScore<br/>transformer\"]\n    C --> R([\"\
+      RelatorioDeTriagem<br/>consumer\"])\n    V -. \"descartado\" .-> X[/\"fora do fluxo\"/]"
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/pipes-and-filters/framework.py
-    commit: bd84630
-    contexto: O arquivo `framework.py` define o contrato de filtro e a classe que encadeia os filtros. Ele não conhece nenhum
-      critério de triagem.
+    commit: 9dc7cdf
+    contexto: O arquivo `framework.py` define o contrato de filtro e a classe que encadeia os filtros. Nenhum critério de
+      triagem aparece neste arquivo.
     inicio: 10
     linhas:
     - 'class Filtro:'
@@ -150,19 +167,20 @@ abas:
     - '        return corrente'
     anotacoes:
     - linha: 13
-      texto: 'O contrato único: receber um item e devolver um item, ou None para tirá-lo do fluxo.'
+      texto: Todo filtro recebe um item e devolve um item, ou None para retirá-lo do fluxo.
     - linha: 28
-      texto: 'O pipe: a saída de cada filtro vira a entrada do próximo.'
+      texto: A saída de cada filtro passa a ser a entrada do filtro seguinte.
   - tipo: conceito
-    titulo: A ordem dos filtros é arquitetura
-    texto: Um filtro pode depender do que um filtro anterior fez. O `CalculadorDeScore` compara habilidades em letras minúsculas,
-      e quem as deixa em minúsculas é o `NormalizadorDeCampos`. A montagem do pipeline em `main.py` declara essa ordem. No
-      Laboratório, você executa uma variante sem o normalizador e vê o efeito no score.
+    titulo: Dependência entre filtros pela ordem do pipeline
+    texto: Um filtro pode depender do resultado de um filtro anterior. O `CalculadorDeScore` compara habilidades escritas
+      em letras minúsculas, e a conversão para minúsculas é feita pelo `NormalizadorDeCampos`. A montagem do pipeline em `main.py`
+      declara essa ordem, e o Laboratório executa uma variante sem o normalizador para mostrar o efeito no score.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/pipes-and-filters/main.py
-    commit: bd84630
-    contexto: O arquivo `main.py` monta o pipeline da triagem. A sequência de chamadas a `adicionar` é a arquitetura do fluxo.
+    commit: 9dc7cdf
+    contexto: O arquivo `main.py` monta o pipeline da triagem. A sequência de chamadas ao método `adicionar` define a ordem
+      do fluxo.
     inicio: 33
     linhas:
     - '    pipeline = ('
@@ -175,33 +193,30 @@ abas:
     - '        .adicionar(relatorio)'
     anotacoes:
     - linha: 36
-      texto: Deixa nomes e habilidades num formato único, antes do cálculo de score.
+      texto: Converte nomes e habilidades para um formato único antes do cálculo de score.
   - tipo: conceito
     titulo: Estado compartilhado invisível
-    texto: O anti-padrão de Pipes and Filters é o filtro que guarda estado interno sem declarar, como um total acumulado entre
-      chamadas. O resultado passa a depender da ordem de execução e o fluxo deixa de ser previsível. Quando o fluxo precisa
-      acumular, o estado vai para um armazenamento externo declarado.
+    texto: O anti-padrão de Pipes and Filters é o filtro que guarda estado interno sem declará-lo, como um total acumulado
+      entre chamadas. Com esse estado, o resultado passa a depender da ordem de execução dos itens. Quando o fluxo precisa
+      acumular valores, o material oficial recomenda um armazenamento externo declarado.
   - tipo: conceito
     titulo: Microkernel
-    texto: 'Microkernel separa um núcleo estável das extensões variáveis. O núcleo contém só o mínimo para o sistema funcionar:
-      o registro, que guarda quais plugins existem, e a orquestração, que decide a ordem de execução. Plugin é uma extensão
-      que implementa o contrato definido pelo núcleo. O núcleo não sabe o que os plugins fazem, e os plugins não se conhecem.
-      Richards e Ford chamam o estilo de Plug-in Architecture.'
-    analogia: 'Um videogame com cartuchos: o console é fixo e cada cartucho acrescenta um jogo.'
+    texto: O estilo Microkernel, que Richards e Ford chamam de Plug-in Architecture, separa um núcleo estável das extensões
+      variáveis. O núcleo contém o registro dos plugins disponíveis e a orquestração que define a ordem de execução. Plugin
+      é uma extensão que implementa o contrato definido pelo núcleo, e os plugins desconhecem uns aos outros.
   - tipo: diagrama
     id: D-02
     tipo_diagrama: Estrutura
     titulo: Núcleo e plugins do faturamento
-    mermaid: "flowchart TD\n    subgraph nucleo[\"nucleo.py\"]\n        REG[\"Registro\"] --> NUC[\"Nucleo\\nimpostos, frete,\
-      \ notificacao\"]\n    end\n    NUC -->|\"contrato Plugin\"| SP[\"impostos_sp.py\"]\n    NUC --> RJ[\"impostos_rj.py\"\
-      ]\n    NUC --> FR[\"frete.py\"]\n    NUC --> NT[\"notificacao.py\"]\n    NUC -. \"plugin novo\" .-> MG[\"impostos_mg.py\"\
-      ]"
+    mermaid: "flowchart TB\n    REG[\"Registro\"] --> NUC[\"Nucleo<br/>ordem das categorias\"]\n    NUC -->|\"contrato Plugin\"\
+      | SP[\"impostos_sp.py\"]\n    NUC --> RJ[\"impostos_rj.py\"]\n    NUC --> FR[\"frete.py\"]\n    NUC --> NT[\"notificacao.py\"\
+      ]\n    NUC -. \"plugin novo\" .-> MG[\"impostos_mg.py\"]"
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/microkernel/nucleo.py
-    commit: bd84630
-    contexto: O arquivo `nucleo.py` contém o contrato de plugin, o registro e o núcleo. Não há nenhuma menção a ICMS, ISS
-      ou a qualquer estado neste arquivo.
+    commit: 9dc7cdf
+    contexto: O arquivo `nucleo.py` define o contrato de plugin e a classe `Nucleo`, que executa os plugins registrados. Nenhum
+      imposto e nenhum estado aparecem neste arquivo.
     inicio: 10
     linhas:
     - ORDEM_CATEGORIAS = ("impostos", "frete", "notificacao")
@@ -220,14 +235,14 @@ abas:
     - '        raise NotImplementedError'
     anotacoes:
     - linha: 10
-      texto: O núcleo conhece só as categorias e a ordem em que elas executam.
+      texto: O núcleo conhece apenas as categorias e a ordem de execução delas.
     - linha: 19
       texto: Cada plugin decide se vale para a fatura, por exemplo pelo estado do cliente.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/microkernel/plugins/impostos_rj.py
-    commit: bd84630
-    contexto: O arquivo `plugins/impostos_rj.py` é um plugin completo. Toda a regra tributária do Rio de Janeiro está nele.
+    commit: 9dc7cdf
+    contexto: O arquivo `plugins/impostos_rj.py` é um plugin completo e contém toda a regra tributária do Rio de Janeiro.
     inicio: 9
     linhas:
     - 'class IcmsRJ(Plugin):'
@@ -243,15 +258,15 @@ abas:
     - '            fatura.ajustes.append(("ICMS-RJ", base * ALIQUOTA_ICMS))'
   - tipo: conceito
     titulo: Core creep
-    texto: Core creep é o anti-padrão em que o núcleo acumula regras que pertencem aos plugins, em geral como uma sequência
-      de `if` por estado, cliente ou região. Cada variação nova obriga a alterar, testar e implantar o núcleo, e a extensibilidade
-      do estilo desaparece. O arquivo abaixo é um contraexemplo mantido só para leitura.
+    texto: Core creep é o anti-padrão em que o núcleo acumula regras pertencentes aos plugins, em geral como uma sequência
+      de condicionais por estado ou por cliente. Cada variação nova passa a exigir uma nova versão do núcleo. O arquivo `nucleo_com_creep.py`
+      exibido abaixo mostra esse núcleo com uma condicional para SP e outra para RJ.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/microkernel/nucleo_com_creep.py
-    commit: bd84630
-    contexto: O arquivo `nucleo_com_creep.py` não é usado pelo programa. Ele mostra como o núcleo ficaria se a regra de cada
-      estado fosse escrita dentro dele.
+    commit: 9dc7cdf
+    contexto: O arquivo `nucleo_com_creep.py` mostra o núcleo com a regra de cada estado escrita dentro dele. O programa `main.py`
+      não usa este arquivo.
     inicio: 11
     linhas:
     - 'class NucleoComCreep:'
@@ -261,23 +276,23 @@ abas:
     - '            fatura.ajustes.append(("ICMS-SP", eletronicos * 0.18))'
     - '        elif fatura.estado == "RJ":'
     - '            fatura.ajustes.append(("ICMS-RJ", eletronicos * 0.20))'
-    - '        # Minas Gerais exigiria mais um elif aqui, dentro do núcleo.'
+    - '        # Minas Gerais exigiria mais um elif dentro do núcleo.'
     anotacoes:
     - linha: 16
-      texto: 'Regra de plugin dentro do núcleo: cada estado novo é mais um elif.'
+      texto: Regra de plugin dentro do núcleo, que exige um elif por estado.
   - tipo: comparativo
     colunas:
     - Pipes and Filters
     - Microkernel
     linhas:
-    - dimensao: Acomoda mudança por
+    - dimensao: Forma de acomodar mudança
       valores:
       - Inclusão, remoção ou troca de filtros
       - Inclusão de plugins
     - dimensao: Parte estável
       valores:
-      - O contrato de filtro e o encadeador
-      - O núcleo e o contrato de plugin
+      - Contrato de filtro e encadeador
+      - Núcleo e contrato de plugin
     - dimensao: Anti-padrão
       valores:
       - Estado compartilhado invisível
@@ -295,29 +310,28 @@ abas:
       - '2'
       - '3'
   - tipo: conceito
-    titulo: ADR, o registro da escolha
-    texto: ADR é a sigla de Architecture Decision Record, ou registro de decisão arquitetural. É um documento curto, versionado
-      junto com o código, que guarda o contexto, a decisão, as alternativas consideradas e as consequências. O bloco abaixo
-      é um ADR de exemplo para o faturamento desta ODA. Clique nele para abrir.
+    titulo: ADR
+    texto: ADR é a sigla de Architecture Decision Record, em português registro de decisão arquitetural. O ADR é um documento
+      curto e versionado junto com o código que registra uma escolha de arquitetura e os motivos dela. O bloco abaixo contém
+      um ADR de exemplo para o faturamento desta ODA, com os campos do template do material oficial.
   - tipo: adr
     id: ADR-002
     titulo: Calcular impostos por estado com Microkernel
     status: Aceita (exemplo didático)
-    contexto: 'O faturamento atende clientes de vários estados, e cada estado tem regras tributárias próprias que mudam com
-      frequência. O fluxo de cálculo é o mesmo para todos: impostos, depois frete, depois notificação.'
-    decisao: Manter no núcleo apenas o registro e a ordem das categorias, e implementar a regra de cada estado como um plugin
-      que cumpre o contrato Plugin.
-    alternativas: Condicionais por estado dentro do núcleo, descartadas porque cada estado novo exigiria alterar e implantar
-      o núcleo. Pipes and Filters, descartado porque o problema central é a variação por estado e não uma sequência de transformações
-      de dados.
-    consequencias: Um estado novo entra por um arquivo em plugins e uma linha de registro. O contrato Plugin passa a exigir
-      estabilidade, porque mudá-lo obriga todos os plugins a mudar.
+    contexto: O faturamento atende clientes de vários estados, e as regras tributárias de cada estado mudam com frequência.
+      A sequência de cálculo é igual para todos os estados e começa sempre pelos impostos.
+    decisao: Manter no núcleo apenas o registro e a ordem das categorias. A regra de cada estado será implementada como um
+      plugin que cumpre o contrato Plugin.
+    alternativas: As condicionais por estado dentro do núcleo foram descartadas porque cada estado novo exigiria uma nova
+      versão do núcleo. Pipes and Filters foi descartado porque o problema central é a variação de regras por estado, e o
+      estilo trata de sequências de transformação de dados.
+    consequencias: Um estado novo entra por um arquivo na pasta plugins e por uma linha de registro. O contrato Plugin precisa
+      permanecer estável, porque uma mudança nele obriga todos os plugins a mudar.
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
-    texto: 'Os conceitos desta aba seguem a página Padrões e decisões do Módulo 1, nas seções Pipes and Filters, Microkernel,
-      O caso canônico: cálculo de impostos e ADR. As notas de 1 a 5 do comparativo vêm das tabelas de características arquiteturais
-      dessas seções, que seguem Richards e Ford.'
+    texto: As notas de 1 a 5 do comparativo vêm das tabelas de características arquiteturais do material oficial, que seguem
+      Richards e Ford. Os links abaixo levam às seções usadas nesta aba.
     links:
     - *id002
     - *id003
@@ -332,52 +346,54 @@ abas:
   titulo: Laboratório
   blocos:
   - tipo: legenda
-    texto: Você vai executar quatro programas prontos e comparar as saídas em pares. Nenhum arquivo precisa ser alterado.
-      Reserve 12 minutos, cerca de 3 por programa.
+    texto: O Laboratório executa quatro programas prontos e compara as saídas em pares. Nenhum arquivo precisa ser alterado,
+      e o tempo previsto é de 12 minutos.
   - tipo: glossario
     titulo: 📘 Conceitos usados nesta aba
-    texto: Os termos técnicos desta aba estão explicados abaixo, na ordem em que aparecem.
+    texto: Os termos técnicos desta aba estão explicados abaixo na ordem em que aparecem.
     itens:
     - termo: Terminal
-      definicao: Programa em que você digita comandos de texto. No Windows é o PowerShell, no macOS e no Linux é o Terminal.
-        O VS Code abre um terminal integrado pelo menu Terminal, opção Novo Terminal.
+      definicao: Programa em que se digitam comandos de texto, chamado PowerShell no Windows e Terminal no macOS e no Linux.
+        O VS Code abre um terminal integrado pelo menu Terminal › Novo Terminal.
     - termo: cd
-      definicao: Comando que muda a pasta atual do terminal. Os programas Python desta ODA precisam ser executados de dentro
-        da própria pasta.
+      definicao: Comando que muda a pasta atual do terminal. Cada programa desta ODA precisa ser executado de dentro da própria
+        pasta.
     - termo: Filtro e pipeline
-      definicao: Filtro é uma etapa que recebe um item e o devolve ou descarta. Pipeline é a sequência de filtros.
+      definicao: Filtro é uma etapa que recebe um item e o devolve ou descarta. Pipeline é a sequência de filtros montada
+        em `main.py`.
     - termo: Score
-      definicao: Percentual das habilidades exigidas pela vaga que o candidato informou, calculado pelo `CalculadorDeScore`.
+      definicao: Percentual das habilidades exigidas pela vaga que aparecem no currículo, calculado pelo filtro `CalculadorDeScore`.
     - termo: Núcleo e plugin
-      definicao: O núcleo é a parte estável, que conhece a ordem das categorias. O plugin é a extensão que traz a regra de
+      definicao: O núcleo é a parte estável que conhece a ordem das categorias. O plugin é a extensão que contém a regra de
         um estado.
   - tipo: faixa
     estilo: objetivo
-    problema: Na triagem, um filtro depende do formato que outro filtro produz. No faturamento, a regra de cada estado poderia
-      acabar dentro do núcleo como mais uma condicional.
-    impacto: Retirar ou reordenar um filtro sem conhecer essa dependência muda o resultado sem nenhum erro. Regras de estado
-      no núcleo obrigam a alterar e implantar o núcleo a cada estado novo.
+    problema: Na triagem, o cálculo de score depende do formato produzido por outro filtro. No faturamento, a regra de cada
+      estado pode ser escrita dentro do núcleo como mais uma condicional.
+    impacto: A remoção de um filtro sem conhecimento dessa dependência altera o resultado sem mensagem de erro. Regras de
+      estado dentro do núcleo exigem uma nova versão do núcleo a cada estado acrescentado.
     mecanismo: A variante `sem_normalizador.py` monta o pipeline com os mesmos filtros, exceto o normalizador. O programa
-      `com_minas_gerais.py` registra o plugin novo `plugins/impostos_mg.py` sem alterar `nucleo.py`.
-    comprovacao: Sem o normalizador, Ana Lima cai de 100% para 0% de score. A fatura de Minas Gerais recebe ICMS-MG de R$900.00,
-      e `nucleo.py` continua sem nenhuma menção a MG.
+      `com_minas_gerais.py` registra o plugin novo `plugins/impostos_mg.py` sem alteração de `nucleo.py`.
+    comprovacao: Sem o normalizador, o score de Ana Lima cai de 100% para 0%. A fatura de Minas Gerais recebe ICMS-MG de R$900.00,
+      e a busca por MG em `nucleo.py` não encontra nenhuma ocorrência.
   - tipo: faixa
     estilo: dica
-    titulo: 💻 Windows, macOS e Linux
-    texto: Os comandos usam `python3`, que é o nome do interpretador no macOS e no Linux. No Windows, use `py` no lugar de
-      `python3`, por exemplo `py main.py`. O comando `cd` funciona igual no PowerShell, inclusive com a barra `/` nos caminhos.
+    titulo: 💻 Comandos por sistema operacional
+    texto: Os comandos desta aba usam `python3`, que é o nome do interpretador Python no macOS e no Linux. No Windows o mesmo
+      programa é executado pelo comando `py`, como em `py main.py`. O comando `cd` funciona da mesma forma no PowerShell e
+      aceita a barra `/` nos caminhos de pasta.
   - tipo: passos
     itens:
     - titulo: Abrir o terminal na raiz do repositório
-      texto: No VS Code, abra a pasta `odas-arquitetura-software` e depois um terminal pelo menu Terminal, opção Novo Terminal.
-        Atualize o repositório antes de começar.
+      texto: No VS Code, abra a pasta `odas-arquitetura-software` pelo menu Arquivo › Abrir Pasta. Em seguida, abra um terminal
+        pelo menu Terminal › Novo Terminal e atualize o repositório.
       editor:
         rotulo: terminal
         linhas:
         - git pull
     - titulo: Executar a triagem completa
-      texto: Entre na pasta da triagem e execute o pipeline. Observe as três linhas de descarte e reprovação, cada uma impressa
-        por um tester diferente, e o score de cada aprovado.
+      texto: Entre na pasta da triagem e execute o pipeline. Cada linha de descarte ou reprovação da saída foi impressa por
+        um tester diferente.
       editor:
         rotulo: terminal
         linhas:
@@ -429,7 +445,8 @@ abas:
   - tipo: passos
     itens:
     - titulo: Executar a variante sem o normalizador
-      texto: Na mesma pasta, execute a variante. Ela usa os mesmos arquivos de `filtros/`, e só a montagem do pipeline é diferente.
+      texto: Na mesma pasta, execute a variante. Ela usa os mesmos arquivos da pasta `filtros/` e difere de `main.py` apenas
+        na montagem do pipeline.
       editor:
         rotulo: terminal
         linhas:
@@ -468,15 +485,14 @@ abas:
     - '     Cidade: Salvador'
   - tipo: faixa
     estilo: quebra
-    texto: 'Ana Lima e Felipe Nunes caíram para 0% de score. Os currículos deles informam habilidades com inicial maiúscula,
-      como `Python`, e o calculador compara com `python`. Nenhum filtro mudou: a dependência entre filtros está na ordem do
-      pipeline, e retirar uma etapa alterou o resultado das seguintes.'
+    texto: O score de Ana Lima e o de Felipe Nunes caíram para 0%. Os currículos dos dois informam habilidades com inicial
+      maiúscula, como `Python`, e o calculador procura `python`. Os arquivos de filtro permaneceram iguais, e a remoção de
+      uma etapa do pipeline alterou o resultado das etapas seguintes.
   - tipo: passos
     itens:
     - titulo: Executar o faturamento por plugins
-      texto: Entre na pasta do microkernel e execute o programa. Observe o registro dos cinco plugins e os ajustes de cada
-        fatura. A linha de e-mail aparece antes dos ajustes porque a notificação é um plugin que imprime durante o processamento,
-        depois dos impostos e do frete.
+      texto: Entre na pasta do microkernel e execute o programa. A linha de e-mail aparece antes dos ajustes porque o plugin
+        de notificação imprime a mensagem durante o processamento, depois dos impostos e do frete.
       editor:
         rotulo: terminal
         linhas:
@@ -541,8 +557,8 @@ abas:
   - tipo: passos
     itens:
     - titulo: Executar o faturamento com Minas Gerais
-      texto: Na mesma pasta, execute o programa que registra o plugin ICMS-MG. Depois abra `nucleo.py` no VS Code e procure
-        por MG com Ctrl+F, ou Cmd+F no macOS.
+      texto: Na mesma pasta, execute o programa que registra o plugin ICMS-MG. Depois, abra `nucleo.py` no VS Code e procure
+        por MG com Ctrl+F (Cmd+F no macOS).
       editor:
         rotulo: terminal
         linhas:
@@ -571,13 +587,13 @@ abas:
     - '  TOTAL: R$6,020.00'
   - tipo: faixa
     estilo: sucesso
-    texto: O estado novo entrou por um arquivo, `plugins/impostos_mg.py`, e por uma linha de registro em `com_minas_gerais.py`.
-      A busca por MG em `nucleo.py` não encontra nada, porque o núcleo não foi alterado.
+    texto: O estado novo entrou pelo arquivo `plugins/impostos_mg.py` e por uma linha de registro em `com_minas_gerais.py`.
+      A busca por MG em `nucleo.py` não encontra ocorrências porque o núcleo permaneceu igual.
   - tipo: faixa
     estilo: dica
-    titulo: 🖥️ Sem Python na máquina?
-    texto: Se o seu ambiente falhou, digite os comandos nos terminais simulados abaixo. As saídas são as mesmas da execução
-      real, capturadas no commit citado na aba Objetivo.
+    titulo: 🖥️ Terminal simulado
+    texto: Quem não conseguiu preparar o ambiente pode digitar os comandos nos terminais simulados abaixo. As saídas simuladas
+      são as saídas reais dos programas no commit citado na aba Objetivo.
   - tipo: terminal
     titulo: terminal simulado · pasta codigo/oda-02/pipes-and-filters
     comandos:
@@ -656,20 +672,21 @@ abas:
   - tipo: faixa
     estilo: erro
     sintoma: 'O terminal mostra `ModuleNotFoundError: No module named ''dominio''` ou `No module named ''filtros''`.'
-    causa: O programa foi executado fora da própria pasta, e o Python não encontra os arquivos vizinhos.
-    correcao: Entre na pasta do programa com `cd` antes de executá-lo, como nos passos acima, e repita o comando.
+    causa: O programa foi executado fora da própria pasta, e o Python não localiza os arquivos vizinhos.
+    correcao: Entre na pasta do programa com `cd` antes de executá-lo, conforme os passos acima, e repita o comando.
   - tipo: checklist
     titulo: Checklist final
     itens:
-    - A triagem completa aprovou três candidatos, com Ana Lima e Elena Souza em 100%.
-    - Sem o normalizador, Ana Lima e Felipe Nunes caíram para 0%.
+    - A triagem completa aprovou Ana Lima e Elena Souza com 100% de score.
+    - Na variante sem o normalizador, Ana Lima e Felipe Nunes ficaram com 0% de score.
     - A fatura de Minas Gerais recebeu ICMS-MG de R$900.00.
-    - A busca por MG em `nucleo.py` não encontrou nada.
+    - A busca por MG em `nucleo.py` não encontrou ocorrências.
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
-    texto: 'Os programas materializam os Experimentos 2 e 3 da Oficina de ferramentas. A variante sem o normalizador e o plugin
-      de Minas Gerais aplicam as propriedades descritas nas seções Pipes and Filters e O caso canônico: cálculo de impostos.'
+    texto: 'Os programas desta aba correspondem aos Experimentos 2 e 3 da Oficina de ferramentas. A variante sem o normalizador
+      e o plugin de Minas Gerais aplicam as propriedades descritas nas seções Pipes and Filters e O caso canônico: cálculo
+      de impostos.'
     links:
     - *id004
     - *id005
@@ -678,75 +695,131 @@ abas:
   titulo: Verificação
   blocos:
   - tipo: legenda
-    texto: Responda às cinco perguntas. Cada alternativa traz uma explicação depois da escolha, com referência ao que você
-      viu nas abas anteriores.
+    texto: As perguntas abaixo tratam do conteúdo do Módulo 1 do material oficial. Cada alternativa exibe uma explicação depois
+      da escolha.
   - tipo: quiz
     perguntas:
-    - enunciado: Na triagem de currículos, qual é o papel do `FiltroPorExperienciaMinima`?
+    - enunciado: Qual tipo de filtro avalia os dados contra um critério e descarta os que não passam?
       alternativas:
-      - texto: Producer, porque entrega os currículos ao fluxo.
+      - texto: Producer
         correta: false
-        explicacao: O producer é o `LeitorDeCurriculos`.
-      - texto: Tester, porque avalia o currículo e descarta os que não atingem o mínimo.
+        explicacao: O producer é a entrada do fluxo e gera ou lê os dados iniciais.
+      - texto: Tester
         correta: true
-        explicacao: Ele devolve None para o candidato com menos anos que o exigido, e o currículo sai do fluxo.
-      - texto: Transformer, porque altera o currículo.
+        explicacao: Na triagem de currículos da oficina, `FiltroPorExperienciaMinima` é um tester.
+      - texto: Transformer
         correta: false
-        explicacao: Ele não altera o currículo, apenas decide se ele continua.
-    - enunciado: Por que Ana Lima caiu para 0% de score na variante sem o normalizador?
+        explicacao: O transformer aplica uma transformação e emite os dados sem descartar.
+    - enunciado: Qual é o papel do filtro do tipo consumer?
       alternativas:
-      - texto: Porque o `CalculadorDeScore` foi alterado.
-        correta: false
-        explicacao: Nenhum arquivo de `filtros/` mudou entre as duas execuções.
-      - texto: Porque o calculador compara habilidades em minúsculas, e o filtro que as convertia saiu do pipeline.
+      - texto: Encerrar o fluxo e persistir ou enviar os dados processados.
         correta: true
-        explicacao: A dependência entre os filtros está na ordem do pipeline, declarada na montagem.
-      - texto: Porque ela foi reprovada pelo filtro de experiência.
+        explicacao: O material oficial cita como exemplos a gravação no banco, o envio de e-mail e a publicação em fila.
+      - texto: Ler os dados de uma fila e iniciar o fluxo.
         correta: false
-        explicacao: Ela continua aprovada, com score 0%.
-    - enunciado: O que precisou mudar para o faturamento atender Minas Gerais?
+        explicacao: Esse é o papel do producer.
+      - texto: Normalizar campos antes do processamento.
+        correta: false
+        explicacao: Esse é o papel de um transformer.
+    - enunciado: Qual é a premissa fundamental do estilo Pipes and Filters, segundo Richards e Ford?
       alternativas:
-      - texto: Um novo `elif` em `nucleo.py`.
-        correta: false
-        explicacao: Esse seria o core creep, mostrado em `nucleo_com_creep.py`.
-      - texto: Um arquivo novo em `plugins/` e uma linha de registro.
+      - texto: A ausência de estado compartilhado entre os filtros.
         correta: true
-        explicacao: O núcleo não foi alterado, e a busca por MG em `nucleo.py` não encontra nada.
-      - texto: O contrato `Plugin` ganhou um método novo.
+        explicacao: Cada filtro processa os dados recebidos e desconhece a origem e o destino deles.
+      - texto: A execução paralela de todos os filtros.
         correta: false
-        explicacao: O contrato continuou igual, e por isso os outros plugins não mudaram.
-    - enunciado: Qual anti-padrão aparece quando o núcleo acumula condicionais por estado ou cliente?
+        explicacao: A paralelização vale apenas para etapas independentes, e a ordenação também é contrato.
+      - texto: A comunicação direta entre filtros vizinhos.
+        correta: false
+        explicacao: Os filtros se comunicam somente pelos pipes.
+    - enunciado: Um filtro acumula um total interno entre chamadas sem declarar esse estado. Qual é a consequência?
       alternativas:
-      - texto: Core creep
+      - texto: O pipeline passa a depender da ordem de execução e deixa de ser determinístico.
         correta: true
-        explicacao: Cada variação nova volta ao núcleo, e a extensibilidade se perde.
+        explicacao: O material oficial chama esse anti-padrão de estado compartilhado invisível e recomenda um mecanismo externo
+          declarado.
+      - texto: O pipeline ganha throughput, porque evita recalcular valores.
+        correta: false
+        explicacao: O ganho aparente vem acompanhado de acoplamento implícito entre as execuções.
+      - texto: O filtro passa a ser classificado como consumer.
+        correta: false
+        explicacao: A classificação depende do papel do filtro no fluxo.
+    - enunciado: Na avaliação de Richards e Ford, qual destas características de Pipes and Filters recebe a nota mais baixa?
+      alternativas:
+      - texto: Testabilidade
+        correta: false
+        explicacao: A testabilidade recebe nota 5, porque cada filtro é testável em isolamento.
+      - texto: Desempenho
+        correta: true
+        explicacao: O desempenho recebe nota 2, porque o processamento sequencial acumula latência entre as etapas.
+      - texto: Modularidade
+        correta: false
+        explicacao: A modularidade recebe nota 5, por construção do estilo.
+    - enunciado: Em qual situação o material oficial desaconselha Pipes and Filters?
+      alternativas:
+      - texto: Processamento de logs em múltiplas etapas.
+        correta: false
+        explicacao: O processamento de logs é um dos usos indicados.
+      - texto: Etapas que precisam compartilhar estado mútuo.
+        correta: true
+        explicacao: O compartilhamento de estado elimina a independência dos filtros.
+      - texto: ETL entre uma origem e um destino.
+        correta: false
+        explicacao: ETL é um dos usos indicados.
+    - enunciado: No estilo Microkernel, como o material oficial descreve a evolução do núcleo e dos plugins?
+      alternativas:
+      - texto: O núcleo evolui lentamente, e os plugins evoluem rapidamente e de forma independente.
+        correta: true
+        explicacao: A única relação entre o núcleo e os plugins é o contrato definido pelo núcleo.
+      - texto: O núcleo e os plugins evoluem juntos, numa mesma versão.
+        correta: false
+        explicacao: Os plugins podem ser implantados independentemente do núcleo.
+      - texto: Os plugins evoluem lentamente, porque dependem uns dos outros.
+        correta: false
+        explicacao: Os plugins desconhecem uns aos outros.
+    - enunciado: O núcleo de um sistema fiscal passa a conter um `if` para cada estado atendido. Qual anti-padrão aparece?
+      alternativas:
       - texto: Sumidouro
         correta: false
         explicacao: O sumidouro é um anti-padrão do estilo em camadas.
+      - texto: Core creep
+        correta: true
+        explicacao: Qualquer lógica que varia entre clientes ou regiões pertence a um plugin.
       - texto: Estado compartilhado invisível
         correta: false
-        explicacao: Esse é o anti-padrão de Pipes and Filters.
-    - enunciado: No ADR-002 desta ODA, por que Pipes and Filters foi descartado para o cálculo de impostos?
+        explicacao: Esse anti-padrão pertence ao estilo Pipes and Filters.
+    - enunciado: Por que o contrato entre o núcleo e os plugins precisa ser estável?
       alternativas:
-      - texto: Porque Pipes and Filters não pode ser testado.
-        correta: false
-        explicacao: A testabilidade é o ponto forte do estilo, com nota 5.
-      - texto: Porque o problema central é a variação por estado, e não uma sequência de transformações de dados.
+      - texto: Porque cada mudança no contrato quebra os plugins existentes.
         correta: true
-        explicacao: O campo Alternativas do ADR registra esse motivo.
-      - texto: Porque o faturamento não tem etapas.
+        explicacao: O material oficial recomenda também versionar o contrato, para que versões diferentes de plugins coexistam.
+      - texto: Porque o núcleo não pode ser testado com contratos diferentes.
         correta: false
-        explicacao: O faturamento tem etapas, e o núcleo as ordena por categoria.
+        explicacao: O núcleo é fácil de testar, segundo a avaliação de Richards e Ford.
+      - texto: Porque o registro só aceita um plugin por categoria.
+        correta: false
+        explicacao: O registro pode guardar vários plugins por categoria, como os impostos de SP e RJ da oficina.
+    - enunciado: Qual é o custo de implantar plugins fora do processo do núcleo (out-of-process)?
+      alternativas:
+      - texto: A implantação passa a acontecer junto com o núcleo.
+        correta: false
+        explicacao: Essa característica é da forma in-process.
+      - texto: A latência de rede entre o núcleo e o plugin.
+        correta: true
+        explicacao: Em troca, o plugin ganha implantação e escala independentes do núcleo.
+      - texto: A dependência de disponibilidade de um provedor externo.
+        correta: false
+        explicacao: Essa característica é da forma SaaS.
   - tipo: resumo
   - tipo: checklist
     titulo: Para revisar depois da aula
     itens:
     - Ler as seções Quando usar Pipes and Filters e Quando usar Microkernel no material oficial.
-    - Abrir o template de ADR do material oficial e comparar com o ADR-002 desta ODA.
+    - Comparar o template de ADR do material oficial com o ADR-002 desta ODA.
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
-    texto: As perguntas cobrem as seções Pipes and Filters, Microkernel e ADR da página Padrões e decisões.
+    texto: Os links abaixo levam às seções do material oficial cobertas pelas perguntas.
     links:
     - rotulo: Material oficial · Quando usar Pipes and Filters
       url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#quando-usar-pipes-and-filters-e-quando-nao-usar

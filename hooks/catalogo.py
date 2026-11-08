@@ -77,7 +77,7 @@ def _href(oda: dict) -> str:
 
 def _titulo_trilha(catalogo: dict, numero: int) -> str:
     titulo = next(t["titulo"] for t in catalogo["trilhas"] if t["numero"] == numero)
-    return f"Trilha {numero} — {titulo}"
+    return f"Trilha {numero} · {titulo}"
 
 
 def renderizar_indice(catalogo: dict) -> str:

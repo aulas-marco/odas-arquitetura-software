@@ -1,14 +1,20 @@
-# Módulo 0 — Preparar o ambiente
+# Preparação do ambiente (Módulo 0)
 
-Este módulo instala as três ferramentas usadas nos laboratórios das ODAs e copia este repositório para o seu computador. Ele leva cerca de 20 minutos e deve ser concluído antes do primeiro encontro ao vivo.
+Este módulo instala as ferramentas usadas nos laboratórios das ODAs e copia este repositório para o computador do aluno. A preparação leva cerca de 20 minutos e deve ser concluída antes do primeiro encontro ao vivo.
 
 | Ferramenta | Para que serve nas ODAs |
 | --- | --- |
-| Git | Programa de controle de versões. Nas ODAs, ele copia o repositório para o seu computador (operação chamada clonar) e o atualiza a cada aula. |
-| VS Code (Visual Studio Code) | Editor de código gratuito da Microsoft. Nas ODAs, ele abre os arquivos citados nas abas e oferece um terminal integrado. |
-| Python 3.10 ou mais recente | Interpretador da linguagem Python. Nas ODAs, ele executa os programas prontos do Laboratório. |
+| Git | Programa de controle de versões. Nas ODAs, o Git copia o repositório para o computador, operação chamada clonar, e o atualiza a cada aula. |
+| VS Code (Visual Studio Code) | Editor de código gratuito da Microsoft. Nas ODAs, o VS Code abre os arquivos citados nas abas e oferece um terminal integrado. |
+| Python 3.10 ou mais recente | Interpretador da linguagem Python. Nas ODAs, o Python executa os programas prontos do Laboratório. |
 
-Os comandos deste módulo são digitados num **terminal**, programa em que se escrevem comandos de texto. No Windows, use o PowerShell, que se abre pelo menu Iniciar. No macOS, use o aplicativo Terminal, em Aplicativos › Utilitários. No Linux, use o terminal da sua distribuição.
+Os comandos deste módulo são digitados num terminal, que é o programa em que se escrevem comandos de texto. A tabela abaixo indica o terminal de cada sistema operacional.
+
+| Sistema | Terminal | Onde encontrar |
+| --- | --- | --- |
+| Windows | PowerShell | Menu Iniciar |
+| macOS | Terminal | Aplicativos › Utilitários |
+| Linux | Terminal da distribuição | Menu de aplicativos |
 
 ## 1. Instalar o Git
 
@@ -20,17 +26,17 @@ Os comandos deste módulo são digitados num **terminal**, programa em que se es
     winget install --id Git.Git -e --source winget
     ```
 
-    Se o `winget` não for reconhecido, baixe o instalador em [git-scm.com/download/win](https://git-scm.com/download/win) e aceite as opções padrão. Depois da instalação, feche e abra o PowerShell de novo.
+    Se o `winget` não for reconhecido, o instalador pode ser baixado em [git-scm.com/download/win](https://git-scm.com/download/win) e executado com as opções padrão. Depois da instalação, o PowerShell precisa ser fechado e aberto de novo.
 
 === "macOS"
 
-    No Terminal, o comando abaixo instala as ferramentas de linha de comando da Apple, que incluem o Git. Uma janela pede confirmação.
+    No Terminal, o comando abaixo instala as ferramentas de linha de comando da Apple, que incluem o Git, depois de uma confirmação numa janela do sistema.
 
     ```bash
     xcode-select --install
     ```
 
-    Se aparecer a mensagem de que as ferramentas já estão instaladas, o Git já está disponível.
+    A mensagem de que as ferramentas já estão instaladas indica que o Git já está disponível.
 
 === "Linux"
 
@@ -43,7 +49,7 @@ Os comandos deste módulo são digitados num **terminal**, programa em que se es
 
     Em Fedora, use `sudo dnf install -y git`.
 
-Confira a instalação. O terminal deve mostrar uma linha como `git version 2.47.0`, e qualquer versão serve.
+O comando abaixo confere a instalação e deve exibir uma linha como `git version 2.47.0`, em qualquer versão.
 
 ```bash
 git --version
@@ -57,11 +63,11 @@ git --version
     winget install --id Microsoft.VisualStudioCode -e --source winget
     ```
 
-    Se preferir, baixe o instalador em [code.visualstudio.com](https://code.visualstudio.com/) e marque a opção "Adicionar ao PATH" durante a instalação.
+    O instalador também pode ser baixado em [code.visualstudio.com](https://code.visualstudio.com/), com a opção "Adicionar ao PATH" marcada durante a instalação.
 
 === "macOS"
 
-    Baixe o VS Code em [code.visualstudio.com](https://code.visualstudio.com/), abra o arquivo baixado e arraste o aplicativo para a pasta Aplicativos. Para habilitar o comando `code` no Terminal, abra o VS Code, pressione Cmd+Shift+P, digite `Shell Command: Install 'code' command in PATH` e confirme.
+    Baixe o VS Code em [code.visualstudio.com](https://code.visualstudio.com/) e arraste o aplicativo baixado para a pasta Aplicativos. O comando `code` fica disponível no Terminal depois do comando `Shell Command: Install 'code' command in PATH`, acionado no VS Code pelo atalho Cmd+Shift+P.
 
 === "Linux"
 
@@ -71,7 +77,7 @@ git --version
     sudo apt install ./code_*.deb
     ```
 
-Instale também a extensão Python, da Microsoft, que colore e analisa os arquivos `.py`. No VS Code, abra o painel Extensões com Ctrl+Shift+X (Cmd+Shift+X no macOS), procure por `Python` e instale a extensão publicada pela Microsoft.
+A extensão Python, publicada pela Microsoft, destaca a sintaxe dos arquivos `.py` no VS Code. Ela é instalada pelo painel Extensões, aberto com Ctrl+Shift+X (Cmd+Shift+X no macOS), com uma busca por `Python`.
 
 ## 3. Instalar o Python
 
@@ -81,7 +87,7 @@ Instale também a extensão Python, da Microsoft, que colore e analisa os arquiv
     winget install --id Python.Python.3.13 -e --source winget
     ```
 
-    Se preferir o instalador, baixe-o em [python.org/downloads](https://www.python.org/downloads/) e marque a opção "Add python.exe to PATH" na primeira tela. No Windows, o comando do interpretador é `py`.
+    O instalador também pode ser baixado em [python.org/downloads](https://www.python.org/downloads/), com a opção "Add python.exe to PATH" marcada na primeira tela. No Windows, o comando do interpretador é `py`.
 
     ```powershell
     py --version
@@ -89,7 +95,7 @@ Instale também a extensão Python, da Microsoft, que colore e analisa os arquiv
 
 === "macOS"
 
-    Baixe o instalador da versão estável mais recente em [python.org/downloads](https://www.python.org/downloads/) e execute-o. No macOS, o comando do interpretador é `python3`.
+    O instalador da versão estável mais recente está em [python.org/downloads](https://www.python.org/downloads/). No macOS, o comando do interpretador é `python3`.
 
     ```bash
     python3 --version
@@ -97,35 +103,35 @@ Instale também a extensão Python, da Microsoft, que colore e analisa os arquiv
 
 === "Linux"
 
-    A maioria das distribuições já traz o Python 3. Confira a versão e, se o comando não existir, instale o pacote `python3` pelo gerenciador da distribuição.
+    A maioria das distribuições Linux já traz o Python 3 instalado. Quando o comando de versão falha, o pacote `python3` precisa ser instalado pelo gerenciador da distribuição.
 
     ```bash
     python3 --version
     sudo apt install -y python3
     ```
 
-A versão mostrada deve ser 3.10 ou mais recente. Se for anterior, instale uma versão nova pelo mesmo caminho.
+A versão exibida deve ser 3.10 ou mais recente, e uma versão anterior precisa ser substituída pelo mesmo procedimento de instalação.
 
 ## 4. Clonar o repositório
 
-Clonar é copiar o repositório do GitHub para o seu computador, com todo o histórico. Escolha uma pasta de trabalho, abra o terminal nela e execute:
+Clonar é copiar o repositório do GitHub para o computador com todo o histórico de versões. Abra o terminal numa pasta de trabalho de sua escolha e execute os comandos abaixo.
 
 ```bash
 git clone https://github.com/aulas-marco/odas-arquitetura-software
 cd odas-arquitetura-software
 ```
 
-O Git cria a pasta `odas-arquitetura-software`, e o comando `cd` entra nela. Para abri-la no VS Code, use o comando abaixo, ou o menu Arquivo › Abrir Pasta.
+O Git cria a pasta `odas-arquitetura-software`, e o comando `cd` entra nela. O comando abaixo abre essa pasta no VS Code, e o menu Arquivo › Abrir Pasta tem o mesmo efeito.
 
 ```bash
 code .
 ```
 
-No VS Code, abra o terminal integrado pelo menu Terminal › Novo Terminal. Ele já começa na pasta do repositório, e é nele que os comandos dos Laboratórios são executados.
+No VS Code, o terminal integrado abre pelo menu Terminal › Novo Terminal, já posicionado na pasta do repositório, e os comandos dos Laboratórios são executados nele.
 
 ## 5. Conferir o ambiente
 
-Na raiz do repositório, execute o verificador. Ele confere a versão do Python, a presença do Git e as pastas das ODAs.
+O programa verificador, executado na raiz do repositório, confere a versão do Python e a presença do Git e das pastas das ODAs.
 
 === "Windows"
 
@@ -139,7 +145,7 @@ Na raiz do repositório, execute o verificador. Ele confere a versão do Python,
     python3 codigo/modulo-0/verificar_ambiente.py
     ```
 
-A saída esperada termina com a linha `Ambiente pronto.`:
+A saída esperada termina com a linha `Ambiente pronto.`, como no exemplo abaixo.
 
 ```text
   [OK] Python 3.13.1 (mínimo 3.10)
@@ -149,11 +155,11 @@ A saída esperada termina com a linha `Ambiente pronto.`:
 Ambiente pronto.
 ```
 
-O número da versão do Python pode ser diferente. Se algum item aparecer como `FALTA`, refaça a etapa correspondente deste módulo. Um `[AVISO]` sobre o comando `code` não impede os laboratórios, porque o VS Code pode ser aberto pelo menu do sistema.
+O número da versão do Python pode ser diferente na máquina do aluno. Um item marcado como `FALTA` indica a etapa deste módulo que precisa ser refeita. Um `[AVISO]` sobre o comando `code` permite seguir com os laboratórios, porque o VS Code também abre pelo menu do sistema.
 
 ## 6. Atualizar antes de cada aula
 
-O repositório recebe as ODAs novas ao longo da disciplina. No início de cada aula, atualize a sua cópia de dentro da pasta do repositório:
+O repositório recebe ODAs novas ao longo da disciplina, e a cópia local precisa ser atualizada no início de cada aula com o comando abaixo, executado dentro da pasta do repositório.
 
 ```bash
 git pull
@@ -163,7 +169,7 @@ git pull
 
 | Sintoma | Causa provável | Correção |
 | --- | --- | --- |
-| `git`, `code` ou `py` "não é reconhecido como comando" | O terminal foi aberto antes da instalação e não conhece o novo programa | Feche todas as janelas do terminal e do VS Code e abra de novo |
-| `python3` abre a Microsoft Store no Windows | O Windows tem um atalho que aponta para a loja | Use `py` no lugar de `python3` |
-| `fatal: destination path 'odas-arquitetura-software' already exists` | O repositório já foi clonado nessa pasta | Entre na pasta com `cd odas-arquitetura-software` e use `git pull` |
-| `git pull` recusa a atualização por causa de alterações locais | Algum arquivo do repositório foi alterado | Desfaça as alterações com `git restore .` e repita o `git pull` |
+| `git`, `code` ou `py` "não é reconhecido como comando" | O terminal foi aberto antes da instalação do programa | Fechar todas as janelas do terminal e do VS Code e abri-las de novo |
+| `python3` abre a Microsoft Store no Windows | O Windows associa o nome `python3` a um atalho da loja | Usar o comando `py` |
+| `fatal: destination path 'odas-arquitetura-software' already exists` | O repositório já foi clonado nessa pasta | Entrar na pasta com `cd odas-arquitetura-software` e executar `git pull` |
+| `git pull` recusa a atualização por causa de alterações locais | Algum arquivo do repositório foi alterado | Desfazer as alterações com `git restore .` e repetir o `git pull` |

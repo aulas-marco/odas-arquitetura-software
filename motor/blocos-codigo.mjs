@@ -115,7 +115,7 @@ registrarBloco('diagrama', (casca, b, ctx) => {
   ]);
   casca.append(h(doc, 'p', { class: 'diagrama__titulo', texto: b.titulo }), quadro);
   import(MERMAID).then(async ({ default: mermaid }) => {
-    mermaid.initialize({ startOnLoad: false, theme: doc.documentElement.dataset.tema === 'claro' ? 'default' : 'dark', securityLevel: 'strict' });
+    mermaid.initialize({ startOnLoad: false, theme: doc.documentElement.dataset.tema === 'claro' ? 'default' : 'dark', securityLevel: 'strict', htmlLabels: false, flowchart: { htmlLabels: false } });
     const { svg } = await mermaid.render(`mmd-${b.id}`, b.mermaid);
     const svgDoc = new ctx.win.DOMParser().parseFromString(svg, 'image/svg+xml');
     area.replaceChildren(doc.importNode(svgDoc.documentElement, true));
