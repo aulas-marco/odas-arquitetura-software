@@ -1,6 +1,6 @@
-"""Regra tributária de Minas Gerais, acrescentada sem alterar o núcleo.
+"""Regra tributária de Minas Gerais, acrescentada sem alteração do núcleo.
 
-A alíquota é ilustrativa e serve apenas ao exemplo.
+A alíquota é ilustrativa e foi escolhida apenas para o exemplo.
 """
 
 from dominio import Fatura

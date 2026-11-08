@@ -1,8 +1,7 @@
-"""Contrato público do módulo Agenda: a única porta que outros módulos podem usar.
+"""Contrato público do módulo Agenda, único ponto de acesso permitido aos outros módulos.
 
-O contrato expõe apenas o que o consumidor precisa, num tipo próprio
-(ConsultaFaturavel), e traduz o modelo interno. Se o modelo interno mudar,
-a tradução muda aqui, e os consumidores não percebem.
+O contrato devolve o tipo próprio ConsultaFaturavel e converte o modelo interno.
+Uma mudança no modelo interno exige ajuste somente neste arquivo.
 """
 
 from dataclasses import dataclass

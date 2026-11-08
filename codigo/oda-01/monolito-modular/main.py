@@ -1,4 +1,4 @@
-"""Uma implantação, dois módulos: a Agenda registra consultas e o Faturamento as cobra."""
+"""Executa o monólito modular com os módulos Agenda e Faturamento."""
 
 from agenda.api import AgendaAPI
 from faturamento.relatorio import RelatorioFaturamento

@@ -1,4 +1,4 @@
-"""Armazenamento interno da Agenda. Em produção, seria uma tabela do banco."""
+"""Armazenamento interno da Agenda, que em produção corresponderia a uma tabela do banco de dados."""
 
 from agenda.interno.modelos import ReservaModel
 

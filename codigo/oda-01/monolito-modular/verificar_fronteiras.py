@@ -1,9 +1,8 @@
-"""Verificador de fronteiras: procura imports que entram no interior de outro módulo.
+"""Verificador de fronteiras entre os módulos agenda e faturamento.
 
-Regra: um módulo só pode importar de outro módulo pelo arquivo api.py dele.
-Qualquer import de "<outro_modulo>.interno" é violação. Ferramentas como
-import-linter (Python), ArchUnit (Java) e Packwerk (Ruby) aplicam a mesma
-ideia na integração contínua.
+Regra: um módulo importa outro módulo somente pelo arquivo api.py dele, e todo
+import de "<outro_modulo>.interno" é uma violação. Ferramentas como o
+import-linter, em Python, aplicam a mesma regra na integração contínua.
 """
 
 import ast

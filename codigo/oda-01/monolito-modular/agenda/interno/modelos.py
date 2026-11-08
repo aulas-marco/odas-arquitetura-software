@@ -1,9 +1,8 @@
-"""Modelo interno do módulo Agenda. Nenhum outro módulo deve importar este arquivo.
+"""Modelo interno do módulo Agenda, de uso exclusivo do próprio módulo.
 
-Na versão 2 da Agenda, a situação da reserva deixou de ser gravada como texto
-("agendada", "realizada", "cancelada") e passou a ser gravada como código de
-duas letras. A mudança é legítima porque o modelo é interno: o contrato público,
-em agenda/api.py, continuou igual.
+Na versão 2 da Agenda, a situação da reserva passou a ser gravada como código
+de duas letras. A mudança é permitida porque o modelo é interno e o contrato
+público em agenda/api.py permaneceu igual.
 """
 
 from dataclasses import dataclass

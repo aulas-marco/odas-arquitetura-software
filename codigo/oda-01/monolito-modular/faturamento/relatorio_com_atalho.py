@@ -1,8 +1,8 @@
 """Forma errada: o Faturamento lê o modelo interno da Agenda.
 
-O atalho foi escrito quando a Agenda gravava a situação como texto. Depois da
-versão 2 da Agenda, a comparação abaixo nunca é verdadeira, o relatório passa
-a devolver zero e nenhum erro aparece.
+O atalho foi escrito quando a Agenda gravava a situação como texto. Desde a
+versão 2 da Agenda a comparação abaixo é sempre falsa, e o relatório devolve
+zero sem mensagem de erro.
 """
 
 from agenda.interno.armazenamento import RESERVAS

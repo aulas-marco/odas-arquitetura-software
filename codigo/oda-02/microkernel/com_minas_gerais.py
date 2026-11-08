@@ -1,7 +1,7 @@
 """Registra um plugin novo, ICMS-MG, e processa uma fatura de Minas Gerais.
 
-nucleo.py não foi alterado: o estado novo entrou por um arquivo em plugins/
-e por uma linha de registro aqui.
+O arquivo nucleo.py permaneceu igual. O estado novo entrou por um arquivo em
+plugins/ e por uma linha de registro neste programa.
 """
 
 from dominio import Fatura, Item

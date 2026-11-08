@@ -1,9 +1,8 @@
-"""Variante do fluxo de main.py sem o NormalizadorDeCampos.
+"""Variante de main.py sem o filtro NormalizadorDeCampos.
 
-Os filtros são os mesmos e nenhum arquivo de filtros/ foi alterado. A única
-diferença é a montagem do pipeline, e ela basta para mudar o resultado:
-o CalculadorDeScore compara habilidades em minúsculas, e quem as deixava em
-minúsculas era o filtro retirado.
+Os arquivos de filtros/ são os mesmos usados por main.py, e a diferença está
+somente na montagem do pipeline. O CalculadorDeScore compara habilidades em
+letras minúsculas, e o filtro retirado era o responsável por convertê-las.
 """
 
 from dominio import Vaga
