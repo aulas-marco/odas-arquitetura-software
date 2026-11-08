@@ -1,0 +1,27 @@
+repositorios:
+  odas-arquitetura-software: {url: "https://github.com/aulas-marco/odas-arquitetura-software", commit: "bd84630"}
+
+trilhas:
+  - {numero: 1, titulo: "Módulo 1 — Visão geral de estilos arquiteturais"}
+
+odas:
+  - id: "01"
+    titulo: "Camadas e monólito modular"
+    trilha: 1
+    repositorio: odas-arquitetura-software
+    fontes: ["modulo-1-visao-geral/padroes-e-decisoes.md#camadas", "modulo-1-visao-geral/padroes-e-decisoes.md#monolito-modular-uma-implantacao-capacidades-com-autonomia-interna", "modulo-1-visao-geral/padroes-e-decisoes.md#adr-o-mecanismo-para-escolher-estilos"]
+    minutos: 25
+    pre_requisitos: []
+    objetivo: "Reconhecer, em código executável, a regra de dependência das camadas e a fronteira entre módulos de um monólito modular."
+    situacao: disponivel
+    app: oda-01
+  - id: "02"
+    titulo: "Pipes and Filters e Microkernel"
+    trilha: 1
+    repositorio: odas-arquitetura-software
+    fontes: ["modulo-1-visao-geral/padroes-e-decisoes.md#pipes-and-filters", "modulo-1-visao-geral/padroes-e-decisoes.md#microkernel", "modulo-1-visao-geral/padroes-e-decisoes.md#adr-o-mecanismo-para-escolher-estilos"]
+    minutos: 25
+    pre_requisitos: ["01"]
+    objetivo: "Reconhecer, em código executável, como um pipeline de filtros e um núcleo com plugins acomodam mudança sem alterar as partes existentes."
+    situacao: disponivel
+    app: oda-02

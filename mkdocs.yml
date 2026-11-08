@@ -1,0 +1,55 @@
+site_name: ODAs — Arquitetura de Software
+site_description: Objetos Digitais de Aprendizagem da disciplina Arquitetura de Backend (IEC/PUC Minas)
+site_url: https://aulas-marco.github.io/odas-arquitetura-software/
+repo_url: https://github.com/aulas-marco/odas-arquitetura-software
+use_directory_urls: true
+
+theme:
+  name: material
+  language: pt-BR
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Usar tema escuro
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Usar tema claro
+  features:
+    - navigation.sections
+    - navigation.top
+    - navigation.footer
+    - content.code.copy
+    - content.tabs.link
+    - search.suggest
+
+hooks:
+  - hooks/catalogo.py
+
+extra_css:
+  - assets/stylesheets/oda.css
+
+extra_javascript:
+  - path: assets/javascripts/oda/index.mjs
+    type: module
+
+markdown_extensions:
+  - toc:
+      permalink: true
+  - tables
+  - attr_list
+  - md_in_html
+  - admonition
+  - pymdownx.details
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+nav:
+  - Catálogo de ODAs: index.md
+  - Módulo 0 — Preparar o ambiente: modulo-0/index.md
+  - Rastreabilidade: rastreabilidade.md

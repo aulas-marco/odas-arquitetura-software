@@ -1,0 +1,755 @@
+id: '02'
+titulo: Pipes and Filters e Microkernel
+abas:
+- id: objetivo
+  titulo: Objetivo
+  blocos:
+  - tipo: legenda
+    texto: 'Esta ODA mostra, em código Python que você executa sem escrever nenhuma linha, dois estilos que acomodam mudança
+      sem alterar as partes existentes. A atividade dura 25 minutos: 2 de Objetivo, 8 de Conceitos, 12 de Laboratório e 3
+      de Verificação.'
+  - tipo: glossario
+    texto: Os termos abaixo aparecem nas abas desta ODA, na ordem em que surgem. Cada aba volta a explicá-los no primeiro
+      uso, porque você pode abrir qualquer aba diretamente.
+    itens:
+    - termo: Estilo arquitetural
+      definicao: 'Forma conhecida de organizar as partes de um sistema: os elementos, as ligações entre eles e as regras sobre
+        o que pode depender de quê. Pipes and Filters e Microkernel são dois estilos.'
+      referencia:
+        rotulo: Material oficial · Estilos arquiteturais
+        url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/conceitos/#estilos-arquiteturais
+    - termo: Filtro
+      definicao: Etapa de processamento que recebe um item, faz uma única coisa com ele e o devolve, ou o descarta. Na triagem
+        de currículos, cada critério é um filtro.
+    - termo: Pipe
+      definicao: Ligação que leva a saída de um filtro à entrada do próximo. Na triagem, o pipe é a lista que a classe `Pipeline`
+        passa de um filtro ao seguinte.
+    - termo: Contrato
+      definicao: Conjunto de métodos que uma parte do sistema promete oferecer. Todo filtro cumpre o contrato `processar`,
+        e todo plugin cumpre o contrato `aplica_se` e `executar`.
+    - termo: Núcleo
+      definicao: No Microkernel, a parte que contém só o mínimo para o sistema funcionar e que muda pouco. No faturamento,
+        o núcleo conhece a ordem das categorias e nada sobre impostos.
+    - termo: Plugin
+      definicao: Extensão que implementa o contrato do núcleo e acrescenta um comportamento variável, como o imposto de um
+        estado.
+    - termo: Registro
+      definicao: Componente do núcleo que guarda quais plugins existem e em que categoria cada um atua.
+    - termo: ADR (Architecture Decision Record)
+      definicao: 'Registro de decisão arquitetural: documento curto e versionado que guarda o contexto, a decisão, as alternativas
+        consideradas e as consequências de uma escolha de arquitetura.'
+      referencia: &id001
+        rotulo: Material oficial · ADR
+        url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#adr-o-mecanismo-para-escolher-estilos
+  - tipo: checklist
+    titulo: Ao concluir, você poderá
+    itens:
+    - Identificar os quatro tipos de filtro na triagem de currículos.
+    - Explicar por que a ordem dos filtros faz parte da arquitetura.
+    - Explicar como um estado novo entra no faturamento sem alterar o núcleo.
+    - Reconhecer o anti-padrão core creep e ler um ADR que registra a escolha de um dos estilos.
+  - tipo: faixa
+    estilo: dica
+    titulo: 🧭 Como ter o código na sua máquina
+    texto: O código desta ODA está no repositório `odas-arquitetura-software`, na pasta `codigo/`. Se você concluiu o Módulo
+      0, o repositório já está clonado e basta atualizá-lo com `git pull` dentro da pasta dele. Os caminhos de arquivo citados
+      nas abas partem da raiz desse repositório, e os trechos exibidos correspondem ao commit `bd84630`.
+    links:
+    - rotulo: Módulo 0 — preparar o ambiente
+      url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
+    - rotulo: Repositório no GitHub, commit bd84630
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/bd84630
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: Esta ODA cobre as seções Pipes and Filters, Microkernel e ADR da página Padrões e decisões do Módulo 1, e os Experimentos
+      2 e 3 da Oficina de ferramentas. Os códigos de `pipes-and-filters/` e `microkernel/` são cópias do código da oficina,
+      com três arquivos acrescentados para o Laboratório.
+    links:
+    - &id002
+      rotulo: Material oficial · Pipes and Filters
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#pipes-and-filters
+    - &id003
+      rotulo: Material oficial · Microkernel
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#microkernel
+    - *id001
+    - &id004
+      rotulo: Material oficial · Oficina, Experimento 2
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/oficina-de-ferramentas/#experimento-2-pipes-and-filters-triagem-de-curriculos-35-minutos
+    - &id005
+      rotulo: Material oficial · Oficina, Experimento 3
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/oficina-de-ferramentas/#experimento-3-microkernel-faturamento-por-plugins-35-minutos
+- id: conceitos
+  titulo: Conceitos
+  blocos:
+  - tipo: legenda
+    texto: Esta aba retoma os conceitos da exposição em aula e mostra cada um no código. Leia os blocos na ordem e use os
+      trechos como referência durante o Laboratório.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📂 Onde está o código
+    texto: Os arquivos desta aba ficam em `codigo/oda-02/pipes-and-filters/` e `codigo/oda-02/microkernel/`, no repositório
+      `odas-arquitetura-software`. O botão Ver no GitHub de cada trecho abre o arquivo completo no navegador, e no VS Code
+      o atalho Ctrl+P, ou Cmd+P no macOS, encontra o arquivo pelo caminho mostrado.
+    links:
+    - rotulo: Repositório no GitHub, commit bd84630
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/bd84630
+  - tipo: conceito
+    titulo: Pipes and Filters
+    texto: Pipes and Filters decompõe um processamento em filtros ligados por pipes. Filtro é uma etapa que recebe um item,
+      faz uma única coisa e o devolve, ou o descarta. Pipe é a ligação que leva a saída de um filtro à entrada do próximo.
+      Os filtros não se conhecem e não compartilham estado, por isso podem ser acrescentados, removidos ou reordenados sem
+      alterar os vizinhos. Richards e Ford chamam o estilo de Pipeline Architecture.
+    analogia: 'Uma esteira de fábrica: cada etapa faz uma coisa e passa o resultado adiante.'
+  - tipo: conceito
+    titulo: Os quatro tipos de filtro
+    texto: O producer é a entrada do fluxo e entrega os dados iniciais. O transformer altera o item sem descartá-lo. O tester
+      avalia o item contra um critério e descarta os que não passam. O consumer é o fim do fluxo e grava ou apresenta o resultado.
+      Na triagem de currículos, o leitor é o producer, o normalizador e o calculador de score são transformers, os validadores
+      de nome, experiência e pretensão são testers, e o relatório é o consumer.
+  - tipo: diagrama
+    id: D-01
+    tipo_diagrama: Fluxo
+    titulo: Pipeline da triagem de currículos
+    mermaid: "flowchart LR\n    L([\"LeitorDeCurriculos\\nproducer\"]) --> V{\"ValidadorDeCurriculo\\ntester\"}\n    V -->\
+      \ N[\"NormalizadorDeCampos\\ntransformer\"] --> E{\"FiltroPorExperienciaMinima\\ntester\"}\n    E --> P{\"FiltroPorPretensaoSalarial\\\
+      ntester\"} --> C[\"CalculadorDeScore\\ntransformer\"]\n    C --> R([\"RelatorioDeTriagem\\nconsumer\"])\n    V -. descartado\
+      \ .-> X[/\"fora do fluxo\"/]"
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-02/pipes-and-filters/framework.py
+    commit: bd84630
+    contexto: O arquivo `framework.py` define o contrato de filtro e a classe que encadeia os filtros. Ele não conhece nenhum
+      critério de triagem.
+    inicio: 10
+    linhas:
+    - 'class Filtro:'
+    - '    """Contrato único que todos os filtros cumprem."""'
+    - ''
+    - '    def processar(self, item: Curriculo) -> Curriculo | None:'
+    - '        raise NotImplementedError'
+    - ''
+    - ''
+    - 'class Pipeline:'
+    - '    def __init__(self) -> None:'
+    - '        self._filtros: list[Filtro] = []'
+    - ''
+    - '    def adicionar(self, filtro: Filtro) -> "Pipeline":'
+    - '        self._filtros.append(filtro)'
+    - '        return self'
+    - ''
+    - '    def executar(self, itens: list[Curriculo]) -> list[Curriculo]:'
+    - '        """Cada filtro processa a corrente inteira antes de passá-la adiante."""'
+    - '        corrente = list(itens)'
+    - '        for filtro in self._filtros:'
+    - '            corrente = ['
+    - '                saida'
+    - '                for saida in (filtro.processar(item) for item in corrente)'
+    - '                if saida is not None'
+    - '            ]'
+    - '        return corrente'
+    anotacoes:
+    - linha: 13
+      texto: 'O contrato único: receber um item e devolver um item, ou None para tirá-lo do fluxo.'
+    - linha: 28
+      texto: 'O pipe: a saída de cada filtro vira a entrada do próximo.'
+  - tipo: conceito
+    titulo: A ordem dos filtros é arquitetura
+    texto: Um filtro pode depender do que um filtro anterior fez. O `CalculadorDeScore` compara habilidades em letras minúsculas,
+      e quem as deixa em minúsculas é o `NormalizadorDeCampos`. A montagem do pipeline em `main.py` declara essa ordem. No
+      Laboratório, você executa uma variante sem o normalizador e vê o efeito no score.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-02/pipes-and-filters/main.py
+    commit: bd84630
+    contexto: O arquivo `main.py` monta o pipeline da triagem. A sequência de chamadas a `adicionar` é a arquitetura do fluxo.
+    inicio: 33
+    linhas:
+    - '    pipeline = ('
+    - '        Pipeline()'
+    - '        .adicionar(ValidadorDeCurriculo())'
+    - '        .adicionar(NormalizadorDeCampos())'
+    - '        .adicionar(FiltroPorExperienciaMinima(vaga))'
+    - '        .adicionar(FiltroPorPretensaoSalarial(vaga))'
+    - '        .adicionar(CalculadorDeScore(vaga))'
+    - '        .adicionar(relatorio)'
+    anotacoes:
+    - linha: 36
+      texto: Deixa nomes e habilidades num formato único, antes do cálculo de score.
+  - tipo: conceito
+    titulo: Estado compartilhado invisível
+    texto: O anti-padrão de Pipes and Filters é o filtro que guarda estado interno sem declarar, como um total acumulado entre
+      chamadas. O resultado passa a depender da ordem de execução e o fluxo deixa de ser previsível. Quando o fluxo precisa
+      acumular, o estado vai para um armazenamento externo declarado.
+  - tipo: conceito
+    titulo: Microkernel
+    texto: 'Microkernel separa um núcleo estável das extensões variáveis. O núcleo contém só o mínimo para o sistema funcionar:
+      o registro, que guarda quais plugins existem, e a orquestração, que decide a ordem de execução. Plugin é uma extensão
+      que implementa o contrato definido pelo núcleo. O núcleo não sabe o que os plugins fazem, e os plugins não se conhecem.
+      Richards e Ford chamam o estilo de Plug-in Architecture.'
+    analogia: 'Um videogame com cartuchos: o console é fixo e cada cartucho acrescenta um jogo.'
+  - tipo: diagrama
+    id: D-02
+    tipo_diagrama: Estrutura
+    titulo: Núcleo e plugins do faturamento
+    mermaid: "flowchart TD\n    subgraph nucleo[\"nucleo.py\"]\n        REG[\"Registro\"] --> NUC[\"Nucleo\\nimpostos, frete,\
+      \ notificacao\"]\n    end\n    NUC -->|\"contrato Plugin\"| SP[\"impostos_sp.py\"]\n    NUC --> RJ[\"impostos_rj.py\"\
+      ]\n    NUC --> FR[\"frete.py\"]\n    NUC --> NT[\"notificacao.py\"]\n    NUC -. \"plugin novo\" .-> MG[\"impostos_mg.py\"\
+      ]"
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-02/microkernel/nucleo.py
+    commit: bd84630
+    contexto: O arquivo `nucleo.py` contém o contrato de plugin, o registro e o núcleo. Não há nenhuma menção a ICMS, ISS
+      ou a qualquer estado neste arquivo.
+    inicio: 10
+    linhas:
+    - ORDEM_CATEGORIAS = ("impostos", "frete", "notificacao")
+    - ''
+    - ''
+    - 'class Plugin:'
+    - '    """O contrato de extensão. Mudá-lo obriga todos os plugins a mudar."""'
+    - ''
+    - '    nome: str = ""'
+    - '    categoria: str = ""'
+    - ''
+    - '    def aplica_se(self, fatura: Fatura) -> bool:'
+    - '        return True'
+    - ''
+    - '    def executar(self, fatura: Fatura) -> None:'
+    - '        raise NotImplementedError'
+    anotacoes:
+    - linha: 10
+      texto: O núcleo conhece só as categorias e a ordem em que elas executam.
+    - linha: 19
+      texto: Cada plugin decide se vale para a fatura, por exemplo pelo estado do cliente.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-02/microkernel/plugins/impostos_rj.py
+    commit: bd84630
+    contexto: O arquivo `plugins/impostos_rj.py` é um plugin completo. Toda a regra tributária do Rio de Janeiro está nele.
+    inicio: 9
+    linhas:
+    - 'class IcmsRJ(Plugin):'
+    - '    nome = "ICMS-RJ"'
+    - '    categoria = "impostos"'
+    - ''
+    - '    def aplica_se(self, fatura: Fatura) -> bool:'
+    - '        return fatura.estado == "RJ"'
+    - ''
+    - '    def executar(self, fatura: Fatura) -> None:'
+    - '        base = sum(i.total for i in fatura.itens if i.categoria == "eletronico")'
+    - '        if base:'
+    - '            fatura.ajustes.append(("ICMS-RJ", base * ALIQUOTA_ICMS))'
+  - tipo: conceito
+    titulo: Core creep
+    texto: Core creep é o anti-padrão em que o núcleo acumula regras que pertencem aos plugins, em geral como uma sequência
+      de `if` por estado, cliente ou região. Cada variação nova obriga a alterar, testar e implantar o núcleo, e a extensibilidade
+      do estilo desaparece. O arquivo abaixo é um contraexemplo mantido só para leitura.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-02/microkernel/nucleo_com_creep.py
+    commit: bd84630
+    contexto: O arquivo `nucleo_com_creep.py` não é usado pelo programa. Ele mostra como o núcleo ficaria se a regra de cada
+      estado fosse escrita dentro dele.
+    inicio: 11
+    linhas:
+    - 'class NucleoComCreep:'
+    - '    def processar(self, fatura: Fatura) -> None:'
+    - '        eletronicos = sum(i.total for i in fatura.itens if i.categoria == "eletronico")'
+    - '        if fatura.estado == "SP":'
+    - '            fatura.ajustes.append(("ICMS-SP", eletronicos * 0.18))'
+    - '        elif fatura.estado == "RJ":'
+    - '            fatura.ajustes.append(("ICMS-RJ", eletronicos * 0.20))'
+    - '        # Minas Gerais exigiria mais um elif aqui, dentro do núcleo.'
+    anotacoes:
+    - linha: 16
+      texto: 'Regra de plugin dentro do núcleo: cada estado novo é mais um elif.'
+  - tipo: comparativo
+    colunas:
+    - Pipes and Filters
+    - Microkernel
+    linhas:
+    - dimensao: Acomoda mudança por
+      valores:
+      - Inclusão, remoção ou troca de filtros
+      - Inclusão de plugins
+    - dimensao: Parte estável
+      valores:
+      - O contrato de filtro e o encadeador
+      - O núcleo e o contrato de plugin
+    - dimensao: Anti-padrão
+      valores:
+      - Estado compartilhado invisível
+      - Core creep
+    - dimensao: Testabilidade (1 a 5)
+      valores:
+      - '5'
+      - '3'
+    - dimensao: Modularidade (1 a 5)
+      valores:
+      - '5'
+      - '4'
+    - dimensao: Desempenho (1 a 5)
+      valores:
+      - '2'
+      - '3'
+  - tipo: conceito
+    titulo: ADR, o registro da escolha
+    texto: ADR é a sigla de Architecture Decision Record, ou registro de decisão arquitetural. É um documento curto, versionado
+      junto com o código, que guarda o contexto, a decisão, as alternativas consideradas e as consequências. O bloco abaixo
+      é um ADR de exemplo para o faturamento desta ODA. Clique nele para abrir.
+  - tipo: adr
+    id: ADR-002
+    titulo: Calcular impostos por estado com Microkernel
+    status: Aceita (exemplo didático)
+    contexto: 'O faturamento atende clientes de vários estados, e cada estado tem regras tributárias próprias que mudam com
+      frequência. O fluxo de cálculo é o mesmo para todos: impostos, depois frete, depois notificação.'
+    decisao: Manter no núcleo apenas o registro e a ordem das categorias, e implementar a regra de cada estado como um plugin
+      que cumpre o contrato Plugin.
+    alternativas: Condicionais por estado dentro do núcleo, descartadas porque cada estado novo exigiria alterar e implantar
+      o núcleo. Pipes and Filters, descartado porque o problema central é a variação por estado e não uma sequência de transformações
+      de dados.
+    consequencias: Um estado novo entra por um arquivo em plugins e uma linha de registro. O contrato Plugin passa a exigir
+      estabilidade, porque mudá-lo obriga todos os plugins a mudar.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: 'Os conceitos desta aba seguem a página Padrões e decisões do Módulo 1, nas seções Pipes and Filters, Microkernel,
+      O caso canônico: cálculo de impostos e ADR. As notas de 1 a 5 do comparativo vêm das tabelas de características arquiteturais
+      dessas seções, que seguem Richards e Ford.'
+    links:
+    - *id002
+    - *id003
+    - &id006
+      rotulo: 'Material oficial · O caso canônico: cálculo de impostos'
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#o-caso-canonico-calculo-de-impostos
+    - *id001
+    - &id007
+      rotulo: Material oficial · Template de ADR
+      url: https://marco-mendes.github.io/arquitetura-software/referencia/template-adr/
+- id: laboratorio
+  titulo: Laboratório
+  blocos:
+  - tipo: legenda
+    texto: Você vai executar quatro programas prontos e comparar as saídas em pares. Nenhum arquivo precisa ser alterado.
+      Reserve 12 minutos, cerca de 3 por programa.
+  - tipo: glossario
+    titulo: 📘 Conceitos usados nesta aba
+    texto: Os termos técnicos desta aba estão explicados abaixo, na ordem em que aparecem.
+    itens:
+    - termo: Terminal
+      definicao: Programa em que você digita comandos de texto. No Windows é o PowerShell, no macOS e no Linux é o Terminal.
+        O VS Code abre um terminal integrado pelo menu Terminal, opção Novo Terminal.
+    - termo: cd
+      definicao: Comando que muda a pasta atual do terminal. Os programas Python desta ODA precisam ser executados de dentro
+        da própria pasta.
+    - termo: Filtro e pipeline
+      definicao: Filtro é uma etapa que recebe um item e o devolve ou descarta. Pipeline é a sequência de filtros.
+    - termo: Score
+      definicao: Percentual das habilidades exigidas pela vaga que o candidato informou, calculado pelo `CalculadorDeScore`.
+    - termo: Núcleo e plugin
+      definicao: O núcleo é a parte estável, que conhece a ordem das categorias. O plugin é a extensão que traz a regra de
+        um estado.
+  - tipo: faixa
+    estilo: objetivo
+    problema: Na triagem, um filtro depende do formato que outro filtro produz. No faturamento, a regra de cada estado poderia
+      acabar dentro do núcleo como mais uma condicional.
+    impacto: Retirar ou reordenar um filtro sem conhecer essa dependência muda o resultado sem nenhum erro. Regras de estado
+      no núcleo obrigam a alterar e implantar o núcleo a cada estado novo.
+    mecanismo: A variante `sem_normalizador.py` monta o pipeline com os mesmos filtros, exceto o normalizador. O programa
+      `com_minas_gerais.py` registra o plugin novo `plugins/impostos_mg.py` sem alterar `nucleo.py`.
+    comprovacao: Sem o normalizador, Ana Lima cai de 100% para 0% de score. A fatura de Minas Gerais recebe ICMS-MG de R$900.00,
+      e `nucleo.py` continua sem nenhuma menção a MG.
+  - tipo: faixa
+    estilo: dica
+    titulo: 💻 Windows, macOS e Linux
+    texto: Os comandos usam `python3`, que é o nome do interpretador no macOS e no Linux. No Windows, use `py` no lugar de
+      `python3`, por exemplo `py main.py`. O comando `cd` funciona igual no PowerShell, inclusive com a barra `/` nos caminhos.
+  - tipo: passos
+    itens:
+    - titulo: Abrir o terminal na raiz do repositório
+      texto: No VS Code, abra a pasta `odas-arquitetura-software` e depois um terminal pelo menu Terminal, opção Novo Terminal.
+        Atualize o repositório antes de começar.
+      editor:
+        rotulo: terminal
+        linhas:
+        - git pull
+    - titulo: Executar a triagem completa
+      texto: Entre na pasta da triagem e execute o pipeline. Observe as três linhas de descarte e reprovação, cada uma impressa
+        por um tester diferente, e o score de cada aprovado.
+      editor:
+        rotulo: terminal
+        linhas:
+        - cd codigo/oda-02/pipes-and-filters
+        - python3 main.py
+  - tipo: editor
+    rotulo: saida
+    origem: executado
+    linhas:
+    - ============================================================
+    - '  PIPELINE DE TRIAGEM DE CURRÍCULOS'
+    - '  Demonstração — Estilo Pipes and Filters'
+    - ============================================================
+    - ''
+    - 'Vaga: Engenheiro(a) de Software Backend'
+    - 'Requisitos: ≥3 anos | Orçamento: R$18,000'
+    - 'Habilidades: Python, PostgreSQL, Docker, REST'
+    - ''
+    - Processando 6 currículos...
+    - ''
+    - 'Pipeline: LeitorDeCurriculos → ValidadorDeCurriculo → NormalizadorDeCampos → FiltroPorExperienciaMinima → FiltroPorPretensaoSalarial
+      → CalculadorDeScore → RelatorioDeTriagem'
+    - ''
+    - '  [DESCARTADO] Currículo id=3: nome ausente'
+    - '  [REPROVADO] Bruno Rocha: 1 ano(s) < mínimo 3'
+    - '  [REPROVADO] Clara Mendes: pretensão R$22,000 > máximo R$18,000'
+    - ''
+    - ════════════════════════════════════════════════════════════
+    - '  TRIAGEM CONCLUÍDA — 3 candidato(s) aprovado(s)'
+    - ════════════════════════════════════════════════════════════
+    - ''
+    - '  1. Ana Lima'
+    - '     Score: ██████████ 100%'
+    - '     Habilidades compatíveis: python, postgresql, rest, docker'
+    - '     Experiência: 5 ano(s) | Pretensão: R$14,000'
+    - '     Cidade: São Paulo'
+    - ''
+    - '  2. Elena Souza'
+    - '     Score: ██████████ 100%'
+    - '     Habilidades compatíveis: python, postgresql, rest, docker'
+    - '     Experiência: 7 ano(s) | Pretensão: R$17,000'
+    - '     Cidade: Porto Alegre'
+    - ''
+    - '  3. Felipe Nunes'
+    - '     Score: █████      50%'
+    - '     Habilidades compatíveis: python, rest'
+    - '     Experiência: 3 ano(s) | Pretensão: R$16,000'
+    - '     Cidade: Salvador'
+  - tipo: passos
+    itens:
+    - titulo: Executar a variante sem o normalizador
+      texto: Na mesma pasta, execute a variante. Ela usa os mesmos arquivos de `filtros/`, e só a montagem do pipeline é diferente.
+      editor:
+        rotulo: terminal
+        linhas:
+        - python3 sem_normalizador.py
+  - tipo: editor
+    rotulo: saida
+    origem: executado
+    linhas:
+    - 'Pipeline: LeitorDeCurriculos → ValidadorDeCurriculo → FiltroPorExperienciaMinima → FiltroPorPretensaoSalarial → CalculadorDeScore
+      → RelatorioDeTriagem'
+    - ''
+    - '  [DESCARTADO] Currículo id=3: nome ausente'
+    - '  [REPROVADO] Bruno Rocha: 1 ano(s) < mínimo 3'
+    - '  [REPROVADO] Clara Mendes: pretensão R$22,000 > máximo R$18,000'
+    - ''
+    - ════════════════════════════════════════════════════════════
+    - '  TRIAGEM CONCLUÍDA — 3 candidato(s) aprovado(s)'
+    - ════════════════════════════════════════════════════════════
+    - ''
+    - '  1. Elena Souza'
+    - '     Score: ██████████ 100%'
+    - '     Habilidades compatíveis: python, postgresql, rest, docker'
+    - '     Experiência: 7 ano(s) | Pretensão: R$17,000'
+    - '     Cidade: Porto Alegre'
+    - ''
+    - '  2. Ana Lima'
+    - '     Score:            0%'
+    - '     Habilidades compatíveis: '
+    - '     Experiência: 5 ano(s) | Pretensão: R$14,000'
+    - '     Cidade: São Paulo'
+    - ''
+    - '  3. Felipe Nunes'
+    - '     Score:            0%'
+    - '     Habilidades compatíveis: '
+    - '     Experiência: 3 ano(s) | Pretensão: R$16,000'
+    - '     Cidade: Salvador'
+  - tipo: faixa
+    estilo: quebra
+    texto: 'Ana Lima e Felipe Nunes caíram para 0% de score. Os currículos deles informam habilidades com inicial maiúscula,
+      como `Python`, e o calculador compara com `python`. Nenhum filtro mudou: a dependência entre filtros está na ordem do
+      pipeline, e retirar uma etapa alterou o resultado das seguintes.'
+  - tipo: passos
+    itens:
+    - titulo: Executar o faturamento por plugins
+      texto: Entre na pasta do microkernel e execute o programa. Observe o registro dos cinco plugins e os ajustes de cada
+        fatura. A linha de e-mail aparece antes dos ajustes porque a notificação é um plugin que imprime durante o processamento,
+        depois dos impostos e do frete.
+      editor:
+        rotulo: terminal
+        linhas:
+        - cd ../microkernel
+        - python3 main.py
+  - tipo: editor
+    rotulo: saida
+    origem: executado
+    linhas:
+    - ============================================================
+    - '  SISTEMA DE FATURAMENTO MULTI-ESTADO'
+    - '  Demonstração — Estilo MicroKernel'
+    - ============================================================
+    - ''
+    - Registrando plugins...
+    - '  [Registry] Plugin ''ICMS-SP'' registrado em ''impostos'''
+    - '  [Registry] Plugin ''ISS-SP'' registrado em ''impostos'''
+    - '  [Registry] Plugin ''ICMS-RJ'' registrado em ''impostos'''
+    - '  [Registry] Plugin ''Frete-Padrão'' registrado em ''frete'''
+    - '  [Registry] Plugin ''Notificação-Email'' registrado em ''notificacao'''
+    - ''
+    - 'Plugins ativos: {''impostos'': [''ICMS-SP'', ''ISS-SP'', ''ICMS-RJ''], ''frete'': [''Frete-Padrão''], ''notificacao'':
+      [''Notificação-Email'']}'
+    - ''
+    - ────────────────────────────────────────────────────────────
+    - '  FATURA #1001 — São Paulo'
+    - ────────────────────────────────────────────────────────────
+    - '  Cliente: TechCorp Ltda (SP)'
+    - '  Itens:'
+    - '    • Notebook Dell: 2× R$5,000.00 = R$10,000.00 [eletronico]'
+    - '    • Suporte Técnico: 10× R$200.00 = R$2,000.00 [servico]'
+    - '  Valor bruto: R$12,000.00'
+    - '  [Email → financeiro@techcorp.com] Fatura #1001 emitida para TechCorp Ltda. Total: R$14,020.00'
+    - '  ICMS-SP: R$1,800.00'
+    - '  ISS-SP: R$100.00'
+    - '  Frete-Padrão: R$120.00'
+    - '  TOTAL: R$14,020.00'
+    - ''
+    - ────────────────────────────────────────────────────────────
+    - '  FATURA #1002 — Rio de Janeiro'
+    - ────────────────────────────────────────────────────────────
+    - '  Cliente: Cariocode SA (RJ)'
+    - '  Itens:'
+    - '    • Servidor Rack: 1× R$9,000.00 = R$9,000.00 [eletronico]'
+    - '  Valor bruto: R$9,000.00'
+    - '  [Email → contas@cariocode.com] Fatura #1002 emitida para Cariocode SA. Total: R$10,920.00'
+    - '  ICMS-RJ: R$1,800.00'
+    - '  Frete-Padrão: R$120.00'
+    - '  TOTAL: R$10,920.00'
+    - ''
+    - ────────────────────────────────────────────────────────────
+    - '  FATURA #1003 — São Paulo, acima da faixa de frete'
+    - ────────────────────────────────────────────────────────────
+    - '  Cliente: Indústria Paulista (SP)'
+    - '  Itens:'
+    - '    • Estação de trabalho: 4× R$4,000.00 = R$16,000.00 [eletronico]'
+    - '  Valor bruto: R$16,000.00'
+    - '  [Email → fiscal@indpaulista.com] Fatura #1003 emitida para Indústria Paulista. Total: R$18,880.00'
+    - '  ICMS-SP: R$2,880.00'
+    - '  Frete-Isento: R$0.00'
+    - '  TOTAL: R$18,880.00'
+  - tipo: passos
+    itens:
+    - titulo: Executar o faturamento com Minas Gerais
+      texto: Na mesma pasta, execute o programa que registra o plugin ICMS-MG. Depois abra `nucleo.py` no VS Code e procure
+        por MG com Ctrl+F, ou Cmd+F no macOS.
+      editor:
+        rotulo: terminal
+        linhas:
+        - python3 com_minas_gerais.py
+  - tipo: editor
+    rotulo: saida
+    origem: executado
+    linhas:
+    - '  [Registry] Plugin ''ICMS-SP'' registrado em ''impostos'''
+    - '  [Registry] Plugin ''ISS-SP'' registrado em ''impostos'''
+    - '  [Registry] Plugin ''ICMS-RJ'' registrado em ''impostos'''
+    - '  [Registry] Plugin ''ICMS-MG'' registrado em ''impostos'''
+    - '  [Registry] Plugin ''Frete-Padrão'' registrado em ''frete'''
+    - '  [Registry] Plugin ''Notificação-Email'' registrado em ''notificacao'''
+    - ''
+    - ────────────────────────────────────────────────────────────
+    - '  FATURA #1004 — Minas Gerais'
+    - ────────────────────────────────────────────────────────────
+    - '  Cliente: Mineira Tech (MG)'
+    - '  Itens:'
+    - '    • Notebook Dell: 1× R$5,000.00 = R$5,000.00 [eletronico]'
+    - '  Valor bruto: R$5,000.00'
+    - '  [Email → contas@mineiratech.com] Fatura #1004 emitida para Mineira Tech. Total: R$6,020.00'
+    - '  ICMS-MG: R$900.00'
+    - '  Frete-Padrão: R$120.00'
+    - '  TOTAL: R$6,020.00'
+  - tipo: faixa
+    estilo: sucesso
+    texto: O estado novo entrou por um arquivo, `plugins/impostos_mg.py`, e por uma linha de registro em `com_minas_gerais.py`.
+      A busca por MG em `nucleo.py` não encontra nada, porque o núcleo não foi alterado.
+  - tipo: faixa
+    estilo: dica
+    titulo: 🖥️ Sem Python na máquina?
+    texto: Se o seu ambiente falhou, digite os comandos nos terminais simulados abaixo. As saídas são as mesmas da execução
+      real, capturadas no commit citado na aba Objetivo.
+  - tipo: terminal
+    titulo: terminal simulado · pasta codigo/oda-02/pipes-and-filters
+    comandos:
+    - entrada: python3 main.py
+      saida: "============================================================\n  PIPELINE DE TRIAGEM DE CURRÍCULOS\n  Demonstração\
+        \ — Estilo Pipes and Filters\n============================================================\n\nVaga: Engenheiro(a)\
+        \ de Software Backend\nRequisitos: ≥3 anos | Orçamento: R$18,000\nHabilidades: Python, PostgreSQL, Docker, REST\n\n\
+        Processando 6 currículos...\n\nPipeline: LeitorDeCurriculos → ValidadorDeCurriculo → NormalizadorDeCampos → FiltroPorExperienciaMinima\
+        \ → FiltroPorPretensaoSalarial → CalculadorDeScore → RelatorioDeTriagem\n\n  [DESCARTADO] Currículo id=3: nome ausente\n\
+        \  [REPROVADO] Bruno Rocha: 1 ano(s) < mínimo 3\n  [REPROVADO] Clara Mendes: pretensão R$22,000 > máximo R$18,000\n\
+        \n════════════════════════════════════════════════════════════\n  TRIAGEM CONCLUÍDA — 3 candidato(s) aprovado(s)\n\
+        ════════════════════════════════════════════════════════════\n\n  1. Ana Lima\n     Score: ██████████ 100%\n     Habilidades\
+        \ compatíveis: python, postgresql, rest, docker\n     Experiência: 5 ano(s) | Pretensão: R$14,000\n     Cidade: São\
+        \ Paulo\n\n  2. Elena Souza\n     Score: ██████████ 100%\n     Habilidades compatíveis: python, postgresql, rest,\
+        \ docker\n     Experiência: 7 ano(s) | Pretensão: R$17,000\n     Cidade: Porto Alegre\n\n  3. Felipe Nunes\n     Score:\
+        \ █████      50%\n     Habilidades compatíveis: python, rest\n     Experiência: 3 ano(s) | Pretensão: R$16,000\n \
+        \    Cidade: Salvador"
+      origem: executado
+      dica: Executa a triagem completa.
+    - entrada: python3 sem_normalizador.py
+      saida: "Pipeline: LeitorDeCurriculos → ValidadorDeCurriculo → FiltroPorExperienciaMinima → FiltroPorPretensaoSalarial\
+        \ → CalculadorDeScore → RelatorioDeTriagem\n\n  [DESCARTADO] Currículo id=3: nome ausente\n  [REPROVADO] Bruno Rocha:\
+        \ 1 ano(s) < mínimo 3\n  [REPROVADO] Clara Mendes: pretensão R$22,000 > máximo R$18,000\n\n════════════════════════════════════════════════════════════\n\
+        \  TRIAGEM CONCLUÍDA — 3 candidato(s) aprovado(s)\n════════════════════════════════════════════════════════════\n\n\
+        \  1. Elena Souza\n     Score: ██████████ 100%\n     Habilidades compatíveis: python, postgresql, rest, docker\n \
+        \    Experiência: 7 ano(s) | Pretensão: R$17,000\n     Cidade: Porto Alegre\n\n  2. Ana Lima\n     Score:        \
+        \    0%\n     Habilidades compatíveis: \n     Experiência: 5 ano(s) | Pretensão: R$14,000\n     Cidade: São Paulo\n\
+        \n  3. Felipe Nunes\n     Score:            0%\n     Habilidades compatíveis: \n     Experiência: 3 ano(s) | Pretensão:\
+        \ R$16,000\n     Cidade: Salvador"
+      origem: executado
+      dica: Executa a triagem sem o normalizador.
+    cenarios:
+    - rotulo: Executar main.py
+      comando: python3 main.py
+    - rotulo: Executar sem_normalizador.py
+      comando: python3 sem_normalizador.py
+  - tipo: terminal
+    titulo: terminal simulado · pasta codigo/oda-02/microkernel
+    comandos:
+    - entrada: python3 main.py
+      saida: "============================================================\n  SISTEMA DE FATURAMENTO MULTI-ESTADO\n  Demonstração\
+        \ — Estilo MicroKernel\n============================================================\n\nRegistrando plugins...\n \
+        \ [Registry] Plugin 'ICMS-SP' registrado em 'impostos'\n  [Registry] Plugin 'ISS-SP' registrado em 'impostos'\n  [Registry]\
+        \ Plugin 'ICMS-RJ' registrado em 'impostos'\n  [Registry] Plugin 'Frete-Padrão' registrado em 'frete'\n  [Registry]\
+        \ Plugin 'Notificação-Email' registrado em 'notificacao'\n\nPlugins ativos: {'impostos': ['ICMS-SP', 'ISS-SP', 'ICMS-RJ'],\
+        \ 'frete': ['Frete-Padrão'], 'notificacao': ['Notificação-Email']}\n\n────────────────────────────────────────────────────────────\n\
+        \  FATURA #1001 — São Paulo\n────────────────────────────────────────────────────────────\n  Cliente: TechCorp Ltda\
+        \ (SP)\n  Itens:\n    • Notebook Dell: 2× R$5,000.00 = R$10,000.00 [eletronico]\n    • Suporte Técnico: 10× R$200.00\
+        \ = R$2,000.00 [servico]\n  Valor bruto: R$12,000.00\n  [Email → financeiro@techcorp.com] Fatura #1001 emitida para\
+        \ TechCorp Ltda. Total: R$14,020.00\n  ICMS-SP: R$1,800.00\n  ISS-SP: R$100.00\n  Frete-Padrão: R$120.00\n  TOTAL:\
+        \ R$14,020.00\n\n────────────────────────────────────────────────────────────\n  FATURA #1002 — Rio de Janeiro\n────────────────────────────────────────────────────────────\n\
+        \  Cliente: Cariocode SA (RJ)\n  Itens:\n    • Servidor Rack: 1× R$9,000.00 = R$9,000.00 [eletronico]\n  Valor bruto:\
+        \ R$9,000.00\n  [Email → contas@cariocode.com] Fatura #1002 emitida para Cariocode SA. Total: R$10,920.00\n  ICMS-RJ:\
+        \ R$1,800.00\n  Frete-Padrão: R$120.00\n  TOTAL: R$10,920.00\n\n────────────────────────────────────────────────────────────\n\
+        \  FATURA #1003 — São Paulo, acima da faixa de frete\n────────────────────────────────────────────────────────────\n\
+        \  Cliente: Indústria Paulista (SP)\n  Itens:\n    • Estação de trabalho: 4× R$4,000.00 = R$16,000.00 [eletronico]\n\
+        \  Valor bruto: R$16,000.00\n  [Email → fiscal@indpaulista.com] Fatura #1003 emitida para Indústria Paulista. Total:\
+        \ R$18,880.00\n  ICMS-SP: R$2,880.00\n  Frete-Isento: R$0.00\n  TOTAL: R$18,880.00"
+      origem: executado
+      dica: Processa as faturas de SP e RJ.
+    - entrada: python3 com_minas_gerais.py
+      saida: "  [Registry] Plugin 'ICMS-SP' registrado em 'impostos'\n  [Registry] Plugin 'ISS-SP' registrado em 'impostos'\n\
+        \  [Registry] Plugin 'ICMS-RJ' registrado em 'impostos'\n  [Registry] Plugin 'ICMS-MG' registrado em 'impostos'\n\
+        \  [Registry] Plugin 'Frete-Padrão' registrado em 'frete'\n  [Registry] Plugin 'Notificação-Email' registrado em 'notificacao'\n\
+        \n────────────────────────────────────────────────────────────\n  FATURA #1004 — Minas Gerais\n────────────────────────────────────────────────────────────\n\
+        \  Cliente: Mineira Tech (MG)\n  Itens:\n    • Notebook Dell: 1× R$5,000.00 = R$5,000.00 [eletronico]\n  Valor bruto:\
+        \ R$5,000.00\n  [Email → contas@mineiratech.com] Fatura #1004 emitida para Mineira Tech. Total: R$6,020.00\n  ICMS-MG:\
+        \ R$900.00\n  Frete-Padrão: R$120.00\n  TOTAL: R$6,020.00"
+      origem: executado
+      dica: Registra o plugin ICMS-MG.
+    cenarios:
+    - rotulo: Executar main.py
+      comando: python3 main.py
+    - rotulo: Executar com_minas_gerais.py
+      comando: python3 com_minas_gerais.py
+  - tipo: faixa
+    estilo: erro
+    sintoma: 'O terminal mostra `ModuleNotFoundError: No module named ''dominio''` ou `No module named ''filtros''`.'
+    causa: O programa foi executado fora da própria pasta, e o Python não encontra os arquivos vizinhos.
+    correcao: Entre na pasta do programa com `cd` antes de executá-lo, como nos passos acima, e repita o comando.
+  - tipo: checklist
+    titulo: Checklist final
+    itens:
+    - A triagem completa aprovou três candidatos, com Ana Lima e Elena Souza em 100%.
+    - Sem o normalizador, Ana Lima e Felipe Nunes caíram para 0%.
+    - A fatura de Minas Gerais recebeu ICMS-MG de R$900.00.
+    - A busca por MG em `nucleo.py` não encontrou nada.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: 'Os programas materializam os Experimentos 2 e 3 da Oficina de ferramentas. A variante sem o normalizador e o plugin
+      de Minas Gerais aplicam as propriedades descritas nas seções Pipes and Filters e O caso canônico: cálculo de impostos.'
+    links:
+    - *id004
+    - *id005
+    - *id006
+- id: verificacao
+  titulo: Verificação
+  blocos:
+  - tipo: legenda
+    texto: Responda às cinco perguntas. Cada alternativa traz uma explicação depois da escolha, com referência ao que você
+      viu nas abas anteriores.
+  - tipo: quiz
+    perguntas:
+    - enunciado: Na triagem de currículos, qual é o papel do `FiltroPorExperienciaMinima`?
+      alternativas:
+      - texto: Producer, porque entrega os currículos ao fluxo.
+        correta: false
+        explicacao: O producer é o `LeitorDeCurriculos`.
+      - texto: Tester, porque avalia o currículo e descarta os que não atingem o mínimo.
+        correta: true
+        explicacao: Ele devolve None para o candidato com menos anos que o exigido, e o currículo sai do fluxo.
+      - texto: Transformer, porque altera o currículo.
+        correta: false
+        explicacao: Ele não altera o currículo, apenas decide se ele continua.
+    - enunciado: Por que Ana Lima caiu para 0% de score na variante sem o normalizador?
+      alternativas:
+      - texto: Porque o `CalculadorDeScore` foi alterado.
+        correta: false
+        explicacao: Nenhum arquivo de `filtros/` mudou entre as duas execuções.
+      - texto: Porque o calculador compara habilidades em minúsculas, e o filtro que as convertia saiu do pipeline.
+        correta: true
+        explicacao: A dependência entre os filtros está na ordem do pipeline, declarada na montagem.
+      - texto: Porque ela foi reprovada pelo filtro de experiência.
+        correta: false
+        explicacao: Ela continua aprovada, com score 0%.
+    - enunciado: O que precisou mudar para o faturamento atender Minas Gerais?
+      alternativas:
+      - texto: Um novo `elif` em `nucleo.py`.
+        correta: false
+        explicacao: Esse seria o core creep, mostrado em `nucleo_com_creep.py`.
+      - texto: Um arquivo novo em `plugins/` e uma linha de registro.
+        correta: true
+        explicacao: O núcleo não foi alterado, e a busca por MG em `nucleo.py` não encontra nada.
+      - texto: O contrato `Plugin` ganhou um método novo.
+        correta: false
+        explicacao: O contrato continuou igual, e por isso os outros plugins não mudaram.
+    - enunciado: Qual anti-padrão aparece quando o núcleo acumula condicionais por estado ou cliente?
+      alternativas:
+      - texto: Core creep
+        correta: true
+        explicacao: Cada variação nova volta ao núcleo, e a extensibilidade se perde.
+      - texto: Sumidouro
+        correta: false
+        explicacao: O sumidouro é um anti-padrão do estilo em camadas.
+      - texto: Estado compartilhado invisível
+        correta: false
+        explicacao: Esse é o anti-padrão de Pipes and Filters.
+    - enunciado: No ADR-002 desta ODA, por que Pipes and Filters foi descartado para o cálculo de impostos?
+      alternativas:
+      - texto: Porque Pipes and Filters não pode ser testado.
+        correta: false
+        explicacao: A testabilidade é o ponto forte do estilo, com nota 5.
+      - texto: Porque o problema central é a variação por estado, e não uma sequência de transformações de dados.
+        correta: true
+        explicacao: O campo Alternativas do ADR registra esse motivo.
+      - texto: Porque o faturamento não tem etapas.
+        correta: false
+        explicacao: O faturamento tem etapas, e o núcleo as ordena por categoria.
+  - tipo: resumo
+  - tipo: checklist
+    titulo: Para revisar depois da aula
+    itens:
+    - Ler as seções Quando usar Pipes and Filters e Quando usar Microkernel no material oficial.
+    - Abrir o template de ADR do material oficial e comparar com o ADR-002 desta ODA.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: As perguntas cobrem as seções Pipes and Filters, Microkernel e ADR da página Padrões e decisões.
+    links:
+    - rotulo: Material oficial · Quando usar Pipes and Filters
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#quando-usar-pipes-and-filters-e-quando-nao-usar
+    - rotulo: Material oficial · Quando usar Microkernel
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-1-visao-geral/padroes-e-decisoes/#quando-usar-microkernel-e-quando-nao-usar
+    - *id007

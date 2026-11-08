@@ -1,0 +1,325 @@
+#!/usr/bin/env python3
+"""Gera as ODAs no formato de aplicação a partir de odas/*/oda.yml."""
+
+from __future__ import annotations
+
+import argparse
+import html
+import json
+from pathlib import Path
+import re
+import shutil
+import sys
+
+import yaml
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from hooks.catalogo import carregar_catalogo, oda_por_id  # noqa: E402
+
+ABAS = ("objetivo", "conceitos", "laboratorio", "verificacao")
+OBRIGATORIOS = {
+    "legenda": ("texto",), "faixa": ("estilo",), "checklist": ("titulo", "itens"), "editor": ("rotulo", "linhas"),
+    "passos": ("itens",), "conceito": ("titulo", "texto"),
+    "adr": ("id", "titulo", "status", "contexto", "decisao", "alternativas", "consequencias"),
+    "arvores": ("esquerda", "direita"), "comparativo": ("colunas", "linhas"), "diagrama": ("id", "tipo_diagrama", "titulo", "mermaid"),
+    "fluxo": ("titulo", "etapas"), "console-api": ("cenarios",), "classificador": ("categorias", "itens"),
+    "terminal": ("comandos",), "incidente": ("titulo", "saida", "origem", "pergunta", "alternativas", "correcao"),
+    "quiz": ("perguntas",), "resumo": (), "glossario": ("itens",), "linha-do-tempo": ("atores", "eventos"),
+}
+ESTILOS = {"dica", "erro", "quebra", "sucesso", "objetivo"}
+CAMPOS_OBJETIVO = ("problema", "impacto", "mecanismo", "comprovacao")
+ROTULOS = {"terminal", "arquivo", "saida", "log"}
+ORIGENS = {"executado", "codigo", "exemplo"}
+FRASE = re.compile(r"[.!?](\s|$)")
+ONDE = "📂 Onde está o código"
+CURADOS = {
+    "developer.mozilla.org", "web.dev", "www.w3.org", "w3c.github.io", "html.spec.whatwg.org", "datatracker.ietf.org", "www.rfc-editor.org",
+    "owasp.org", "cheatsheetseries.owasp.org", "martinfowler.com", "microservices.io", "c4model.com", "adr.github.io",
+    "learn.microsoft.com", "docs.aws.amazon.com", "aws.amazon.com", "docs.localstack.cloud", "aspire.dev",
+    "react.dev", "redux.js.org", "redux-toolkit.js.org", "tanstack.com", "vite.dev", "vitest.dev", "playwright.dev", "eslint.org",
+    "www.typescriptlang.org", "nodejs.org", "docs.npmjs.com", "hono.dev", "mswjs.io", "feature-sliced.design", "feature-sliced.github.io",
+    "git-scm.com", "marco-mendes.github.io", "code.visualstudio.com", "www.python.org", "docs.python.org", "docs.github.com", "docs.docker.com", "nginx.org", "www.postgresql.org", "www.sqlite.org", "www.npgsql.org",
+    "xunit.net", "opentelemetry.io", "json-schema.org", "semver.org", "www.bcb.gov.br", "jwt.io", "www.iana.org", "yaml.org",
+}
+COMO_OBTER = "🧭 Como ter o código na sua máquina"
+
+
+def _editor(bloco: dict, commit: str, rotulo: str) -> list[str]:
+    erros = []
+    linhas = bloco.get("linhas")
+    if not isinstance(linhas, list) or not all(isinstance(l, str) for l in linhas):
+        return [f"{rotulo}: editor exige linhas como lista de textos."]
+    inicio = bloco.get("inicio", 1)
+    vistas = set()
+    for a in bloco.get("anotacoes", []):
+        if not inicio <= a.get("linha", 0) < inicio + len(linhas):
+            erros.append(f"{rotulo}: anotação na linha {a.get('linha')} fora do trecho exibido.")
+        elif a["linha"] in vistas:
+            erros.append(f"{rotulo}: duas anotações na linha {a['linha']}.")
+        vistas.add(a.get("linha"))
+    if bloco.get("rotulo") not in ROTULOS:
+        erros.append(f"{rotulo}: rótulo de editor inválido: {bloco.get('rotulo')}.")
+    if bloco.get("rotulo") == "arquivo":
+        if not bloco.get("caminho") or not bloco.get("commit"):
+            erros.append(f"{rotulo}: editor de arquivo exige caminho e commit.")
+        elif bloco["commit"] != commit:
+            erros.append(f"{rotulo}: editor de arquivo cita o commit {bloco['commit']}, e o catálogo fixa {commit}.")
+    if bloco.get("rotulo") in {"saida", "log"} and bloco.get("origem") not in ORIGENS:
+        erros.append(f"{rotulo}: saída exige origem executado, codigo ou exemplo.")
+    return erros
+
+
+def _uma_correta(alternativas) -> bool:
+    return isinstance(alternativas, list) and sum(1 for a in alternativas if a.get("correta") is True) == 1
+
+
+def _efeito_valido(efeito) -> bool:
+    return efeito is None or isinstance(efeito, str) or (isinstance(efeito, list) and all(isinstance(e, str) for e in efeito))
+
+
+def _normalizar(comando: str) -> str:
+    return " ".join(str(comando).split())
+
+
+def _bloco(bloco, commit: str, rotulo: str, flags: set[str] = frozenset()) -> list[str]:
+    if not isinstance(bloco, dict):
+        return [f"{rotulo}: bloco deve ser um objeto."]
+    tipo = bloco.get("tipo")
+    if tipo not in OBRIGATORIOS:
+        return [f"{rotulo}: tipo de bloco desconhecido: {tipo}."]
+    erros = [f"{rotulo}: {tipo} exige a propriedade {p}." for p in OBRIGATORIOS[tipo] if p not in bloco]
+    if erros:
+        return erros
+    if tipo == "legenda" and len(FRASE.findall(bloco["texto"])) > 3:
+        erros.append(f"{rotulo}: legenda passa de três frases.")
+    if tipo == "faixa":
+        if bloco["estilo"] not in ESTILOS:
+            erros.append(f"{rotulo}: estilo de faixa inválido: {bloco['estilo']}.")
+        elif bloco["estilo"] == "erro" and not all(k in bloco for k in ("sintoma", "causa", "correcao")):
+            erros.append(f"{rotulo}: faixa de erro exige sintoma, causa e correcao.")
+        elif bloco["estilo"] == "objetivo" and not all(bloco.get(k) for k in CAMPOS_OBJETIVO):
+            erros.append(f"{rotulo}: faixa de objetivo exige {', '.join(CAMPOS_OBJETIVO)}.")
+        elif bloco["estilo"] not in ("erro", "objetivo") and "texto" not in bloco:
+            erros.append(f"{rotulo}: faixa exige texto.")
+        for l in bloco.get("links", []):
+            if not l.get("rotulo") or not str(l.get("url", "")).startswith("https://"):
+                erros.append(f"{rotulo}: link de faixa exige rotulo e url https.")
+    if tipo == "glossario":
+        for i, item in enumerate(bloco["itens"], 1):
+            if not item.get("termo") or not item.get("definicao"):
+                erros.append(f"{rotulo}: termo {i} do glossário exige termo e definicao.")
+            ref = item.get("referencia")
+            if ref is not None:
+                host = re.match(r"https://([^/]+)/", str(ref.get("url", "")) + "/")
+                if not ref.get("rotulo") or not host or host.group(1) not in CURADOS:
+                    erros.append(f"{rotulo}: referência do termo {i} exige rotulo e url https de um portal curado.")
+    if tipo == "editor":
+        erros += _editor(bloco, commit, rotulo)
+        if bloco.get("rotulo") == "arquivo" and not bloco.get("contexto"):
+            erros.append(f"{rotulo}: editor de arquivo exige contexto, que diz o que o arquivo é e por que ele aparece.")
+    if tipo == "passos":
+        for i, passo in enumerate(bloco["itens"], 1):
+            if "titulo" not in passo:
+                erros.append(f"{rotulo}.passo {i}: passo exige titulo.")
+            if not _efeito_valido(passo.get("efeito")):
+                erros.append(f"{rotulo}.passo {i}: efeito deve ser texto ou lista de textos.")
+            if "editor" in passo:
+                erros += _editor(passo["editor"], commit, f"{rotulo}.passo {i}")
+    if tipo == "terminal":
+        entradas = {_normalizar(c.get("entrada", "")) for c in bloco["comandos"]}
+        for i, c in enumerate(bloco.get("cenarios", []), 1):
+            if _normalizar(c.get("comando", "")) not in entradas:
+                erros.append(f"{rotulo}: cenário {i} do terminal usa comando não declarado: {c.get('comando')}.")
+        for c in bloco["comandos"]:
+            condicoes = c.get("condicao") or []
+            for condicao in (condicoes if isinstance(condicoes, list) else [condicoes]):
+                if condicao.lstrip("!") not in flags:
+                    erros.append(f"{rotulo}: condição usa estado que nenhum efeito define: {condicao.lstrip('!')}.")
+            if not _efeito_valido(c.get("efeito")):
+                erros.append(f"{rotulo}: efeito de comando deve ser texto ou lista de textos.")
+        for i, c in enumerate(bloco["comandos"], 1):
+            if not c.get("entrada") or not isinstance(c.get("saida"), str):
+                erros.append(f"{rotulo}: comando {i} exige entrada e saida.")
+            if c.get("origem") not in ORIGENS:
+                erros.append(f"{rotulo}: comando {i} com origem inválida: {c.get('origem')}.")
+    if tipo == "console-api":
+        for i, c in enumerate(bloco["cenarios"], 1):
+            if not c.get("rotulo") or "metodo" not in c.get("requisicao", {}) or "status" not in c.get("resposta", {}):
+                erros.append(f"{rotulo}: cenário {i} exige rotulo, requisicao.metodo e resposta.status.")
+            if c.get("origem") not in ORIGENS:
+                erros.append(f"{rotulo}: cenário {i} com origem inválida: {c.get('origem')}.")
+    if tipo == "linha-do-tempo":
+        atores = {a.get("id") for a in bloco["atores"]}
+        anteriores = set()
+        for e in bloco["eventos"]:
+            for ator in (e.get("de"), e.get("para")):
+                if ator not in atores:
+                    erros.append(f"{rotulo}: evento {e.get('id')} usa ator inexistente: {ator}.")
+            if "depende" in e and e["depende"] not in anteriores:
+                erros.append(f"{rotulo}: evento {e.get('id')} depende de {e['depende']}, que não é evento anterior.")
+            anteriores.add(e.get("id"))
+        for f in bloco.get("falhas", []):
+            if f.get("ator") not in atores:
+                erros.append(f"{rotulo}: falha {f.get('id')} usa ator inexistente: {f.get('ator')}.")
+    if tipo == "classificador":
+        ids = {c.get("id") for c in bloco["categorias"]}
+        for i, item in enumerate(bloco["itens"], 1):
+            if item.get("categoria") not in ids:
+                erros.append(f"{rotulo}: item {i} do classificador usa categoria inexistente: {item.get('categoria')}.")
+    if tipo == "arvores":
+        for lado in ("esquerda", "direita"):
+            for i, no in enumerate(bloco[lado].get("nos", []), 1):
+                if not no.get("caminho") or not no.get("descricao"):
+                    erros.append(f"{rotulo}: nó {i} da árvore {lado} exige caminho e descricao.")
+    if tipo == "fluxo":
+        for i, e in enumerate(bloco["etapas"], 1):
+            if not e.get("titulo") or not e.get("descricao"):
+                erros.append(f"{rotulo}: etapa {i} exige titulo e descricao.")
+            if "codigo" in e and e["codigo"].get("commit") != commit:
+                erros.append(f"{rotulo}: etapa {i} cita commit diferente do catálogo.")
+    if tipo == "incidente":
+        if not isinstance(bloco["saida"], str):
+            erros.append(f"{rotulo}: incidente exige saida como texto.")
+        if bloco["origem"] not in ORIGENS:
+            erros.append(f"{rotulo}: incidente com origem inválida: {bloco['origem']}.")
+        if not _uma_correta(bloco["alternativas"]):
+            erros.append(f"{rotulo}: incidente deve ter exatamente uma alternativa correta.")
+    if tipo == "quiz":
+        for i, p in enumerate(bloco["perguntas"], 1):
+            if not p.get("enunciado"):
+                erros.append(f"{rotulo}: pergunta {i} exige enunciado.")
+            if not _uma_correta(p.get("alternativas")):
+                erros.append(f"{rotulo}: pergunta {i} deve ter exatamente uma alternativa correta.")
+    return erros
+
+
+def _mostra_codigo(aba: dict) -> bool:
+    for b in aba.get("blocos", []):
+        if not isinstance(b, dict):
+            continue
+        if b.get("tipo") == "arvores" or (b.get("tipo") == "editor" and b.get("rotulo") == "arquivo"):
+            return True
+        if b.get("tipo") == "fluxo" and any("codigo" in e for e in b.get("etapas", [])):
+            return True
+    return False
+
+
+def validar_oda(dados: dict, catalogo: dict) -> list[str]:
+    oda = oda_por_id(catalogo, str(dados.get("id")))
+    if oda is None:
+        return [f"ODA {dados.get('id')} não consta do catálogo."]
+    erros = []
+    if dados.get("titulo") != oda["titulo"]:
+        erros.append(f"Título difere do catálogo: {oda['titulo']}.")
+    abas = dados.get("abas", [])
+    if tuple(a.get("id") for a in abas) != ABAS:
+        erros.append(f"As abas devem ser, nesta ordem: {', '.join(ABAS)}.")
+    commit = catalogo["repositorios"][oda["repositorio"]]["commit"]
+    flags = set()
+    for aba in abas:
+        for bloco in aba.get("blocos", []):
+            if isinstance(bloco, dict):
+                fontes = bloco.get("itens", []) if bloco.get("tipo") == "passos" else bloco.get("comandos", []) if bloco.get("tipo") == "terminal" else []
+                for f in fontes:
+                    efeito = f.get("efeito") if isinstance(f, dict) else None
+                    if not _efeito_valido(efeito):
+                        continue
+                    for e in (efeito if isinstance(efeito, list) else [efeito] if efeito else []):
+                        flags.add(e.lstrip("!"))
+    for aba in abas:
+        if not aba.get("titulo"):
+            erros.append(f"{aba.get('id')}: aba sem titulo.")
+        titulos = {b.get("titulo") for b in aba.get("blocos", []) if isinstance(b, dict)}
+        if aba.get("id") == "objetivo" and COMO_OBTER not in titulos:
+            erros.append(f"objetivo: falta a faixa {COMO_OBTER}.")
+        if aba.get("id") == "laboratorio":
+            estilos = [b.get("estilo") if b.get("tipo") == "faixa" else b.get("tipo") for b in aba.get("blocos", []) if isinstance(b, dict) and b.get("tipo") != "glossario" and b.get("titulo") != "📘 Conceitos usados nesta aba"]
+            esperado = 1 if estilos[:1] == ["legenda"] else 0
+            if estilos[esperado:esperado + 1] != ["objetivo"]:
+                erros.append("laboratorio: a faixa de objetivo deve vir logo depois da legenda e dos conceitos da aba.")
+        if aba.get("id") == "objetivo":
+            tipos = [b.get("tipo") for b in aba.get("blocos", []) if isinstance(b, dict)]
+            esperado = 1 if tipos[:1] == ["legenda"] else 0
+            if tipos[esperado:esperado + 1] != ["glossario"]:
+                erros.append("objetivo: o glossário deve vir logo depois da legenda, antes de qualquer outro bloco.")
+        if aba.get("id") != "laboratorio" and _mostra_codigo(aba) and ONDE not in titulos:
+            erros.append(f"{aba.get('id')}: aba mostra código e não tem a faixa {ONDE}.")
+        for i, bloco in enumerate(aba.get("blocos", [])):
+            erros += _bloco(bloco, commit, f"{aba.get('id')}[{i}]", flags)
+    return erros
+
+
+def preparar(dados: dict) -> dict:
+    for aba in dados["abas"]:
+        for i, bloco in enumerate(aba["blocos"]):
+            if bloco["tipo"] == "adr":
+                bloco["id_adr"] = bloco.pop("id")
+            if bloco["tipo"] == "diagrama":
+                bloco["id_diagrama"] = bloco.pop("id")
+            bloco["id"] = f"{aba['id']}-{i}"
+    return dados
+
+
+def html_da_oda(dados: dict) -> str:
+    carga = json.dumps(dados, ensure_ascii=False).replace("</", "<\\/")
+    titulo = html.escape(f"ODA {dados['id']} — {dados['titulo']}")
+    return f"""<!doctype html>
+<html lang="pt-BR" data-tema="escuro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{titulo}</title>
+<link rel="stylesheet" href="../motor/oda.css">
+</head>
+<body>
+<div id="app"><p>Carregando a ODA…</p></div>
+<noscript><p>Esta ODA precisa de JavaScript habilitado.</p></noscript>
+<script id="oda-dados" type="application/json">{carga}</script>
+<script type="module">import {{ iniciar }} from '../motor/app.mjs'; iniciar(document, window);</script>
+</body>
+</html>
+"""
+
+
+def gerar(raiz: Path, destino: Path) -> list[str]:
+    catalogo = carregar_catalogo(raiz / "catalogo" / "odas.yml")
+    erros: list[str] = []
+    arquivos = sorted((raiz / "odas").glob("*/oda.yml"))
+    guia = raiz / "guia-autoria" / "oda.yml"
+    if guia.exists():
+        arquivos.append(guia)
+        catalogo = dict(catalogo, odas=[*catalogo["odas"], {
+            "id": "autoria", "titulo": "Como criar uma ODA",
+            "repositorio": "frontend-react", "minutos": 60,
+        }])
+    for arquivo in arquivos:
+        dados = yaml.safe_load(arquivo.read_text(encoding="utf-8"))
+        problemas = validar_oda(dados, catalogo)
+        if problemas:
+            erros += [f"{arquivo.relative_to(raiz)}: {p}" for p in problemas]
+            continue
+        oda = oda_por_id(catalogo, str(dados["id"]))
+        dados.update(repositorio=oda["repositorio"], url_repositorio=catalogo["repositorios"][oda["repositorio"]]["url"], commit=catalogo["repositorios"][oda["repositorio"]]["commit"], minutos=oda["minutos"])
+        pasta = destino / ("oda-criar" if arquivo == guia else arquivo.parent.name)
+        pasta.mkdir(parents=True, exist_ok=True)
+        (pasta / "index.html").write_text(html_da_oda(preparar(dados)), encoding="utf-8")
+    if not erros:
+        shutil.copytree(raiz / "motor", destino / "motor", dirs_exist_ok=True)
+    return erros
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--destino", default="site")
+    destino = ROOT / parser.parse_args().destino
+    erros = gerar(ROOT, destino)
+    for erro in erros:
+        print(erro)
+    print(f"{len(erros)} erro(s).")
+    return 1 if erros else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
