@@ -1,0 +1,6 @@
+# Bibliotecas da ODA 04, com versões fixas para que as saídas sejam iguais às da ODA.
+ariadne==1.1.1
+graphql-core==3.3.2
+starlette==1.10.0
+httpx==0.28.1
+websockets==17.4

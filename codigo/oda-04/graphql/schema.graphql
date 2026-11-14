@@ -1,0 +1,31 @@
+# Contrato GraphQL da elegibilidade, escrito em SDL (Schema Definition Language).
+# O consumidor escolhe, em cada consulta, quais campos destes tipos quer receber.
+
+type Query {
+  elegibilidade(protocolo: ID!): Elegibilidade
+  elegibilidades: [Elegibilidade!]!
+}
+
+type Mutation {
+  solicitarElegibilidade(pedido: PedidoElegibilidade!): Elegibilidade!
+}
+
+input PedidoElegibilidade {
+  cpf: String!
+  codigoOperadora: String!
+  matriculaPlano: String!
+}
+
+type Elegibilidade {
+  protocolo: ID!
+  situacao: String!
+  criadoEm: String!
+  matriculaPlano: String!
+  operadora: Operadora!
+}
+
+type Operadora {
+  codigo: String!
+  nome: String!
+  prazoRespostaHoras: Int!
+}

@@ -15,7 +15,7 @@ RAIZ = Path(__file__).resolve().parents[2]
 def conferir() -> list[tuple[bool, str]]:
     versao = sys.version_info
     return [
-        (versao >= (3, 10), f"Python {versao.major}.{versao.minor}.{versao.micro} (mínimo 3.10)"),
+        (versao >= (3, 11), f"Python {versao.major}.{versao.minor}.{versao.micro} (mínimo 3.11)"),
         (shutil.which("git") is not None, "Git encontrado no PATH"),
         ((RAIZ / "codigo" / "oda-01").is_dir() and (RAIZ / "codigo" / "oda-02").is_dir(),
          "Repositório clonado, com as pastas codigo/oda-01 e codigo/oda-02"),

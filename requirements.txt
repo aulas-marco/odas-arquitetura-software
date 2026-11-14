@@ -1,1 +1,3 @@
 mkdocs-material==9.7.6
+-r codigo/oda-03/requirements.txt
+-r codigo/oda-04/requirements.txt

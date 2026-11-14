@@ -6,7 +6,7 @@ Este módulo instala as ferramentas usadas nos laboratórios das ODAs e copia es
 | --- | --- |
 | Git | Programa de controle de versões. Nas ODAs, o Git copia o repositório para o computador, operação chamada clonar, e o atualiza a cada aula. |
 | VS Code (Visual Studio Code) | Editor de código gratuito da Microsoft. Nas ODAs, o VS Code abre os arquivos citados nas abas e oferece um terminal integrado. |
-| Python 3.10 ou mais recente | Interpretador da linguagem Python. Nas ODAs, o Python executa os programas prontos do Laboratório. |
+| Python 3.11 ou mais recente | Interpretador da linguagem Python. Nas ODAs, o Python executa os programas prontos do Laboratório. |
 
 Os comandos deste módulo são digitados num terminal, que é o programa em que se escrevem comandos de texto. A tabela abaixo indica o terminal de cada sistema operacional.
 
@@ -110,7 +110,7 @@ A extensão Python, publicada pela Microsoft, destaca a sintaxe dos arquivos `.p
     sudo apt install -y python3
     ```
 
-A versão exibida deve ser 3.10 ou mais recente, e uma versão anterior precisa ser substituída pelo mesmo procedimento de instalação.
+A versão exibida deve ser 3.11 ou mais recente, e uma versão anterior precisa ser substituída pelo mesmo procedimento de instalação.
 
 ## 4. Clonar o repositório
 
@@ -148,7 +148,7 @@ O programa verificador, executado na raiz do repositório, confere a versão do 
 A saída esperada termina com a linha `Ambiente pronto.`, como no exemplo abaixo.
 
 ```text
-  [OK] Python 3.13.1 (mínimo 3.10)
+  [OK] Python 3.13.1 (mínimo 3.11)
   [OK] Git encontrado no PATH
   [OK] Repositório clonado, com as pastas codigo/oda-01 e codigo/oda-02
 

@@ -1,0 +1,27 @@
+// Contrato gRPC da elegibilidade, escrito em Protocol Buffers.
+// O número depois de cada campo identifica o campo na mensagem binária.
+// Trocar o nome de um campo preserva a compatibilidade, e trocar o número quebra.
+syntax = "proto3";
+
+package hospital.elegibilidade.v1;
+
+service Elegibilidades {
+  rpc SolicitarElegibilidade (PedidoElegibilidade) returns (ElegibilidadeAceita);
+  rpc ConsultarElegibilidade (ConsultaElegibilidade) returns (ElegibilidadeAceita);
+}
+
+message PedidoElegibilidade {
+  string cpf = 1;
+  string codigo_operadora = 2;
+  string matricula_plano = 3;
+}
+
+message ConsultaElegibilidade {
+  string protocolo = 1;
+}
+
+message ElegibilidadeAceita {
+  string protocolo = 1;
+  string situacao = 2;
+  string criado_em = 3;
+}

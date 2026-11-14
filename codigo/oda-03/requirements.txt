@@ -1,0 +1,8 @@
+# Bibliotecas da ODA 03, com versões fixas para que as saídas sejam iguais às da ODA.
+fastapi==0.163.0
+pydantic==2.14.3
+starlette==1.10.0
+httpx==0.28.1
+grpcio==1.85.1
+grpcio-tools==1.85.1
+protobuf==7.36.2
