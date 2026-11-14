@@ -30,8 +30,8 @@ abas:
         rotulo: Material oficial · A semântica do HTTP
         url: https://marco-mendes.github.io/arquitetura-software/modulo-2-apis/conceitos/#exemplo-a-semancia-do-http
     - termo: gRPC
-      definicao: Framework de chamada remota de procedimento criado pelo Google, em que o consumidor chama uma operação pelo
-        nome e a mensagem viaja em formato binário sobre HTTP/2.
+      definicao: Framework de chamada remota de procedimento criado pelo Google, no qual o consumidor chama cada operação
+        pelo nome por meio de mensagens binárias transmitidas sobre HTTP/2.
     - termo: Protocol Buffers
       definicao: Linguagem de contrato e formato binário de mensagem usados pelo gRPC. O contrato fica num arquivo com extensão
         `.proto`.
@@ -57,23 +57,23 @@ abas:
   - tipo: faixa
     estilo: dica
     titulo: 🧭 Como ter o código na sua máquina
-    texto: O código desta ODA está na pasta `codigo/oda-03/` do repositório `odas-arquitetura-software`. Quem concluiu o Módulo
-      0 já tem o repositório clonado e precisa apenas executar `git pull` dentro da pasta dele. Os programas desta ODA usam
-      bibliotecas externas, instaladas no Laboratório num ambiente virtual com Python 3.11 ou mais recente, e os trechos exibidos
-      correspondem ao commit `e81982a`.
+    texto: O código desta ODA está na pasta `codigo/oda-03/` do repositório `odas-arquitetura-software`, que quem concluiu
+      o Módulo 0 já tem clonado e atualiza com `git pull` dentro da pasta dele. Os programas desta ODA usam bibliotecas externas
+      instaladas no Laboratório num ambiente virtual com Python 3.11 ou mais recente. Os trechos exibidos nas abas correspondem
+      ao commit `f9f8fde`.
     links:
     - rotulo: 'Módulo 0: preparação do ambiente'
       url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
-    - rotulo: Repositório no GitHub, commit e81982a
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/e81982a
+    - rotulo: Repositório no GitHub, commit f9f8fde
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
     texto: Os links abaixo levam às seções do Módulo 2 cobertas por esta ODA. Os programas da pasta `codigo/oda-03` são os
-      exemplos de REST e de gRPC da seção O mesmo caso em quatro estilos de API, no Exemplo arquitetural.
+      exemplos de REST e de gRPC da seção Elegibilidade em quatro estilos de API, no Exemplo arquitetural.
     links:
-    - rotulo: Material oficial · O mesmo caso em quatro estilos de API
-      url: https://marco-mendes.github.io/arquitetura-software/modulo-2-apis/exemplo-arquitetural/#o-mesmo-caso-em-quatro-estilos-de-api
+    - rotulo: Material oficial · Elegibilidade em quatro estilos de API
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-2-apis/exemplo-arquitetural/#elegibilidade-em-quatro-estilos-de-api
     - rotulo: Material oficial · Elegibilidade como recurso REST
       url: https://marco-mendes.github.io/arquitetura-software/modulo-2-apis/exemplo-arquitetural/#elegibilidade-como-recurso-rest
     - rotulo: Material oficial · Elegibilidade como operação gRPC
@@ -89,17 +89,17 @@ abas:
   - tipo: faixa
     estilo: dica
     titulo: 📂 Onde está o código
-    texto: Os arquivos desta aba ficam em `codigo/oda-03/rest/` e `codigo/oda-03/grpc/` no repositório `odas-arquitetura-software`,
-      e o botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P (Cmd+P no macOS)
-      localiza qualquer arquivo pelo caminho exibido no trecho.
+    texto: Os arquivos desta aba ficam em `codigo/oda-03/rest/` e `codigo/oda-03/grpc/` no repositório `odas-arquitetura-software`.
+      O botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P no Windows e
+      no Linux ou Cmd+P no macOS localiza qualquer arquivo pelo caminho exibido no trecho.
     links:
-    - rotulo: Repositório no GitHub, commit e81982a
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/e81982a
+    - rotulo: Repositório no GitHub, commit f9f8fde
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
   - tipo: conceito
     titulo: Interface, contrato e implementação
     texto: Uma API separa três camadas. A interface diz o que está disponível, o contrato diz qual promessa é observável e
-      a implementação diz como a promessa é cumprida hoje. Nesta ODA a implementação muda de REST para gRPC, e a capacidade
-      de negócio permanece a mesma, com um pedido que recebe um protocolo e a situação `recebida`.
+      a implementação diz como a promessa é cumprida hoje. Nesta ODA a implementação passa de REST para gRPC sem mudança na
+      capacidade de negócio, que continua a receber um pedido e a devolver um protocolo com a situação `recebida`.
   - tipo: conceito
     titulo: REST e o recurso
     texto: No estilo REST, a elegibilidade é um recurso com endereço próprio. O método HTTP declara a intenção da chamada,
@@ -109,7 +109,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-03/rest/main.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `main.py` declara a rota que aceita o pedido de elegibilidade. A rota devolve `202` porque a API aceitou
       o pedido sem tomar nenhuma decisão sobre a cobertura.
     inicio: 20
@@ -132,9 +132,9 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-03/rest/models.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `models.py` escreve o contrato do pedido como classe Pydantic. O padrão do `cpf` é verificado antes
-      de a rota executar, e um corpo inválido recebe `422`.
+      da execução da rota, de modo que um corpo inválido recebe `422`.
     inicio: 12
     linhas:
     - 'class PedidoElegibilidade(BaseModel):  # o que o consumidor envia'
@@ -146,13 +146,13 @@ abas:
       texto: A regra dos onze dígitos faz parte do contrato da API REST.
   - tipo: conceito
     titulo: gRPC e a operação
-    texto: No gRPC, o consumidor chama uma operação pelo nome, como `SolicitarElegibilidade`, e a mensagem viaja em formato
-      binário sobre HTTP/2. O contrato é um arquivo `.proto` escrito na linguagem do Protocol Buffers, que declara o serviço,
-      as operações e as mensagens.
+    texto: No gRPC o consumidor chama cada operação pelo nome, como `SolicitarElegibilidade`, por meio de mensagens binárias
+      transmitidas sobre HTTP/2. O contrato é um arquivo `.proto` escrito na linguagem do Protocol Buffers, que declara o
+      serviço, as operações e as mensagens.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-03/grpc/elegibilidade.proto
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `elegibilidade.proto` é o contrato gRPC da elegibilidade. Os dois arquivos `_pb2` da mesma pasta foram
       gerados a partir dele.
     inicio: 8
@@ -174,18 +174,19 @@ abas:
       texto: O número 1 identifica o campo na mensagem binária, no lugar do nome cpf.
   - tipo: conceito
     titulo: Número do campo e evolução do contrato
-    texto: O nome do campo não viaja na mensagem binária, somente o número. A renomeação de um campo preserva a compatibilidade
-      com consumidores antigos, enquanto a troca do número ou a reutilização de um número removido quebra a leitura das mensagens
-      já em circulação. O `v1` no nome do pacote marca a linha de evolução do contrato.
+    texto: A mensagem binária contém o número de cada campo sem o nome do campo, de modo que a renomeação de um campo preserva
+      a compatibilidade com consumidores antigos. A troca do número ou a reutilização de um número removido impede a leitura
+      das mensagens já em circulação. O `v1` no nome do pacote marca a linha de evolução do contrato, no mesmo sentido do
+      versionamento descrito no Módulo 2.
   - tipo: conceito
     titulo: Código gerado, stub e servidor
-    texto: O compilador `protoc` lê o `.proto` e gera dois arquivos Python. O `elegibilidade_pb2.py` contém as classes das
-      mensagens trocadas pelo serviço. O `elegibilidade_pb2_grpc.py` contém o stub usado pelo cliente para chamar as operações
-      e a classe base que o servidor estende.
+    texto: O compilador `protoc` lê o `.proto` e gera dois arquivos Python com o código usado pelo cliente e pelo servidor.
+      O `elegibilidade_pb2.py` contém as classes das mensagens trocadas pelo serviço. O `elegibilidade_pb2_grpc.py` contém
+      o stub usado pelo cliente para chamar as operações e a classe base que o servidor estende.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-03/grpc/servidor.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `servidor.py` implementa as duas operações do contrato. A classe herda de `ElegibilidadesServicer`,
       gerada pelo `protoc`.
     inicio: 24
@@ -210,7 +211,7 @@ abas:
     - ''
     anotacoes:
     - linha: 26
-      texto: O .proto não declara padrões de texto, e a regra dos onze dígitos fica no servidor.
+      texto: O .proto não declara padrões de texto, por isso a regra dos onze dígitos fica no servidor.
     - linha: 39
       texto: O gRPC usa uma tabela própria de status, sem os códigos HTTP.
   - tipo: diagrama
@@ -251,9 +252,10 @@ abas:
       - Serviços internos da plataforma
   - tipo: conceito
     titulo: Limites do gRPC
-    texto: O material oficial registra dois limites do estilo. A mensagem binária não é legível num registro de rede sem o
-      `.proto`, e um navegador não chama um serviço gRPC diretamente, o que exige a variante gRPC-Web e um proxy na borda.
-      Se a operadora externa continua lenta, o gRPC sozinho não resolve a demora.
+    texto: O material oficial registra os limites do estilo gRPC para a plataforma hospitalar. A mensagem binária não é legível
+      num registro de rede sem o `.proto` que a descreve. Um navegador também não chama um serviço gRPC diretamente, o que
+      exige a variante gRPC-Web e um proxy na borda. Quando a operadora externa continua lenta, a troca de REST por gRPC não
+      reduz o tempo de resposta da operadora.
   - tipo: conceito
     titulo: ADR
     texto: ADR é a sigla de Architecture Decision Record, em português registro de decisão arquitetural. O bloco abaixo contém
@@ -289,8 +291,8 @@ abas:
   titulo: Laboratório
   blocos:
   - tipo: legenda
-    texto: O Laboratório executa os dois programas de demonstração e compara as saídas. Nenhum arquivo precisa ser alterado,
-      e o tempo previsto é de 12 minutos.
+    texto: O Laboratório executa os dois programas de demonstração e compara as saídas. Nenhum arquivo precisa ser alterado
+      durante os 12 minutos previstos para a aba.
   - tipo: glossario
     titulo: 📘 Conceitos usados nesta aba
     texto: Os termos técnicos desta aba estão explicados abaixo na ordem em que aparecem.
@@ -311,22 +313,22 @@ abas:
       definicao: Objeto gerado a partir do `.proto` que o cliente gRPC usa para chamar as operações remotas.
   - tipo: faixa
     estilo: objetivo
-    problema: A plataforma precisa decidir como expor a elegibilidade a consumidores diferentes, e a diferença entre REST
-      e gRPC só fica clara quando os dois atendem o mesmo pedido.
+    problema: A plataforma precisa decidir como expor a elegibilidade a consumidores diferentes. A diferença entre REST e
+      gRPC fica visível quando os dois estilos atendem o mesmo pedido.
     impacto: Sem a comparação lado a lado a escolha de estilo tende a seguir a preferência da equipe, sem considerar o tamanho
       da mensagem, a forma do erro e o lugar das regras de validação.
     mecanismo: Os programas `rest/demo.py` e `grpc/demo.py` enviam o mesmo pedido, consultam o protocolo, provocam os mesmos
       dois erros e medem o tamanho do corpo do pedido.
-    comprovacao: O REST responde `404` e `422`, e o gRPC responde `NOT_FOUND` e `INVALID_ARGUMENT`. O pedido ocupa 83 bytes
-      em JSON e 36 bytes em Protocol Buffers.
+    comprovacao: Nos dois erros provocados, o REST responde `404` e `422` e o gRPC responde `NOT_FOUND` e `INVALID_ARGUMENT`.
+      O pedido ocupa 83 bytes em JSON e 36 bytes em Protocol Buffers.
   - tipo: faixa
     estilo: dica
     titulo: 💻 Comandos por sistema operacional
     texto: Os comandos desta aba usam a sintaxe do macOS e do Linux. No Windows, o ambiente virtual é criado com `py -m venv
       .venv` e ativado no PowerShell com `.venv\Scripts\Activate.ps1`. Se o PowerShell recusar a ativação por política de
       execução, o comando `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` libera scripts apenas na janela aberta.
-      Com o ambiente ativado, o comando `python` é o mesmo nos três sistemas, e o `cd` aceita a barra `/` nos caminhos de
-      pasta.
+      Com o ambiente ativado, o comando `python` é o mesmo nos três sistemas e o comando `cd` aceita a barra `/` nos caminhos
+      de pasta também no PowerShell.
   - tipo: passos
     itens:
     - titulo: Abrir o terminal na raiz do repositório
@@ -338,7 +340,8 @@ abas:
         - git pull
     - titulo: Criar e ativar o ambiente virtual
       texto: O ambiente virtual é uma pasta `.venv` na raiz do repositório que guarda as bibliotecas desta disciplina, separadas
-        do Python do sistema. O prompt do terminal passa a exibir `(.venv)` depois da ativação.
+        do Python do sistema. Depois da ativação, o prompt do terminal exibe o prefixo `(.venv)` no início de cada linha de
+        comando.
       editor:
         rotulo: terminal
         linhas:
@@ -408,8 +411,8 @@ abas:
   - tipo: passos
     itens:
     - titulo: Executar o exemplo gRPC
-      texto: Entre na pasta do exemplo gRPC e execute a demonstração. O programa sobe o servidor gRPC numa porta livre, chama
-        as operações pelo stub e encerra o servidor no final.
+      texto: Entre na pasta do exemplo gRPC e execute a demonstração. O programa inicia o servidor gRPC numa porta livre,
+        chama as operações pelo stub e encerra o servidor no final.
       editor:
         rotulo: terminal
         linhas:
@@ -440,9 +443,9 @@ abas:
     - 'Primeiros bytes da mensagem binária: b''\n\x0b12345678901\x12\x07O'''
   - tipo: faixa
     estilo: quebra
-    texto: O resultado de negócio é o mesmo do REST, com outra forma de erro. Os bytes `\n` e `\x0b` do início da mensagem
-      binária informam o campo de número 1 e o tamanho 11, e o texto `12345678901` vem logo depois. O nome `cpf` não aparece
-      na mensagem.
+    texto: O resultado de negócio é o mesmo do REST, com a forma de erro própria do gRPC. Os bytes `\n` e `\x0b` do início
+      da mensagem binária informam o campo de número 1 com 11 bytes de conteúdo, que correspondem ao texto `12345678901`.
+      O nome do campo `cpf` não aparece na mensagem, que identifica o campo apenas pelo número 1.
   - tipo: passos
     itens:
     - titulo: Gerar o código a partir do contrato
@@ -553,7 +556,7 @@ abas:
         explicacao: A situação `recebida` não quer dizer aprovada.
       - texto: Que o recurso foi criado e já tem o estado final.
         correta: false
-        explicacao: Esse significado seria mais próximo de `201`, e o pedido ainda aguarda a operadora.
+        explicacao: O pedido ainda aguarda a decisão da operadora, situação que o código `201` não descreve.
     - enunciado: Uma rota `/aprovarAutomaticamente` recebe JSON sobre HTTP. Como o material oficial classifica essa rota?
       alternativas:
       - texto: Como uma operação RPC coerente, que não deve ser chamada de REST só por usar JSON e HTTP.
@@ -589,7 +592,7 @@ abas:
         explicacao: O código do cliente e o do servidor são gerados a partir do contrato.
     - enunciado: Por que trocar o número de um campo do `.proto` quebra consumidores antigos?
       alternativas:
-      - texto: Porque a mensagem binária identifica o campo pelo número, e o nome do campo não viaja.
+      - texto: Porque a mensagem binária identifica cada campo pelo número, sem transmitir o nome do campo.
         correta: true
         explicacao: Pelo mesmo motivo, a renomeação de um campo preserva a compatibilidade.
       - texto: Porque o gRPC proíbe alterações no `.proto`.
@@ -630,7 +633,7 @@ abas:
         explicacao: O `.proto` do exemplo declara apenas o tipo `string`.
       - texto: No stub do cliente.
         correta: false
-        explicacao: O stub é gerado e não contém regras de negócio.
+        explicacao: O stub é código gerado a partir do contrato, sem regras de negócio.
     - enunciado: Que exigência aparece quando um navegador precisa chamar um serviço gRPC?
       alternativas:
       - texto: O uso da variante gRPC-Web e de um proxy na borda.

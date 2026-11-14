@@ -1,5 +1,5 @@
 repositorios:
-  odas-arquitetura-software: {url: "https://github.com/aulas-marco/odas-arquitetura-software", commit: "e81982a"}
+  odas-arquitetura-software: {url: "https://github.com/aulas-marco/odas-arquitetura-software", commit: "f9f8fde"}
 
 trilhas:
   - {numero: 1, titulo: "Visão geral de estilos arquiteturais (Módulo 1)"}
@@ -33,7 +33,7 @@ odas:
     fontes: ["modulo-2-apis/exemplo-arquitetural.md#elegibilidade-como-recurso-rest", "modulo-2-apis/exemplo-arquitetural.md#elegibilidade-como-operacao-grpc", "modulo-2-apis/conceitos.md#alem-do-http-estilos-de-apis"]
     minutos: 25
     pre_requisitos: []
-    objetivo: "Comparar, em código executável, a mesma capacidade exposta como recurso REST e como operação gRPC, com seus contratos, erros e mensagens."
+    objetivo: "Comparar em código executável a mesma capacidade exposta como recurso REST e como operação gRPC, com seus contratos, erros e mensagens."
     situacao: disponivel
     app: oda-03
   - id: "04"

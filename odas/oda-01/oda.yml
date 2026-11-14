@@ -55,12 +55,12 @@ abas:
     titulo: 🧭 Como ter o código na sua máquina
     texto: O código desta ODA está na pasta `codigo/` do repositório `odas-arquitetura-software`. Quem concluiu o Módulo 0
       já tem o repositório clonado e precisa apenas executar `git pull` dentro da pasta dele. Os caminhos de arquivo citados
-      nas abas partem da raiz do repositório, e os trechos exibidos correspondem ao commit `e81982a`.
+      nas abas partem da raiz do repositório, e os trechos exibidos correspondem ao commit `f9f8fde`.
     links:
     - rotulo: 'Módulo 0: preparação do ambiente'
       url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
-    - rotulo: Repositório no GitHub, commit e81982a
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/e81982a
+    - rotulo: Repositório no GitHub, commit f9f8fde
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
@@ -90,8 +90,8 @@ abas:
       e o botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P (Cmd+P no macOS)
       localiza qualquer arquivo pelo caminho exibido no trecho.
     links:
-    - rotulo: Repositório no GitHub, commit e81982a
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/e81982a
+    - rotulo: Repositório no GitHub, commit f9f8fde
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
   - tipo: conceito
     titulo: Estilo arquitetural
     texto: Estilo arquitetural é uma forma conhecida de organizar as partes de um sistema e as regras de dependência entre
@@ -137,7 +137,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-01/camadas/dominio.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `dominio.py` contém a camada de domínio da agenda clínica, onde fica a regra de conflito de horários.
     inicio: 6
     linhas:
@@ -164,7 +164,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-01/camadas/servicos.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `servicos.py` contém a camada de serviço. O método `agendar` coordena o caso de uso e consulta o domínio
       antes de gravar a consulta.
     inicio: 15
@@ -194,7 +194,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-01/camadas/apresentacao.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `apresentacao.py` contém a camada de apresentação. O trecho abaixo é o único ponto do código que conhece
       os códigos HTTP 201 e 409.
     inicio: 15
@@ -233,7 +233,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-01/monolito-modular/agenda/api.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `agenda/api.py` contém o contrato público do módulo Agenda. O método `consultas_faturaveis` devolve
       o tipo `ConsultaFaturavel` e converte o código interno de situação usado pela Agenda.
     inicio: 38
@@ -254,7 +254,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-01/monolito-modular/faturamento/relatorio_com_atalho.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `faturamento/relatorio_com_atalho.py` contém a forma errada, mantida no repositório para comparação.
     inicio: 8
     linhas:

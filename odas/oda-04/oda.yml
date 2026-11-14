@@ -21,7 +21,7 @@ abas:
         url: https://marco-mendes.github.io/arquitetura-software/modulo-2-apis/conceitos/#alem-do-http-estilos-de-apis
     - termo: Schema
       definicao: Declaração dos tipos e dos campos que uma API GraphQL oferece. Nesta ODA o schema fica no arquivo `schema.graphql`,
-        escrito em SDL (Schema Definition Language).
+        escrito em SDL, sigla de Schema Definition Language.
     - termo: Query e mutation
       definicao: Os dois tipos de operação GraphQL usados nesta ODA. A query lê dados e a mutation altera dados.
     - termo: Resolver
@@ -48,23 +48,23 @@ abas:
   - tipo: faixa
     estilo: dica
     titulo: 🧭 Como ter o código na sua máquina
-    texto: O código desta ODA está na pasta `codigo/oda-04/` do repositório `odas-arquitetura-software`. Quem concluiu o Módulo
-      0 já tem o repositório clonado e precisa apenas executar `git pull` dentro da pasta dele. Os programas desta ODA usam
-      bibliotecas externas, instaladas no Laboratório num ambiente virtual com Python 3.11 ou mais recente, e os trechos exibidos
-      correspondem ao commit `e81982a`.
+    texto: O código desta ODA está na pasta `codigo/oda-04/` do repositório `odas-arquitetura-software`, que quem concluiu
+      o Módulo 0 já tem clonado e atualiza com `git pull` dentro da pasta dele. Os programas desta ODA usam bibliotecas externas
+      instaladas no Laboratório num ambiente virtual com Python 3.11 ou mais recente. Os trechos exibidos nas abas correspondem
+      ao commit `f9f8fde`.
     links:
     - rotulo: 'Módulo 0: preparação do ambiente'
       url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
-    - rotulo: Repositório no GitHub, commit e81982a
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/e81982a
+    - rotulo: Repositório no GitHub, commit f9f8fde
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
     texto: Os links abaixo levam às seções do Módulo 2 cobertas por esta ODA. Os programas da pasta `codigo/oda-04` são os
-      exemplos de GraphQL e de WebSocket da seção O mesmo caso em quatro estilos de API, no Exemplo arquitetural.
+      exemplos de GraphQL e de WebSocket da seção Elegibilidade em quatro estilos de API, no Exemplo arquitetural.
     links:
-    - rotulo: Material oficial · O mesmo caso em quatro estilos de API
-      url: https://marco-mendes.github.io/arquitetura-software/modulo-2-apis/exemplo-arquitetural/#o-mesmo-caso-em-quatro-estilos-de-api
+    - rotulo: Material oficial · Elegibilidade em quatro estilos de API
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-2-apis/exemplo-arquitetural/#elegibilidade-em-quatro-estilos-de-api
     - rotulo: Material oficial · Seleção de campos com GraphQL
       url: https://marco-mendes.github.io/arquitetura-software/modulo-2-apis/exemplo-arquitetural/#selecao-de-campos-com-graphql
     - rotulo: Material oficial · Aviso de mudança por WebSocket
@@ -80,21 +80,21 @@ abas:
   - tipo: faixa
     estilo: dica
     titulo: 📂 Onde está o código
-    texto: Os arquivos desta aba ficam em `codigo/oda-04/graphql/` e `codigo/oda-04/websocket/` no repositório `odas-arquitetura-software`,
-      e o botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P (Cmd+P no macOS)
-      localiza qualquer arquivo pelo caminho exibido no trecho.
+    texto: Os arquivos desta aba ficam em `codigo/oda-04/graphql/` e `codigo/oda-04/websocket/` no repositório `odas-arquitetura-software`.
+      O botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P no Windows e
+      no Linux ou Cmd+P no macOS localiza qualquer arquivo pelo caminho exibido no trecho.
     links:
-    - rotulo: Repositório no GitHub, commit e81982a
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/e81982a
+    - rotulo: Repositório no GitHub, commit f9f8fde
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
   - tipo: conceito
     titulo: GraphQL e o schema
-    texto: No GraphQL, o schema declara os tipos e os campos disponíveis, e cada consulta enviada pelo consumidor diz quais
-      desses campos ele quer receber. Todas as operações vão ao mesmo endereço `POST /graphql`, e o corpo da requisição diz
-      se a operação é uma query de leitura ou uma mutation de alteração de dados.
+    texto: No GraphQL, o schema declara os tipos e os campos disponíveis para cada consulta enviada pelo consumidor, que indica
+      quais desses campos quer receber. Todas as operações vão ao mesmo endereço `POST /graphql`. O corpo da requisição de
+      cada operação indica se ela é uma query de leitura ou uma mutation de alteração de dados.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-04/graphql/schema.graphql
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `schema.graphql` é o contrato da API GraphQL, escrito em SDL. O programa `api.py` lê este arquivo
       e associa um resolver a cada campo que precisa de código.
     inicio: 4
@@ -116,11 +116,11 @@ abas:
   - tipo: conceito
     titulo: Resolver
     texto: O resolver é a função chamada quando a consulta pede um campo. No exemplo, as operadoras ficam num cadastro separado
-      das elegibilidades, e o resolver do campo `operadora` consulta esse cadastro.
+      das elegibilidades, consultado pelo resolver do campo `operadora`.
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-04/graphql/api.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `api.py` registra os resolvers da API. Este resolver imprime uma linha a cada execução, para que o
       Laboratório mostre quantas vezes o cadastro foi consultado.
     inicio: 29
@@ -135,18 +135,20 @@ abas:
       texto: Executa uma vez para cada elegibilidade que a consulta devolve com o campo operadora.
   - tipo: conceito
     titulo: Problema N+1
-    texto: Uma lista de três elegibilidades com a operadora de cada uma executa o resolver três vezes. Esse efeito é o problema
-      N+1, e a mitigação usual é agrupar numa só as buscas de uma mesma consulta, técnica que a biblioteca DataLoader popularizou.
+    texto: Uma lista de três elegibilidades com a operadora de cada uma executa o resolver três vezes. O efeito recebe o nome
+      de problema N+1. A mitigação usual agrupa numa única busca os acessos feitos durante a mesma consulta, técnica difundida
+      pela biblioteca DataLoader.
   - tipo: conceito
     titulo: Consequências do endereço único
     texto: Quando todas as consultas usam `POST /graphql`, o cache HTTP baseado no endereço e no método deixa de distinguir
-      uma consulta de outra. A autorização precisa ser decidida por campo ou por tipo, e consultas com muitos níveis de aninhamento
-      exigem limite de profundidade ou de custo.
+      uma consulta de outra. A autorização precisa ser decidida por campo ou por tipo. Consultas com muitos níveis de aninhamento
+      exigem limite de profundidade ou de custo por consulta.
   - tipo: conceito
     titulo: WebSocket e a conexão aberta
-    texto: 'A conexão WebSocket começa como uma requisição HTTP com o cabeçalho `Upgrade: websocket`, e o servidor responde
-      `101 Switching Protocols`. A partir daí as duas pontas enviam mensagens a qualquer momento. O protocolo não define o
-      formato das mensagens, e o JSON com `tipo`, `protocolo` e `situacao` é uma decisão da aplicação.'
+    texto: 'A conexão WebSocket começa com uma requisição HTTP que contém o cabeçalho `Upgrade: websocket`, à qual o servidor
+      responde com `101 Switching Protocols`. A partir dessa resposta, as duas pontas enviam mensagens a qualquer momento
+      pela mesma conexão. O protocolo não define o formato das mensagens, de modo que o JSON com os campos `tipo`, `protocolo`
+      e `situacao` é uma decisão da aplicação.'
   - tipo: diagrama
     id: D-01
     tipo_diagrama: Sequência
@@ -157,7 +159,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-04/websocket/servidor.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O arquivo `servidor.py` mantém as conexões abertas por protocolo. O método `publicar` é chamado quando a operadora
       responde e envia a mudança a cada conexão que acompanha o protocolo.
     inicio: 36
@@ -181,7 +183,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-04/websocket/servidor.py
-    commit: e81982a
+    commit: f9f8fde
     contexto: O mesmo arquivo responde ao pedido de acompanhamento. O estado atual enviado na chegada permite que um cliente
       reconectado conheça a situação nova.
     inicio: 28
@@ -197,8 +199,8 @@ abas:
     titulo: Mensagem perdida e várias instâncias
     texto: O WebSocket não guarda mensagens para entrega posterior. Quando o consumidor precisa receber cada transição de
       situação, a garantia de entrega exige um mecanismo durável de mensageria, tema do Módulo 5. Com várias instâncias do
-      serviço, a mudança precisa circular entre elas por um canal compartilhado, e um cliente lento exige uma política para
-      as mensagens pendentes.
+      serviço, a mudança precisa circular entre elas por um canal compartilhado. Um cliente lento exige uma política para
+      as mensagens pendentes no servidor, como limite de fila ou descarte das mensagens mais antigas.
   - tipo: comparativo
     colunas:
     - GraphQL
@@ -236,14 +238,15 @@ abas:
     id: ADR-004
     titulo: Avisar mudanças de elegibilidade por WebSocket com estado atual na conexão
     status: Aceita (exemplo didático)
-    contexto: O painel da recepção precisa exibir a situação da elegibilidade assim que a operadora responde, e consultas
-      repetidas a cada poucos segundos sobrecarregariam a API. O painel só precisa da situação mais recente.
+    contexto: O painel da recepção precisa exibir a situação da elegibilidade assim que a operadora responde ao pedido. Consultas
+      repetidas a cada poucos segundos sobrecarregariam a API com requisições sem informação nova. O painel precisa apenas
+      da situação mais recente de cada protocolo acompanhado, como ELG-001.
     decisao: Manter uma conexão WebSocket por painel e enviar uma mensagem a cada mudança de situação. Todo pedido de acompanhamento
       recebe primeiro o estado atual do protocolo.
     alternativas: A consulta periódica por REST foi descartada pelo volume de requisições sem novidade. A mensageria durável
       foi adiada porque o painel não precisa do histórico de transições.
-    consequencias: Uma mudança ocorrida durante a queda da conexão não é entregue, e o painel conhece a situação nova ao se
-      reconectar. Com várias instâncias, a plataforma precisará de um canal compartilhado entre elas.
+    consequencias: Uma mudança ocorrida durante a queda da conexão não é entregue ao painel, que conhece a situação nova ao
+      se reconectar. Com várias instâncias, a plataforma precisará de um canal compartilhado entre elas.
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
@@ -263,8 +266,8 @@ abas:
   titulo: Laboratório
   blocos:
   - tipo: legenda
-    texto: O Laboratório executa os dois programas de demonstração e compara as saídas. Nenhum arquivo precisa ser alterado,
-      e o tempo previsto é de 12 minutos.
+    texto: O Laboratório executa os dois programas de demonstração e compara as saídas. Nenhum arquivo precisa ser alterado
+      durante os 12 minutos previstos para a aba.
   - tipo: glossario
     titulo: 📘 Conceitos usados nesta aba
     texto: Os termos técnicos desta aba estão explicados abaixo na ordem em que aparecem.
@@ -279,26 +282,27 @@ abas:
       definicao: Instalador de bibliotecas Python. O arquivo `requirements.txt` lista as bibliotecas e as versões.
     - termo: Resolver
       definicao: Função que produz o valor de um campo do schema GraphQL e só executa quando a consulta pede o campo.
-    - termo: Cena
+    - termo: Cenário
       definicao: Trecho do `demo.py` do WebSocket com um roteiro próprio de conexões e mudanças de situação.
   - tipo: faixa
     estilo: objetivo
-    problema: Telas diferentes precisam de partes diferentes da elegibilidade, e o painel da recepção precisa saber da resposta
+    problema: Telas diferentes precisam de partes diferentes da elegibilidade. O painel da recepção precisa saber da resposta
       da operadora assim que ela chega.
-    impacto: Uma API que devolve sempre a representação inteira envia dados que a tela não usa, e a consulta repetida da situação
-      gera requisições sem novidade.
+    impacto: Uma API que devolve sempre a representação inteira envia dados que a tela não usa. A consulta repetida da situação
+      gera requisições sem informação nova.
     mecanismo: O programa `graphql/demo.py` envia seis operações ao mesmo endereço com seleções de campos diferentes. O programa
       `websocket/demo.py` acompanha um protocolo com dois clientes e simula uma queda de conexão.
-    comprovacao: A consulta do aplicativo recebe 50 bytes e a do painel recebe 165 bytes, e a lista executa o resolver da
-      operadora três vezes. No WebSocket, a mudança para `elegivel` ocorrida sem conexão aberta não é entregue.
+    comprovacao: A consulta do aplicativo recebe 50 bytes e a do painel recebe 165 bytes. Na lista de três elegibilidades,
+      o resolver da operadora executa três vezes, uma por item. No WebSocket, a mudança para `elegivel` ocorrida sem conexão
+      aberta não é entregue a nenhum cliente.
   - tipo: faixa
     estilo: dica
     titulo: 💻 Comandos por sistema operacional
     texto: Os comandos desta aba usam a sintaxe do macOS e do Linux. No Windows, o ambiente virtual é criado com `py -m venv
       .venv` e ativado no PowerShell com `.venv\Scripts\Activate.ps1`. Se o PowerShell recusar a ativação por política de
       execução, o comando `Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass` libera scripts apenas na janela aberta.
-      Com o ambiente ativado, o comando `python` é o mesmo nos três sistemas, e o `cd` aceita a barra `/` nos caminhos de
-      pasta.
+      Com o ambiente ativado, o comando `python` é o mesmo nos três sistemas e o comando `cd` aceita a barra `/` nos caminhos
+      de pasta também no PowerShell.
   - tipo: passos
     itens:
     - titulo: Abrir o terminal na raiz do repositório
@@ -309,9 +313,9 @@ abas:
         linhas:
         - git pull
     - titulo: Criar e ativar o ambiente virtual
-      texto: Quem já criou o ambiente virtual na ODA 03 pode pular para a ativação. O ambiente virtual é uma pasta `.venv`
-        na raiz do repositório que guarda as bibliotecas desta disciplina, separadas do Python do sistema. O prompt do terminal
-        passa a exibir `(.venv)` depois da ativação.
+      texto: Quem já criou o ambiente virtual na ODA 03 pode pular para a ativação, feita no mesmo terminal. O ambiente virtual
+        é uma pasta `.venv` na raiz do repositório que guarda as bibliotecas desta disciplina, separadas do Python do sistema.
+        Depois da ativação, o prompt do terminal exibe o prefixo `(.venv)` no início de cada linha de comando.
       editor:
         rotulo: terminal
         linhas:
@@ -431,14 +435,15 @@ abas:
     - '}'
   - tipo: faixa
     estilo: quebra
-    texto: Todas as operações foram ao mesmo endereço. A resposta do aplicativo teve 50 bytes e a do painel teve 165 bytes,
-      e o resolver da operadora executou três vezes na lista, uma por elegibilidade. O campo `senhaDoPaciente` foi recusado
-      com `400` antes de qualquer resolver executar.
+    texto: Todas as operações foram ao mesmo endereço `POST /graphql`, com respostas de 50 bytes para o aplicativo e de 165
+      bytes para o painel, porque cada consulta escolheu campos diferentes. Na lista de três elegibilidades, o resolver da
+      operadora executou três vezes, uma por item. O campo `senhaDoPaciente` foi recusado com status 400 antes da execução
+      de qualquer resolver.
   - tipo: passos
     itens:
     - titulo: Executar o exemplo WebSocket
-      texto: Entre na pasta do exemplo WebSocket e execute a demonstração. O servidor e os clientes rodam no mesmo processo,
-        e as linhas `[servidor]` mostram quantas conexões estavam abertas a cada mudança.
+      texto: Entre na pasta do exemplo WebSocket e execute a demonstração, que executa o servidor e os clientes no mesmo processo.
+        As linhas `[servidor]` da saída mostram quantas conexões estavam abertas a cada mudança de situação.
       editor:
         rotulo: terminal
         linhas:
@@ -448,7 +453,7 @@ abas:
     rotulo: saida
     origem: executado
     linhas:
-    - '--- Cena 1: painel e aplicativo acompanham ELG-001'
+    - '--- Cenário 1: painel e aplicativo acompanham ELG-001'
     - '  [painel] enviou: {"acao": "acompanhar", "protocolo": "ELG-001"}'
     - '  [painel] recebeu: {"tipo": "estado_atual", "protocolo": "ELG-001", "situacao": "recebida"}'
     - '  [aplicativo] enviou: {"acao": "acompanhar", "protocolo": "ELG-001"}'
@@ -458,15 +463,16 @@ abas:
     - '  [aplicativo] recebeu: {"tipo": "mudanca", "protocolo": "ELG-001", "situacao": "em_analise"}'
     - '  [painel] e [aplicativo] fecharam a conexão'
     - ''
-    - '--- Cena 2: uma mudança acontece sem nenhuma conexão aberta'
+    - '--- Cenário 2: mudança de situação sem nenhuma conexão aberta'
     - '  [servidor] ELG-001 mudou para elegivel, 0 conexão(ões) aberta(s)'
     - '  [painel] enviou: {"acao": "acompanhar", "protocolo": "ELG-001"}'
     - '  [painel] recebeu: {"tipo": "estado_atual", "protocolo": "ELG-001", "situacao": "elegivel"}'
     - '  O painel recebeu o estado atual. A mensagem de mudança para elegivel não foi entregue.'
   - tipo: faixa
     estilo: quebra
-    texto: Na Cena 1, o painel e o aplicativo receberam `em_analise` sem enviar nova requisição. Na Cena 2, a mudança para
-      `elegivel` ocorreu com zero conexões abertas, e o painel só conheceu a situação nova pelo estado atual enviado na reconexão.
+    texto: No Cenário 1, o painel e o aplicativo receberam `em_analise` sem enviar nova requisição ao servidor. No Cenário
+      2, a mudança para `elegivel` ocorreu com zero conexões abertas e não foi entregue a nenhum cliente. O painel conheceu
+      a situação nova pelo estado atual que o servidor envia a cada pedido de acompanhamento, inclusive depois de uma reconexão.
   - tipo: faixa
     estilo: dica
     titulo: 🖥️ Terminal simulado
@@ -503,18 +509,18 @@ abas:
     titulo: terminal simulado · pasta codigo/oda-04/websocket
     comandos:
     - entrada: python demo.py
-      saida: "--- Cena 1: painel e aplicativo acompanham ELG-001\n  [painel] enviou: {\"acao\": \"acompanhar\", \"protocolo\"\
+      saida: "--- Cenário 1: painel e aplicativo acompanham ELG-001\n  [painel] enviou: {\"acao\": \"acompanhar\", \"protocolo\"\
         : \"ELG-001\"}\n  [painel] recebeu: {\"tipo\": \"estado_atual\", \"protocolo\": \"ELG-001\", \"situacao\": \"recebida\"\
         }\n  [aplicativo] enviou: {\"acao\": \"acompanhar\", \"protocolo\": \"ELG-001\"}\n  [aplicativo] recebeu: {\"tipo\"\
         : \"estado_atual\", \"protocolo\": \"ELG-001\", \"situacao\": \"recebida\"}\n  [servidor] ELG-001 mudou para em_analise,\
         \ 2 conexão(ões) aberta(s)\n  [painel] recebeu: {\"tipo\": \"mudanca\", \"protocolo\": \"ELG-001\", \"situacao\":\
         \ \"em_analise\"}\n  [aplicativo] recebeu: {\"tipo\": \"mudanca\", \"protocolo\": \"ELG-001\", \"situacao\": \"em_analise\"\
-        }\n  [painel] e [aplicativo] fecharam a conexão\n\n--- Cena 2: uma mudança acontece sem nenhuma conexão aberta\n \
-        \ [servidor] ELG-001 mudou para elegivel, 0 conexão(ões) aberta(s)\n  [painel] enviou: {\"acao\": \"acompanhar\",\
-        \ \"protocolo\": \"ELG-001\"}\n  [painel] recebeu: {\"tipo\": \"estado_atual\", \"protocolo\": \"ELG-001\", \"situacao\"\
+        }\n  [painel] e [aplicativo] fecharam a conexão\n\n--- Cenário 2: mudança de situação sem nenhuma conexão aberta\n\
+        \  [servidor] ELG-001 mudou para elegivel, 0 conexão(ões) aberta(s)\n  [painel] enviou: {\"acao\": \"acompanhar\"\
+        , \"protocolo\": \"ELG-001\"}\n  [painel] recebeu: {\"tipo\": \"estado_atual\", \"protocolo\": \"ELG-001\", \"situacao\"\
         : \"elegivel\"}\n  O painel recebeu o estado atual. A mensagem de mudança para elegivel não foi entregue."
       origem: executado
-      dica: Executa as duas cenas do WebSocket.
+      dica: Executa os dois cenários do WebSocket.
     cenarios:
     - rotulo: Executar demo.py
       comando: python demo.py
@@ -535,7 +541,7 @@ abas:
     - As seis operações GraphQL usaram o endereço `POST /graphql`.
     - O resolver da operadora executou três vezes na consulta da lista.
     - O protocolo `ELG-999` devolveu `null` com status `200`.
-    - Na Cena 2, o servidor registrou zero conexões abertas na mudança para `elegivel`.
+    - No Cenário 2, o servidor registrou zero conexões abertas na mudança para `elegivel`.
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
@@ -559,7 +565,7 @@ abas:
       alternativas:
       - texto: Quais campos do schema ele quer receber.
         correta: true
-        explicacao: O schema declara os tipos e campos disponíveis, e a consulta escolhe entre eles.
+        explicacao: A consulta escolhe entre os tipos e campos declarados no schema.
       - texto: Qual URI do recurso será chamada.
         correta: false
         explicacao: Todas as operações vão ao mesmo endereço.
@@ -568,7 +574,7 @@ abas:
         explicacao: Números de campo pertencem ao Protocol Buffers do gRPC.
     - enunciado: Para qual endereço vão as operações GraphQL no exemplo do material oficial?
       alternativas:
-      - texto: Para o mesmo endereço, `POST /graphql`, e a operação muda no corpo da requisição.
+      - texto: Para o endereço único `POST /graphql`, com a operação indicada no corpo da requisição.
         correta: true
         explicacao: O corpo diz se a operação é query ou mutation.
       - texto: Para uma URI por tipo do schema.
@@ -601,13 +607,14 @@ abas:
         explicacao: Resolvers também produzem os campos das queries.
     - enunciado: O que é o problema N+1 e qual é a mitigação usual citada no material?
       alternativas:
-      - texto: Uma consulta com N itens dispara N consultas adicionais, e a mitigação é agrupar as buscas, como faz o DataLoader.
+      - texto: Uma consulta com N itens dispara N consultas adicionais, mitigadas pelo agrupamento das buscas que o DataLoader
+          faz.
         correta: true
         explicacao: No exemplo, a lista de três elegibilidades consultou o cadastro de operadoras três vezes.
-      - texto: Uma consulta é repetida N vezes pelo cliente, e a mitigação é o cache HTTP.
+      - texto: Uma consulta repetida N vezes pelo cliente, mitigada pelo cache HTTP.
         correta: false
         explicacao: O efeito ocorre dentro da execução de uma única consulta.
-      - texto: O schema cresce N vezes a cada versão, e a mitigação é versionar a URI.
+      - texto: Um schema que cresce N vezes a cada versão, mitigado pelo versionamento da URI.
         correta: false
         explicacao: O problema N+1 trata do número de buscas feitas durante a execução de uma consulta.
     - enunciado: Uma consulta pede um campo que o schema não declara. O que acontece?
@@ -645,7 +652,7 @@ abas:
         explicacao: O GraphQL do exemplo usa requisição e resposta.
     - enunciado: A situação muda enquanto nenhum cliente está conectado ao WebSocket. O que o material oficial conclui?
       alternativas:
-      - texto: A mensagem não é guardada, e a garantia de entrega de cada transição exige um mecanismo durável de mensageria.
+      - texto: A mensagem não é guardada. A garantia de entrega de cada transição exige um mecanismo durável de mensageria.
         correta: true
         explicacao: No exemplo, o painel conheceu a situação nova pelo estado atual enviado na reconexão.
       - texto: O WebSocket guarda a mensagem e a entrega na reconexão.
