@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const ODAS = ['oda-01', 'oda-02'];
+const ODAS = ['oda-01', 'oda-02', 'oda-03', 'oda-04'];
 const ABAS = ['objetivo', 'conceitos', 'laboratorio', 'verificacao'];
 
 function vigiarErros(page) {
@@ -38,3 +38,21 @@ test('oda-01: o terminal simulado reproduz o 409 da agenda', async ({ page }) =>
   await campo.press('Enter');
   await expect(painel.locator('.terminal__tela').first()).toContainText('HTTP 409 CONFLICT');
 });
+
+test('oda-03: o terminal simulado reproduz o NOT_FOUND do gRPC', async ({ page }) => {
+  await page.goto('/oda-03/#laboratorio');
+  const painel = page.locator('#painel-laboratorio');
+  const campo = painel.getByLabel('Digite um comando').nth(1);
+  await campo.fill('python demo.py');
+  await campo.press('Enter');
+  await expect(painel.locator('.terminal__tela').nth(1)).toContainText('NOT_FOUND');
+});
+
+for (const oda of ['oda-03', 'oda-04']) {
+  test(`${oda}: os diagramas da aba Conceitos viram SVG`, async ({ page }) => {
+    await page.goto(`/${oda}/#conceitos`);
+    const painel = page.locator('#painel-conceitos');
+    await expect(painel.locator('.diagrama__area svg')).toHaveCount(1, { timeout: 15000 });
+    await expect(painel.locator('.bloco-erro')).toHaveCount(0);
+  });
+}

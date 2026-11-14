@@ -52,12 +52,12 @@ abas:
     titulo: 🧭 Como ter o código na sua máquina
     texto: O código desta ODA está na pasta `codigo/` do repositório `odas-arquitetura-software`. Quem concluiu o Módulo 0
       já tem o repositório clonado e precisa apenas executar `git pull` dentro da pasta dele. Os caminhos de arquivo citados
-      nas abas partem da raiz do repositório, e os trechos exibidos correspondem ao commit `9dc7cdf`.
+      nas abas partem da raiz do repositório, e os trechos exibidos correspondem ao commit `e81982a`.
     links:
     - rotulo: 'Módulo 0: preparação do ambiente'
       url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
-    - rotulo: Repositório no GitHub, commit 9dc7cdf
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/9dc7cdf
+    - rotulo: Repositório no GitHub, commit e81982a
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/e81982a
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
@@ -91,8 +91,8 @@ abas:
       `odas-arquitetura-software`, e o botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code,
       o atalho Ctrl+P (Cmd+P no macOS) localiza qualquer arquivo pelo caminho exibido no trecho.
     links:
-    - rotulo: Repositório no GitHub, commit 9dc7cdf
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/9dc7cdf
+    - rotulo: Repositório no GitHub, commit e81982a
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/e81982a
   - tipo: conceito
     titulo: Pipes and Filters
     texto: O estilo Pipes and Filters decompõe um processamento em filtros ligados por pipes. Filtro é uma etapa que recebe
@@ -135,7 +135,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/pipes-and-filters/framework.py
-    commit: 9dc7cdf
+    commit: e81982a
     contexto: O arquivo `framework.py` define o contrato de filtro e a classe que encadeia os filtros. Nenhum critério de
       triagem aparece neste arquivo.
     inicio: 10
@@ -178,7 +178,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/pipes-and-filters/main.py
-    commit: 9dc7cdf
+    commit: e81982a
     contexto: O arquivo `main.py` monta o pipeline da triagem. A sequência de chamadas ao método `adicionar` define a ordem
       do fluxo.
     inicio: 33
@@ -214,7 +214,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/microkernel/nucleo.py
-    commit: 9dc7cdf
+    commit: e81982a
     contexto: O arquivo `nucleo.py` define o contrato de plugin e a classe `Nucleo`, que executa os plugins registrados. Nenhum
       imposto e nenhum estado aparecem neste arquivo.
     inicio: 10
@@ -241,7 +241,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/microkernel/plugins/impostos_rj.py
-    commit: 9dc7cdf
+    commit: e81982a
     contexto: O arquivo `plugins/impostos_rj.py` é um plugin completo e contém toda a regra tributária do Rio de Janeiro.
     inicio: 9
     linhas:
@@ -264,7 +264,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-02/microkernel/nucleo_com_creep.py
-    commit: 9dc7cdf
+    commit: e81982a
     contexto: O arquivo `nucleo_com_creep.py` mostra o núcleo com a regra de cada estado escrita dentro dele. O programa `main.py`
       não usa este arquivo.
     inicio: 11

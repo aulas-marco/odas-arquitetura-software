@@ -1,8 +1,9 @@
 repositorios:
-  odas-arquitetura-software: {url: "https://github.com/aulas-marco/odas-arquitetura-software", commit: "9dc7cdf"}
+  odas-arquitetura-software: {url: "https://github.com/aulas-marco/odas-arquitetura-software", commit: "e81982a"}
 
 trilhas:
   - {numero: 1, titulo: "Visão geral de estilos arquiteturais (Módulo 1)"}
+  - {numero: 2, titulo: "Arquitetura de APIs (Módulo 2)"}
 
 odas:
   - id: "01"
@@ -25,3 +26,23 @@ odas:
     objetivo: "Reconhecer, em código executável, como um pipeline de filtros e um núcleo com plugins acomodam mudança sem alterar as partes existentes."
     situacao: disponivel
     app: oda-02
+  - id: "03"
+    titulo: "REST e gRPC"
+    trilha: 2
+    repositorio: odas-arquitetura-software
+    fontes: ["modulo-2-apis/exemplo-arquitetural.md#elegibilidade-como-recurso-rest", "modulo-2-apis/exemplo-arquitetural.md#elegibilidade-como-operacao-grpc", "modulo-2-apis/conceitos.md#alem-do-http-estilos-de-apis"]
+    minutos: 25
+    pre_requisitos: []
+    objetivo: "Comparar, em código executável, a mesma capacidade exposta como recurso REST e como operação gRPC, com seus contratos, erros e mensagens."
+    situacao: disponivel
+    app: oda-03
+  - id: "04"
+    titulo: "GraphQL e WebSocket"
+    trilha: 2
+    repositorio: odas-arquitetura-software
+    fontes: ["modulo-2-apis/exemplo-arquitetural.md#selecao-de-campos-com-graphql", "modulo-2-apis/exemplo-arquitetural.md#aviso-de-mudanca-por-websocket", "modulo-2-apis/exemplo-arquitetural.md#comparacao-dos-quatro-estilos-no-caso-hospitalar"]
+    minutos: 25
+    pre_requisitos: ["03"]
+    objetivo: "Reconhecer, em código executável, a seleção de campos e os resolvers do GraphQL e o envio de mudanças pelo canal aberto do WebSocket."
+    situacao: disponivel
+    app: oda-04
