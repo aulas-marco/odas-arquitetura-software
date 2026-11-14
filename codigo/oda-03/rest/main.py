@@ -14,7 +14,7 @@ from fastapi.responses import JSONResponse
 from models import ElegibilidadeAceita, PedidoElegibilidade
 
 app = FastAPI(title="API de elegibilidades da plataforma hospitalar")
-_elegibilidades: dict[str, ElegibilidadeAceita] = {}  # memória: some ao reiniciar
+_elegibilidades: dict[str, ElegibilidadeAceita] = {}  # dados apagados ao reiniciar o processo
 
 
 @app.post("/elegibilidades", status_code=status.HTTP_202_ACCEPTED)

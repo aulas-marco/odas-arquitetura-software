@@ -1,7 +1,7 @@
-"""Mostra o canal WebSocket em duas cenas, com servidor e clientes no mesmo processo.
+"""Mostra o canal WebSocket em dois cenários, com servidor e clientes no mesmo processo.
 
-Na primeira cena, dois clientes recebem a mesma mudança sem pedir de novo. Na
-segunda, a conexão cai e uma mudança acontece enquanto ninguém está conectado.
+No primeiro cenário, dois clientes recebem a mesma mudança sem pedir de novo. No
+segundo, a situação muda enquanto nenhum cliente está conectado.
 """
 
 import asyncio
@@ -28,7 +28,7 @@ async def principal():
     async with serve(central.atender, "127.0.0.1", 0) as servidor:  # porta 0: o sistema escolhe uma livre
         url = f"ws://127.0.0.1:{servidor.sockets[0].getsockname()[1]}"
 
-        print("--- Cena 1: painel e aplicativo acompanham ELG-001")
+        print("--- Cenário 1: painel e aplicativo acompanham ELG-001")
         async with connect(url) as painel, connect(url) as aplicativo:
             await enviar("painel", painel, {"acao": "acompanhar", "protocolo": "ELG-001"})
             await receber("painel", painel)
@@ -41,7 +41,7 @@ async def principal():
         print()
 
         await asyncio.sleep(0.2)  # tempo para o servidor registrar o fechamento
-        print("--- Cena 2: uma mudança acontece sem nenhuma conexão aberta")
+        print("--- Cenário 2: mudança de situação sem nenhuma conexão aberta")
         await central.publicar("ELG-001", "elegivel")  # ninguém recebe esta mensagem
         async with connect(url) as painel:
             await enviar("painel", painel, {"acao": "acompanhar", "protocolo": "ELG-001"})

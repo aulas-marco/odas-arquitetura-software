@@ -1,6 +1,6 @@
 """Percorre o serviço gRPC de elegibilidades com um cliente gerado.
 
-O servidor sobe numa porta livre do próprio computador e o cliente chama as
+O servidor é iniciado numa porta livre do próprio computador e o cliente chama as
 operações pelo stub, que tem um método Python para cada rpc do contrato.
 """
 
