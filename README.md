@@ -14,7 +14,7 @@ Portal publicado: <https://aulas-marco.github.io/odas-arquitetura-software/>
 
 | Caminho | Conteúdo |
 | --- | --- |
-| `codigo/` | Programas Python executados nos Laboratórios. Os das ODAs 01 e 02 usam só a biblioteca padrão, e os das ODAs 03 e 04 declaram as bibliotecas em `requirements.txt` |
+| `codigo/` | Programas Python executados nos Laboratórios. Os das ODAs 01, 02, 05 e 06 usam só a biblioteca padrão, e os das ODAs 03 e 04 declaram as bibliotecas em `requirements.txt` |
 | `odas/<oda>/oda.yml` | Conteúdo de cada ODA, organizado em quatro abas de blocos |
 | `catalogo/odas.yml` | Catálogo das ODAs, com módulo, tempo, fontes no material oficial e commit de referência do código |
 | `docs/` | Página mestre, Módulo 0 e página de rastreabilidade, publicadas com MkDocs Material |

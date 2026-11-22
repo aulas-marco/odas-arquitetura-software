@@ -1,0 +1,674 @@
+id: '05'
+titulo: Falha parcial e resiliência da chamada síncrona
+abas:
+- id: objetivo
+  titulo: Objetivo
+  blocos:
+  - tipo: legenda
+    texto: Esta ODA coloca Exames e Elegibilidade da plataforma hospitalar em comunicação HTTP real e provoca falhas na dependência.
+      A atividade dura 25 minutos distribuídos entre as quatro abas.
+  - tipo: glossario
+    texto: Os termos abaixo aparecem nas abas desta ODA na ordem em que surgem. Cada aba repete a explicação do termo no primeiro
+      uso, porque o aluno pode abrir qualquer aba diretamente.
+    itens:
+    - termo: Elegibilidade
+      definicao: Serviço que decide se um beneficiário pode usar o plano. É dono do próprio banco, que nenhum outro serviço
+        lê.
+    - termo: Exames
+      definicao: Serviço que registra uma solicitação de exame. Antes de gravar, consulta Elegibilidade por uma chamada HTTP
+        síncrona.
+    - termo: Banco por serviço
+      definicao: Regra pela qual somente o serviço proprietário acessa diretamente o seu armazenamento. Os outros serviços
+        usam o contrato da API.
+      referencia:
+        rotulo: Material oficial · Propriedade dos dados
+        url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#propriedade-dos-dados
+    - termo: Acoplamento temporal
+      definicao: Dependência em que o consumidor precisa que o provedor esteja disponível no momento da chamada.
+      referencia:
+        rotulo: Material oficial · Acoplamento
+        url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#acoplamento
+    - termo: Falha parcial
+      definicao: Situação em que uma parte do sistema distribuído funciona e outra não. No exemplo, Exames responde à verificação
+        de saúde e não consegue aceitar uma solicitação nova.
+      referencia:
+        rotulo: Material oficial · Chamadas síncronas e falhas parciais
+        url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
+    - termo: Prazo de espera (timeout)
+      definicao: Tempo máximo que o consumidor aceita esperar pela resposta. Passado o prazo, a chamada é abandonada e tratada
+        como falha.
+    - termo: Nova tentativa (retry)
+      definicao: Repetição automática de uma chamada que falhou, útil quando a falha é transitória.
+    - termo: Idempotência
+      definicao: Propriedade de uma operação que produz o mesmo efeito quando executada uma ou várias vezes. A chave de idempotência
+        identifica o pedido repetido.
+    - termo: Disjuntor (circuit breaker)
+      definicao: Mecanismo que interrompe as chamadas a uma dependência instável depois de um número de falhas e libera uma
+        chamada de teste após um intervalo.
+    - termo: ADR (Architecture Decision Record)
+      definicao: Registro de decisão arquitetural. É um documento curto e versionado que registra uma escolha de arquitetura
+        e os motivos dela.
+      referencia:
+        rotulo: Material oficial · Template de ADR
+        url: https://marco-mendes.github.io/arquitetura-software/referencia/template-adr/
+  - tipo: checklist
+    titulo: Ao concluir, você poderá
+    itens:
+    - Reconhecer em execução a falha parcial, com `200` na saúde de Exames e `503` na solicitação.
+    - Explicar como o prazo de espera limita o tempo que Exames fica preso a uma dependência lenta.
+    - Explicar por que repetir um POST sem chave de idempotência grava a solicitação duas vezes.
+    - Descrever os estados fechado, aberto e meio aberto do disjuntor a partir da saída do programa.
+  - tipo: faixa
+    estilo: dica
+    titulo: 🧭 Como ter o código na sua máquina
+    texto: O código desta ODA está na pasta `codigo/oda-05/` do repositório `odas-arquitetura-software`, que quem concluiu
+      o Módulo 0 já tem clonado e atualiza com `git pull` dentro da pasta dele. Os programas desta ODA usam só a biblioteca
+      padrão do Python 3.11 ou mais recente e dispensam a instalação de bibliotecas. Os trechos exibidos nas abas vêm do commit
+      `00419ea`, que o botão Ver no GitHub de cada trecho abre no navegador.
+    links:
+    - rotulo: 'Módulo 0: preparação do ambiente'
+      url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
+    - rotulo: Repositório no GitHub, commit 00419ea
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/00419ea
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: Os links abaixo levam às seções do Módulo 3 cobertas por esta ODA. Os programas da pasta `codigo/oda-05` reproduzem
+      sem Docker a falha parcial da Oficina de ferramentas e acrescentam as políticas de nova tentativa, idempotência e disjuntor
+      citadas na página de conceitos.
+    links:
+    - rotulo: Material oficial · Chamadas síncronas e falhas parciais
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
+    - rotulo: Material oficial · Acoplamento
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#acoplamento
+    - rotulo: Material oficial · Chamadas síncronas, orçamento de falha
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#chamadas-sincronas-orcamento-de-falha
+    - rotulo: Material oficial · Oficina, tornar a falha parcial observável
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#tornar-a-falha-parcial-observavel
+- id: conceitos
+  titulo: Conceitos
+  blocos:
+  - tipo: legenda
+    texto: Esta aba retoma os conceitos expostos em aula e associa cada conceito a um trecho do código. Os trechos servem
+      de referência durante o Laboratório.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📂 Onde está o código
+    texto: Os arquivos desta aba ficam em `codigo/oda-05/` no repositório `odas-arquitetura-software`. O botão Ver no GitHub
+      de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P no Windows e no Linux ou Cmd+P no macOS
+      localiza qualquer arquivo pelo caminho exibido no trecho.
+    links:
+    - rotulo: Repositório no GitHub, commit 00419ea
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/00419ea
+  - tipo: conceito
+    titulo: Banco por serviço e fronteira
+    texto: Elegibilidade guarda os beneficiários num dicionário que só o módulo dela lê. Exames não importa esse dicionário
+      e conhece apenas o endereço HTTP do serviço. A fronteira de dados fica explícita no código, no mesmo sentido das duas
+      redes de banco separadas da Oficina de ferramentas.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-05/elegibilidade.py
+    commit: 00419ea
+    contexto: O arquivo `elegibilidade.py` declara o banco do serviço como dicionário privado. Nenhum outro arquivo da pasta
+      lê `_BANCO`.
+    inicio: 13
+    linhas:
+    - '_BANCO = {  # dados sintéticos, acessíveis só a este serviço'
+    - '    "B-001": {"beneficiario_id": "B-001", "elegivel": True},'
+    - '    "B-002": {"beneficiario_id": "B-002", "elegivel": False},'
+    - '}'
+    anotacoes:
+    - linha: 13
+      texto: Somente as funções deste módulo leem e alteram o banco.
+  - tipo: conceito
+    titulo: Chamada síncrona com prazo
+    texto: Na chamada síncrona, Exames espera a resposta de Elegibilidade antes de gravar. A disponibilidade percebida por
+      Exames passa a depender da rede e do outro serviço. O prazo de espera limita esse acoplamento temporal, porque transforma
+      uma espera indefinida numa falha com hora para acontecer.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-05/exames.py
+    commit: 00419ea
+    contexto: O arquivo `exames.py` faz a chamada HTTP com o prazo declarado no construtor. Erro de rede, prazo esgotado e
+      resposta `5xx` geram a mesma exceção, `ConnectionError`.
+    inicio: 24
+    linhas:
+    - '    def consultar_elegibilidade(self, beneficiario_id):'
+    - '        url = f"{self.url_elegibilidade}/elegibilidades/{beneficiario_id}"'
+    - '        try:'
+    - '            with urllib.request.urlopen(url, timeout=self.prazo) as resposta:'
+    - '                return resposta.status, json.load(resposta)'
+    - '        except urllib.error.HTTPError as erro:'
+    - '            if erro.code >= 500:'
+    - '                raise ConnectionError(f"Elegibilidade respondeu {erro.code}") from erro'
+    - '            return erro.code, json.load(erro)'
+    - '        except (urllib.error.URLError, TimeoutError) as erro:'
+    - '            raise ConnectionError("Elegibilidade não respondeu dentro do prazo") from erro'
+    anotacoes:
+    - linha: 27
+      texto: O parâmetro timeout é o prazo de espera, em segundos.
+    - linha: 30
+      texto: Uma resposta 5xx de Elegibilidade é tratada como indisponibilidade.
+    - linha: 33
+      texto: Recusa de conexão e prazo esgotado chegam aqui.
+  - tipo: conceito
+    titulo: Falha parcial com semântica
+    texto: Quando a dependência falha, Exames responde `503` com o código `dependencia_indisponivel` e não grava a solicitação.
+      O material oficial descarta o `500` genérico porque ele esconderia a causa e descarta presumir elegibilidade positiva
+      porque registrar um exame sem cobertura seria perigoso no contexto clínico.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-05/exames.py
+    commit: 00419ea
+    contexto: Ainda em `exames.py`, a operação `solicitar_exame` traduz a falha técnica num resultado que a recepção consegue
+      interpretar.
+    inicio: 39
+    linhas:
+    - '        try:'
+    - '            status, corpo = self.politica(lambda: self.consultar_elegibilidade(beneficiario_id))'
+    - '        except ConnectionError:'
+    - '            return 503, {"codigo": "dependencia_indisponivel"}'
+    anotacoes:
+    - linha: 42
+      texto: O código 503 indica que a falha está na dependência de Exames.
+  - tipo: conceito
+    titulo: Nova tentativa e idempotência
+    texto: A nova tentativa ajuda quando a falha é transitória, como uma sobrecarga de segundos. Ela também aumenta a carga
+      sobre uma dependência que já está em dificuldade, por isso a espera cresce a cada tentativa. Repetir uma escrita exige
+      idempotência, porque a repetição de um POST cuja resposta se perdeu não pode gravar a solicitação de novo.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-05/resiliencia.py
+    commit: 00419ea
+    contexto: O arquivo `resiliencia.py` define a política de nova tentativa. Ela recebe a chamada como função e não conhece
+      o domínio hospitalar.
+    inicio: 8
+    linhas:
+    - 'def com_novas_tentativas(tentativas, espera_inicial, dormir, relatar=print):'
+    - '    def politica(chamada):'
+    - '        espera = espera_inicial'
+    - '        for numero in range(1, tentativas + 1):'
+    - '            try:'
+    - '                resultado = chamada()'
+    - '                relatar(f"  tentativa {numero}: respondeu {resultado[0]}")'
+    - '                return resultado'
+    - '            except ConnectionError as erro:'
+    - '                relatar(f"  tentativa {numero}: falhou ({erro})")'
+    - '                if numero == tentativas:'
+    - '                    raise'
+    - '                dormir(espera)'
+    - '                espera *= 2  # espera exponencial: 0,1 s, depois 0,2 s, depois 0,4 s'
+    - '    return politica'
+    anotacoes:
+    - linha: 13
+      texto: Cada tentativa executa a mesma chamada.
+    - linha: 21
+      texto: A espera dobra entre uma tentativa e a seguinte.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-05/exames.py
+    commit: 00419ea
+    contexto: Em `exames.py`, a chave de idempotência identifica o pedido repetido e devolve a solicitação já registrada.
+    inicio: 36
+    linhas:
+    - '    def solicitar_exame(self, beneficiario_id, codigo_exame, chave=None):'
+    - '        if chave in self._por_chave:  # pedido repetido: devolve o que já foi registrado'
+    - '            return 201, self._por_chave[chave]'
+    anotacoes:
+    - linha: 37
+      texto: Pedido com chave conhecida não grava de novo.
+  - tipo: conceito
+    titulo: Disjuntor
+    texto: O disjuntor conta as falhas seguidas. Ao atingir o limite, ele abre e recusa as chamadas seguintes sem usar a rede,
+      o que poupa a dependência e responde rápido ao consumidor. Depois do intervalo configurado, o disjuntor passa ao estado
+      meio aberto e libera uma chamada de teste cujo resultado define se ele fecha ou volta a abrir.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-05/resiliencia.py
+    commit: 00419ea
+    contexto: Ainda em `resiliencia.py`, a classe `Disjuntor` decide se a chamada usa a rede e muda de estado conforme o resultado.
+    inicio: 34
+    linhas:
+    - '    def __call__(self, chamada):'
+    - '        if self.estado == "aberto":'
+    - '            if self.relogio() - self.aberto_em < self.tempo_aberto:'
+    - '                raise ConnectionError("disjuntor aberto, chamada recusada sem usar a rede")'
+    - '            self.estado = "meio_aberto"  # o prazo passou: uma chamada de teste é liberada'
+    - '        try:'
+    - '            resultado = chamada()'
+    - '        except ConnectionError:'
+    - '            self.falhas += 1'
+    - '            if self.estado == "meio_aberto" or self.falhas >= self.limite_falhas:'
+    - '                self.estado, self.aberto_em = "aberto", self.relogio()'
+    - '            raise'
+    - '        self.estado, self.falhas = "fechado", 0'
+    - '        return resultado'
+    anotacoes:
+    - linha: 37
+      texto: Com o disjuntor aberto e o intervalo ainda não vencido, a rede não é usada.
+    - linha: 38
+      texto: Com o intervalo vencido, uma chamada de teste é liberada.
+    - linha: 44
+      texto: Uma falha no teste ou o limite atingido abre o disjuntor.
+  - tipo: diagrama
+    id: D-01
+    tipo_diagrama: Estados
+    titulo: Estados do disjuntor
+    mermaid: "flowchart LR\n    F[\"fechado\"] -->|\"3 falhas seguidas\"| A[\"aberto\"]\n    A -->|\"30 s depois\"| M[\"meio_aberto\"\
+      ]\n    M -->|\"chamada de teste com sucesso\"| F\n    M -->|\"chamada de teste com falha\"| A"
+  - tipo: comparativo
+    colunas:
+    - Prazo de espera
+    - Nova tentativa
+    - Disjuntor
+    linhas:
+    - dimensao: Situação que trata
+      valores:
+      - Dependência lenta
+      - Falha transitória
+      - Dependência instável por mais tempo
+    - dimensao: Efeito para o consumidor
+      valores:
+      - Falha em tempo conhecido
+      - Sucesso depois de algumas falhas
+      - Falha imediata enquanto aberto
+    - dimensao: Cuidado exigido
+      valores:
+      - Escolher o valor pelo tempo normal de resposta
+      - Idempotência e espera crescente
+      - Limite de falhas e intervalo de teste
+    - dimensao: No programa
+      valores:
+      - '`prazo=0.3`'
+      - '`com_novas_tentativas`'
+      - '`Disjuntor`'
+  - tipo: conceito
+    titulo: ADR
+    texto: ADR é a sigla de Architecture Decision Record, em português registro de decisão arquitetural. O bloco abaixo registra
+      a decisão de Exames para a indisponibilidade de Elegibilidade, com os campos do template do material oficial.
+  - tipo: adr
+    id: ADR-005
+    titulo: Falhar de forma explícita quando Elegibilidade não responde
+    status: Aceita (exemplo didático)
+    contexto: Exames precisa da decisão de Elegibilidade antes de gravar uma solicitação. Elegibilidade pode ficar fora do
+      ar, lenta ou sobrecarregada por alguns segundos.
+    decisao: Chamar Elegibilidade com prazo de espera de 2 segundos e responder `503` com `dependencia_indisponivel` quando
+      ela não responder. Repetir apenas a consulta idempotente e aceitar chave de idempotência no POST.
+    alternativas: Presumir elegibilidade positiva foi descartado porque registraria exames sem cobertura. Esperar sem prazo
+      foi descartado porque uma dependência lenta prenderia todas as requisições de Exames.
+    consequencias: A recepção recebe um erro que pode tentar de novo mais tarde. A equipe precisa monitorar a taxa de `503`
+      e revisar o prazo se o tempo normal de resposta de Elegibilidade mudar.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: Os links abaixo levam às seções usadas nesta aba.
+    links:
+    - rotulo: Material oficial · Propriedade dos dados
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#propriedade-dos-dados
+    - rotulo: Material oficial · Chamadas síncronas e falhas parciais
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
+    - rotulo: Material oficial · Chamadas síncronas, orçamento de falha
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#chamadas-sincronas-orcamento-de-falha
+    - rotulo: Material oficial · Oficina, por que o erro é 503 e não 500
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#por-que-o-erro-e-503-e-nao-500
+    - rotulo: Material oficial · Template de ADR
+      url: https://marco-mendes.github.io/arquitetura-software/referencia/template-adr/
+- id: laboratorio
+  titulo: Laboratório
+  blocos:
+  - tipo: legenda
+    texto: O Laboratório executa três programas que provocam falhas em Elegibilidade e mostram a reação de Exames. Nenhum
+      arquivo precisa ser alterado durante os 12 minutos previstos para a aba.
+  - tipo: glossario
+    titulo: 📘 Conceitos usados nesta aba
+    texto: Os termos técnicos desta aba estão explicados abaixo na ordem em que aparecem.
+    itens:
+    - termo: Terminal
+      definicao: Programa em que se digitam comandos de texto, chamado PowerShell no Windows e Terminal no macOS e no Linux.
+        O VS Code abre um terminal integrado pelo menu Terminal › Novo Terminal.
+    - termo: Porta
+      definicao: Número que identifica um programa servidor dentro do computador. Os programas pedem ao sistema uma porta
+        livre a cada execução.
+    - termo: Falha parcial
+      definicao: Situação em que Exames responde à verificação de saúde e não consegue aceitar uma solicitação porque Elegibilidade
+        não respondeu.
+    - termo: Chave de idempotência
+      definicao: Identificador que o consumidor envia junto do pedido para que o servidor reconheça uma repetição.
+    - termo: Disjuntor
+      definicao: Mecanismo que recusa chamadas sem usar a rede depois de um número de falhas seguidas.
+  - tipo: faixa
+    estilo: objetivo
+    problema: Exames depende de uma resposta síncrona de Elegibilidade para registrar uma solicitação. Quando Elegibilidade
+      cai, fica lenta ou oscila, Exames precisa reagir de forma previsível.
+    impacto: Sem prazo de espera, uma dependência lenta prende as requisições de Exames por tempo indefinido. Sem idempotência,
+      a repetição de um POST duplica a solicitação no banco de Exames. Sem disjuntor, cada pedido novo tenta uma conexão com
+      uma dependência que já está fora do ar.
+    mecanismo: Os três programas iniciam Elegibilidade como servidor HTTP numa porta livre, mudam o comportamento dele e imprimem
+      a resposta de Exames em cada situação.
+    comprovacao: Exames responde `200` na verificação de saúde e `503` na solicitação enquanto Elegibilidade está fora do
+      ar. A repetição com chave de idempotência mantém uma única solicitação gravada no banco de Exames. O disjuntor usa a
+      rede em 3 de 5 pedidos e fecha depois da chamada de teste bem-sucedida.
+  - tipo: faixa
+    estilo: dica
+    titulo: 💻 Comandos por sistema operacional
+    texto: Os programas desta ODA usam só a biblioteca padrão do Python 3.11 ou mais recente, sem ambiente virtual nem `pip
+      install`. No macOS e no Linux o comando pode ser `python3` em vez de `python`. No Windows, o comando `cd` aceita a barra
+      `/` nos caminhos de pasta também no PowerShell.
+  - tipo: passos
+    itens:
+    - titulo: Abrir o terminal na raiz do repositório
+      texto: No VS Code, abra a pasta `odas-arquitetura-software` pelo menu Arquivo › Abrir Pasta. Em seguida, abra um terminal
+        pelo menu Terminal › Novo Terminal e atualize o repositório.
+      editor:
+        rotulo: terminal
+        linhas:
+        - git pull
+    - titulo: Executar a demonstração da falha parcial
+      texto: Entre na pasta da ODA e execute o primeiro programa. Ele coloca Elegibilidade no ar, depois fora do ar e por
+        fim lenta.
+      editor:
+        rotulo: terminal
+        linhas:
+        - cd codigo/oda-05
+        - python demo_falha_parcial.py
+  - tipo: editor
+    rotulo: saida
+    origem: executado
+    linhas:
+    - Elegibilidade no ar
+    - '  POST /exames B-001 -> 201 {''solicitacao_id'': 1, ''beneficiario_id'': ''B-001'', ''codigo_exame'': ''HEMOGRAMA''}'
+    - '  POST /exames B-002 -> 422 {''codigo'': ''beneficiario_inelegivel''}'
+    - '  POST /exames B-999 -> 422 {''codigo'': ''beneficiario_desconhecido''}'
+    - ''
+    - Elegibilidade fora do ar
+    - '  GET /health        -> 200 {''status'': ''ok'', ''servico'': ''exames''}'
+    - '  POST /exames B-001 -> 503 {''codigo'': ''dependencia_indisponivel''}'
+    - '  solicitações gravadas em Exames: 1'
+    - ''
+    - Elegibilidade lenta com resposta em 1 s e prazo de 300 ms em Exames
+    - '  POST /exames B-001 -> 503 {''codigo'': ''dependencia_indisponivel''}'
+    - '  Exames desistiu antes de 500 ms: sim'
+  - tipo: faixa
+    estilo: sucesso
+    texto: Com Elegibilidade fora do ar, a verificação de saúde de Exames respondeu `200` e a solicitação respondeu `503`
+      sem gravar nada no banco. Com Elegibilidade lenta, o prazo de 300 ms encerrou a espera de Exames antes que a resposta
+      chegasse em 1 s.
+  - tipo: passos
+    itens:
+    - titulo: Executar a demonstração da nova tentativa
+      texto: O programa deixa Elegibilidade instável por duas chamadas. Depois repete um POST cuja resposta foi descartada,
+        sem chave e com chave.
+      editor:
+        rotulo: terminal
+        linhas:
+        - python demo_novas_tentativas.py
+  - tipo: editor
+    rotulo: saida
+    origem: executado
+    linhas:
+    - Sem nova tentativa
+    - '  POST /exames B-001 -> 503'
+    - ''
+    - Com até três tentativas
+    - '  tentativa 1: falhou (Elegibilidade respondeu 503)'
+    - '  tentativa 2: falhou (Elegibilidade respondeu 503)'
+    - '  tentativa 3: respondeu 200'
+    - '  POST /exames B-001 -> 201'
+    - '  chamadas que chegaram a Elegibilidade: 3'
+    - ''
+    - Recepção repete o POST sem chave de idempotência
+    - '  solicitações gravadas: 2'
+    - ''
+    - Recepção repete o POST com a chave de idempotência req-7f3a
+    - '  segunda resposta -> 201 {''solicitacao_id'': 1, ''beneficiario_id'': ''B-001'', ''codigo_exame'': ''RAIO-X''}'
+    - '  solicitações gravadas: 1'
+  - tipo: faixa
+    estilo: quebra
+    texto: Sem chave de idempotência, a mesma intenção da recepção gerou duas solicitações. Com a chave `req-7f3a`, a segunda
+      resposta trouxe o `solicitacao_id` 1 já gravado e o banco ficou com uma solicitação.
+  - tipo: passos
+    itens:
+    - titulo: Executar a demonstração do disjuntor
+      texto: O programa envia cinco pedidos com Elegibilidade fora do ar. Depois avança o relógio simulado em 30 s e envia
+        um sexto pedido com Elegibilidade de volta.
+      editor:
+        rotulo: terminal
+        linhas:
+        - python demo_disjuntor.py
+  - tipo: editor
+    rotulo: saida
+    origem: executado
+    linhas:
+    - Elegibilidade fora do ar, limite de 3 falhas
+    - '  pedido 1: 503, usou a rede: sim, disjuntor fechado'
+    - '  pedido 2: 503, usou a rede: sim, disjuntor fechado'
+    - '  pedido 3: 503, usou a rede: sim, disjuntor aberto'
+    - '  pedido 4: 503, usou a rede: não, disjuntor aberto'
+    - '  pedido 5: 503, usou a rede: não, disjuntor aberto'
+    - '  tentativas de conexão: 3 de 5 pedidos'
+    - ''
+    - 30 s depois, Elegibilidade de volta
+    - '  pedido 6: 201, chamada de teste liberada, disjuntor fechado'
+    - '  chamadas que chegaram a Elegibilidade: 1'
+  - tipo: faixa
+    estilo: sucesso
+    texto: Os pedidos 4 e 5 receberam `503` sem tentativa de conexão. O pedido 6 foi a chamada de teste, recebeu `201` e fechou
+      o disjuntor.
+  - tipo: faixa
+    estilo: dica
+    titulo: 🖥️ Terminal simulado
+    texto: Quem não conseguiu preparar o ambiente pode digitar os comandos nos terminais simulados abaixo. As saídas simuladas
+      são as saídas reais dos programas no commit citado na aba Objetivo.
+  - tipo: terminal
+    titulo: terminal simulado · pasta codigo/oda-05
+    comandos:
+    - entrada: python demo_falha_parcial.py
+      saida: "Elegibilidade no ar\n  POST /exames B-001 -> 201 {'solicitacao_id': 1, 'beneficiario_id': 'B-001', 'codigo_exame':\
+        \ 'HEMOGRAMA'}\n  POST /exames B-002 -> 422 {'codigo': 'beneficiario_inelegivel'}\n  POST /exames B-999 -> 422 {'codigo':\
+        \ 'beneficiario_desconhecido'}\n\nElegibilidade fora do ar\n  GET /health        -> 200 {'status': 'ok', 'servico':\
+        \ 'exames'}\n  POST /exames B-001 -> 503 {'codigo': 'dependencia_indisponivel'}\n  solicitações gravadas em Exames:\
+        \ 1\n\nElegibilidade lenta com resposta em 1 s e prazo de 300 ms em Exames\n  POST /exames B-001 -> 503 {'codigo':\
+        \ 'dependencia_indisponivel'}\n  Exames desistiu antes de 500 ms: sim"
+      origem: executado
+      dica: Executa a demonstração da falha parcial.
+    cenarios:
+    - rotulo: Executar demo_falha_parcial.py
+      comando: python demo_falha_parcial.py
+  - tipo: terminal
+    titulo: terminal simulado · pasta codigo/oda-05
+    comandos:
+    - entrada: python demo_novas_tentativas.py
+      saida: "Sem nova tentativa\n  POST /exames B-001 -> 503\n\nCom até três tentativas\n  tentativa 1: falhou (Elegibilidade\
+        \ respondeu 503)\n  tentativa 2: falhou (Elegibilidade respondeu 503)\n  tentativa 3: respondeu 200\n  POST /exames\
+        \ B-001 -> 201\n  chamadas que chegaram a Elegibilidade: 3\n\nRecepção repete o POST sem chave de idempotência\n \
+        \ solicitações gravadas: 2\n\nRecepção repete o POST com a chave de idempotência req-7f3a\n  segunda resposta -> 201\
+        \ {'solicitacao_id': 1, 'beneficiario_id': 'B-001', 'codigo_exame': 'RAIO-X'}\n  solicitações gravadas: 1"
+      origem: executado
+      dica: Executa a demonstração da nova tentativa e da idempotência.
+    cenarios:
+    - rotulo: Executar demo_novas_tentativas.py
+      comando: python demo_novas_tentativas.py
+  - tipo: terminal
+    titulo: terminal simulado · pasta codigo/oda-05
+    comandos:
+    - entrada: python demo_disjuntor.py
+      saida: "Elegibilidade fora do ar, limite de 3 falhas\n  pedido 1: 503, usou a rede: sim, disjuntor fechado\n  pedido\
+        \ 2: 503, usou a rede: sim, disjuntor fechado\n  pedido 3: 503, usou a rede: sim, disjuntor aberto\n  pedido 4: 503,\
+        \ usou a rede: não, disjuntor aberto\n  pedido 5: 503, usou a rede: não, disjuntor aberto\n  tentativas de conexão:\
+        \ 3 de 5 pedidos\n\n30 s depois, Elegibilidade de volta\n  pedido 6: 201, chamada de teste liberada, disjuntor fechado\n\
+        \  chamadas que chegaram a Elegibilidade: 1"
+      origem: executado
+      dica: Executa a demonstração do disjuntor.
+    cenarios:
+    - rotulo: Executar demo_disjuntor.py
+      comando: python demo_disjuntor.py
+  - tipo: faixa
+    estilo: erro
+    sintoma: O terminal mostra `ModuleNotFoundError` ou `No such file or directory`.
+    causa: O comando foi executado fora da pasta do programa. Nesse caso o Python não encontra os módulos vizinhos.
+    correcao: Volte à raiz do repositório e entre na pasta indicada no passo, como `cd codigo/oda-05`, antes de executar o
+      programa.
+  - tipo: faixa
+    estilo: erro
+    sintoma: O terminal mostra `SyntaxError` ou `TypeError` numa linha do programa.
+    causa: O Python instalado é anterior à versão 3.11.
+    correcao: Confira a versão com `python --version` e instale o Python 3.13 pelo procedimento do Módulo 0.
+  - tipo: checklist
+    titulo: Checklist final
+    itens:
+    - A saúde de Exames respondeu `200` e a solicitação respondeu `503` com Elegibilidade fora do ar.
+    - Com Elegibilidade lenta, Exames desistiu antes de 500 ms.
+    - A terceira tentativa recebeu `200` e a solicitação foi aceita com `201`.
+    - A repetição com chave de idempotência manteve uma única solicitação gravada.
+    - O disjuntor usou a rede em 3 de 5 pedidos e fechou depois da chamada de teste.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: Os programas desta aba reproduzem a falha parcial da Oficina de ferramentas do Módulo 3 sem Docker e acrescentam
+      as políticas citadas na página de conceitos.
+    links:
+    - rotulo: Material oficial · Oficina, resultado esperado
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#resultado-esperado
+    - rotulo: Material oficial · Oficina, tornar a falha parcial observável
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#tornar-a-falha-parcial-observavel
+    - rotulo: Material oficial · Chamadas síncronas e falhas parciais
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
+- id: verificacao
+  titulo: Verificação
+  blocos:
+  - tipo: legenda
+    texto: As perguntas abaixo tratam do conteúdo do Módulo 3 do material oficial. Cada alternativa exibe uma explicação depois
+      da escolha.
+  - tipo: quiz
+    perguntas:
+    - enunciado: Segundo o material oficial, o que acontece com o acoplamento quando uma chamada de função é substituída por
+        uma chamada HTTP?
+      alternativas:
+      - texto: O acoplamento muda de forma e continua existindo.
+        correta: true
+        explicacao: A chamada remota acrescenta acoplamento temporal, por exemplo.
+      - texto: O acoplamento desaparece.
+        correta: false
+        explicacao: O material afirma que trocar a chamada local por REST desloca o acoplamento.
+      - texto: O acoplamento passa a ser só de dados.
+        correta: false
+        explicacao: Contrato, tempo e implantação continuam presentes.
+    - enunciado: Que forma de acoplamento Exames aceita ao consultar Elegibilidade antes de gravar?
+      alternativas:
+      - texto: Acoplamento temporal.
+        correta: true
+        explicacao: A solicitação espera a resposta síncrona de Elegibilidade.
+      - texto: Acoplamento de dados.
+        correta: false
+        explicacao: Exames não lê a tabela de Elegibilidade.
+      - texto: Acoplamento de implantação.
+        correta: false
+        explicacao: Os dois serviços são implantados separadamente.
+    - enunciado: O que significa banco por serviço no material oficial?
+      alternativas:
+      - texto: Somente o serviço proprietário acessa diretamente o seu armazenamento.
+        correta: true
+        explicacao: Os consumidores usam contratos, eventos ou réplicas projetadas.
+      - texto: Cada serviço precisa de um servidor de banco físico próprio.
+        correta: false
+        explicacao: O material diz que schemas ou bancos no mesmo servidor também servem.
+      - texto: Cada serviço usa uma tecnologia de banco diferente.
+        correta: false
+        explicacao: Isso é persistência poliglota, que é outra decisão.
+    - enunciado: O que é uma falha parcial?
+      alternativas:
+      - texto: Uma parte do sistema distribuído funciona e outra não.
+        correta: true
+        explicacao: Exames responde à saúde e não consegue aceitar solicitação nova.
+      - texto: Uma falha que atinge todos os serviços ao mesmo tempo.
+        correta: false
+        explicacao: Nesse caso nenhuma parte funcionaria.
+      - texto: Uma falha que só ocorre no banco de dados.
+        correta: false
+        explicacao: A falha parcial pode estar em qualquer dependência.
+    - enunciado: Por que Exames responde `503` com `dependencia_indisponivel` em vez de `500`?
+      alternativas:
+      - texto: Porque o `503` torna observável que a dependência está indisponível.
+        correta: true
+        explicacao: O `500` genérico esconderia a semântica da falha.
+      - texto: Porque o `500` é reservado para erros de validação.
+        correta: false
+        explicacao: Erro de validação no exemplo é `422`.
+      - texto: Porque o `503` registra a solicitação para depois.
+        correta: false
+        explicacao: Nenhuma solicitação é gravada nessa situação.
+    - enunciado: No exemplo clínico, por que o material oficial descarta presumir elegibilidade positiva quando Elegibilidade
+        cai?
+      alternativas:
+      - texto: Porque o fallback precisa ser válido para o negócio. Presumir cobertura seria perigoso.
+        correta: true
+        explicacao: Falhar de forma explícita é a decisão didática.
+      - texto: Porque o fallback é sempre proibido.
+        correta: false
+        explicacao: O material admite fallback quando ele é válido para o negócio.
+      - texto: Porque Exames não tem acesso a um cache.
+        correta: false
+        explicacao: O motivo apontado é o risco clínico.
+    - enunciado: Que cuidado o material associa à nova tentativa?
+      alternativas:
+      - texto: Ela amplia a carga e exige idempotência.
+        correta: true
+        explicacao: Por isso o programa só repete com espera crescente e usa chave no POST.
+      - texto: Ela elimina a necessidade de prazo de espera.
+        correta: false
+        explicacao: Cada tentativa continua precisando de prazo.
+      - texto: Ela só funciona com mensageria.
+        correta: false
+        explicacao: A nova tentativa do Laboratório usa HTTP.
+    - enunciado: Qual é a função do disjuntor segundo a página de conceitos?
+      alternativas:
+      - texto: Interromper as tentativas quando a dependência está instável.
+        correta: true
+        explicacao: No Laboratório, os pedidos 4 e 5 não usaram a rede.
+      - texto: Repetir a chamada até ela funcionar.
+        correta: false
+        explicacao: Esse é o papel da nova tentativa.
+      - texto: Guardar a última resposta para usar como fallback.
+        correta: false
+        explicacao: Isso seria um cache, que é outra decisão.
+    - enunciado: Por que Exames não repete automaticamente a consulta na Oficina de ferramentas?
+      alternativas:
+      - texto: Porque a consulta é rápida e uma tempestade de repetições na queda poderia piorar a recuperação.
+        correta: true
+        explicacao: O texto cita esse risco no orçamento de falha.
+      - texto: Porque a consulta não é idempotente.
+        correta: false
+        explicacao: Uma consulta GET é idempotente.
+      - texto: Porque o FastAPI não permite repetir chamadas.
+        correta: false
+        explicacao: A decisão é de arquitetura.
+    - enunciado: O que deve ser documentado antes de adicionar uma chamada síncrona entre serviços?
+      alternativas:
+      - texto: Os itens da seção orçamento de falha, do prazo de espera à telemetria.
+        correta: true
+        explicacao: A lista vai do prazo e da política de repetição até os códigos de erro e a telemetria.
+      - texto: Somente a URL do serviço chamado.
+        correta: false
+        explicacao: A URL não descreve o comportamento na falha.
+      - texto: Somente o tempo médio de resposta.
+        correta: false
+        explicacao: O tempo médio esconde o comportamento na falha.
+  - tipo: resumo
+  - tipo: checklist
+    titulo: Para revisar depois da aula
+    itens:
+    - Ler a seção Chamadas síncronas e falhas parciais da página de conceitos.
+    - Comparar a saída de `demo_falha_parcial.py` com o Resultado esperado da Oficina de ferramentas.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: Os links abaixo levam às seções do material oficial cobertas pelas perguntas.
+    links:
+    - rotulo: Material oficial · Acoplamento
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#acoplamento
+    - rotulo: Material oficial · Propriedade dos dados
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#propriedade-dos-dados
+    - rotulo: Material oficial · Chamadas síncronas e falhas parciais
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
+    - rotulo: Material oficial · Chamadas síncronas, orçamento de falha
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#chamadas-sincronas-orcamento-de-falha

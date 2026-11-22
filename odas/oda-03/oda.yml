@@ -60,12 +60,12 @@ abas:
     texto: O código desta ODA está na pasta `codigo/oda-03/` do repositório `odas-arquitetura-software`, que quem concluiu
       o Módulo 0 já tem clonado e atualiza com `git pull` dentro da pasta dele. Os programas desta ODA usam bibliotecas externas
       instaladas no Laboratório num ambiente virtual com Python 3.11 ou mais recente. Os trechos exibidos nas abas correspondem
-      ao commit `f9f8fde`.
+      ao commit `00419ea`.
     links:
     - rotulo: 'Módulo 0: preparação do ambiente'
       url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
-    - rotulo: Repositório no GitHub, commit f9f8fde
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
+    - rotulo: Repositório no GitHub, commit 00419ea
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/00419ea
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
@@ -93,8 +93,8 @@ abas:
       O botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P no Windows e
       no Linux ou Cmd+P no macOS localiza qualquer arquivo pelo caminho exibido no trecho.
     links:
-    - rotulo: Repositório no GitHub, commit f9f8fde
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
+    - rotulo: Repositório no GitHub, commit 00419ea
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/00419ea
   - tipo: conceito
     titulo: Interface, contrato e implementação
     texto: Uma API separa três camadas. A interface diz o que está disponível, o contrato diz qual promessa é observável e
@@ -109,7 +109,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-03/rest/main.py
-    commit: f9f8fde
+    commit: 00419ea
     contexto: O arquivo `main.py` declara a rota que aceita o pedido de elegibilidade. A rota devolve `202` porque a API aceitou
       o pedido sem tomar nenhuma decisão sobre a cobertura.
     inicio: 20
@@ -132,7 +132,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-03/rest/models.py
-    commit: f9f8fde
+    commit: 00419ea
     contexto: O arquivo `models.py` escreve o contrato do pedido como classe Pydantic. O padrão do `cpf` é verificado antes
       da execução da rota, de modo que um corpo inválido recebe `422`.
     inicio: 12
@@ -152,7 +152,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-03/grpc/elegibilidade.proto
-    commit: f9f8fde
+    commit: 00419ea
     contexto: O arquivo `elegibilidade.proto` é o contrato gRPC da elegibilidade. Os dois arquivos `_pb2` da mesma pasta foram
       gerados a partir dele.
     inicio: 8
@@ -186,7 +186,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-03/grpc/servidor.py
-    commit: f9f8fde
+    commit: 00419ea
     contexto: O arquivo `servidor.py` implementa as duas operações do contrato. A classe herda de `ElegibilidadesServicer`,
       gerada pelo `protoc`.
     inicio: 24

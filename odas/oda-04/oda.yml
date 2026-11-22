@@ -51,12 +51,12 @@ abas:
     texto: O código desta ODA está na pasta `codigo/oda-04/` do repositório `odas-arquitetura-software`, que quem concluiu
       o Módulo 0 já tem clonado e atualiza com `git pull` dentro da pasta dele. Os programas desta ODA usam bibliotecas externas
       instaladas no Laboratório num ambiente virtual com Python 3.11 ou mais recente. Os trechos exibidos nas abas correspondem
-      ao commit `f9f8fde`.
+      ao commit `00419ea`.
     links:
     - rotulo: 'Módulo 0: preparação do ambiente'
       url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
-    - rotulo: Repositório no GitHub, commit f9f8fde
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
+    - rotulo: Repositório no GitHub, commit 00419ea
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/00419ea
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
@@ -84,8 +84,8 @@ abas:
       O botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P no Windows e
       no Linux ou Cmd+P no macOS localiza qualquer arquivo pelo caminho exibido no trecho.
     links:
-    - rotulo: Repositório no GitHub, commit f9f8fde
-      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/f9f8fde
+    - rotulo: Repositório no GitHub, commit 00419ea
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/00419ea
   - tipo: conceito
     titulo: GraphQL e o schema
     texto: No GraphQL, o schema declara os tipos e os campos disponíveis para cada consulta enviada pelo consumidor, que indica
@@ -94,7 +94,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-04/graphql/schema.graphql
-    commit: f9f8fde
+    commit: 00419ea
     contexto: O arquivo `schema.graphql` é o contrato da API GraphQL, escrito em SDL. O programa `api.py` lê este arquivo
       e associa um resolver a cada campo que precisa de código.
     inicio: 4
@@ -120,7 +120,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-04/graphql/api.py
-    commit: f9f8fde
+    commit: 00419ea
     contexto: O arquivo `api.py` registra os resolvers da API. Este resolver imprime uma linha a cada execução, para que o
       Laboratório mostre quantas vezes o cadastro foi consultado.
     inicio: 29
@@ -159,7 +159,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-04/websocket/servidor.py
-    commit: f9f8fde
+    commit: 00419ea
     contexto: O arquivo `servidor.py` mantém as conexões abertas por protocolo. O método `publicar` é chamado quando a operadora
       responde e envia a mudança a cada conexão que acompanha o protocolo.
     inicio: 36
@@ -183,7 +183,7 @@ abas:
   - tipo: editor
     rotulo: arquivo
     caminho: codigo/oda-04/websocket/servidor.py
-    commit: f9f8fde
+    commit: 00419ea
     contexto: O mesmo arquivo responde ao pedido de acompanhamento. O estado atual enviado na chegada permite que um cliente
       reconectado conheça a situação nova.
     inicio: 28

@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-const ODAS = ['oda-01', 'oda-02', 'oda-03', 'oda-04'];
+const ODAS = ['oda-01', 'oda-02', 'oda-03', 'oda-04', 'oda-05', 'oda-06'];
 const ABAS = ['objetivo', 'conceitos', 'laboratorio', 'verificacao'];
 
 function vigiarErros(page) {
@@ -48,7 +48,7 @@ test('oda-03: o terminal simulado reproduz o NOT_FOUND do gRPC', async ({ page }
   await expect(painel.locator('.terminal__tela').nth(1)).toContainText('NOT_FOUND');
 });
 
-for (const oda of ['oda-03', 'oda-04']) {
+for (const oda of ['oda-03', 'oda-04', 'oda-05', 'oda-06']) {
   test(`${oda}: os diagramas da aba Conceitos viram SVG`, async ({ page }) => {
     await page.goto(`/${oda}/#conceitos`);
     const painel = page.locator('#painel-conceitos');
@@ -56,3 +56,21 @@ for (const oda of ['oda-03', 'oda-04']) {
     await expect(painel.locator('.bloco-erro')).toHaveCount(0);
   });
 }
+
+test('oda-05: o terminal simulado reproduz o 503 da falha parcial', async ({ page }) => {
+  await page.goto('/oda-05/#laboratorio');
+  const painel = page.locator('#painel-laboratorio');
+  const campo = painel.getByLabel('Digite um comando').first();
+  await campo.fill('python demo_falha_parcial.py');
+  await campo.press('Enter');
+  await expect(painel.locator('.terminal__tela').first()).toContainText('dependencia_indisponivel');
+});
+
+test('oda-06: o terminal simulado reproduz a compensação da SAGA', async ({ page }) => {
+  await page.goto('/oda-06/#laboratorio');
+  const painel = page.locator('#painel-laboratorio');
+  const campo = painel.getByLabel('Digite um comando').first();
+  await campo.fill('python demo.py');
+  await campo.press('Enter');
+  await expect(painel.locator('.terminal__tela').first()).toContainText('requer_intervencao');
+});

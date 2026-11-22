@@ -1,9 +1,10 @@
 repositorios:
-  odas-arquitetura-software: {url: "https://github.com/aulas-marco/odas-arquitetura-software", commit: "f9f8fde"}
+  odas-arquitetura-software: {url: "https://github.com/aulas-marco/odas-arquitetura-software", commit: "00419ea"}
 
 trilhas:
   - {numero: 1, titulo: "Visão geral de estilos arquiteturais (Módulo 1)"}
   - {numero: 2, titulo: "Arquitetura de APIs (Módulo 2)"}
+  - {numero: 3, titulo: "Arquitetura de serviços (Módulo 3)"}
 
 odas:
   - id: "01"
@@ -46,3 +47,23 @@ odas:
     objetivo: "Reconhecer, em código executável, a seleção de campos e os resolvers do GraphQL e o envio de mudanças pelo canal aberto do WebSocket."
     situacao: disponivel
     app: oda-04
+  - id: "05"
+    titulo: "Falha parcial e resiliência da chamada síncrona"
+    trilha: 3
+    repositorio: odas-arquitetura-software
+    fontes: ["modulo-3-servicos/conceitos.md#chamadas-sincronas-e-falhas-parciais", "modulo-3-servicos/padroes-e-decisoes.md#chamadas-sincronas-orcamento-de-falha", "modulo-3-servicos/oficina-de-ferramentas.md#tornar-a-falha-parcial-observavel"]
+    minutos: 25
+    pre_requisitos: []
+    objetivo: "Reconhecer, em código executável, a falha parcial entre dois serviços e o efeito do prazo de espera, da nova tentativa com idempotência e do disjuntor."
+    situacao: disponivel
+    app: oda-05
+  - id: "06"
+    titulo: "SAGA e CQRS"
+    trilha: 3
+    repositorio: odas-arquitetura-software
+    fontes: ["modulo-3-servicos/padroes-e-decisoes.md#saga", "modulo-3-servicos/padroes-e-decisoes.md#coreografia-e-orquestracao", "modulo-3-servicos/padroes-e-decisoes.md#cqrs"]
+    minutos: 25
+    pre_requisitos: ["05"]
+    objetivo: "Reconhecer, em código executável, os passos, as compensações e a coordenação de uma SAGA orquestrada e a defasagem de uma projeção CQRS."
+    situacao: disponivel
+    app: oda-06

@@ -1,0 +1,700 @@
+id: '06'
+titulo: SAGA e CQRS
+abas:
+- id: objetivo
+  titulo: Objetivo
+  blocos:
+  - tipo: legenda
+    texto: Esta ODA executa uma SAGA de agendamento de exame com três participantes e uma projeção de leitura para o painel
+      gerencial. A atividade dura 25 minutos distribuídos entre as quatro abas.
+  - tipo: glossario
+    texto: Os termos abaixo aparecem nas abas desta ODA na ordem em que surgem. Cada aba repete a explicação do termo no primeiro
+      uso, porque o aluno pode abrir qualquer aba diretamente.
+    itens:
+    - termo: Transação local
+      definicao: Alteração confirmada por um único serviço no próprio banco. Entre serviços não existe rollback automático.
+      referencia:
+        rotulo: Material oficial · Consistência local e entre serviços
+        url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#consistencia-local-e-consistencia-entre-servicos
+    - termo: SAGA
+      definicao: Sequência de transações locais em serviços diferentes. Se uma etapa posterior falha, operações compensatórias
+        tentam neutralizar o efeito das anteriores.
+      referencia:
+        rotulo: Material oficial · SAGA
+        url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#saga
+    - termo: Operação compensatória
+      definicao: Ação de negócio que neutraliza o efeito de um passo já confirmado, como liberar um horário reservado. Ela
+        não apaga o passado e pode falhar.
+    - termo: Orquestração
+      definicao: Forma de coordenação em que um componente conhece a sequência, chama cada participante e aciona as compensações
+        na falha.
+    - termo: Coreografia
+      definicao: Forma de coordenação em que cada serviço reage aos eventos do anterior, sem componente central.
+    - termo: Idempotência
+      definicao: Propriedade de um comando que produz o mesmo efeito quando recebido uma ou várias vezes.
+    - termo: CQRS
+      definicao: Separação entre o modelo que recebe comandos e o modelo que atende consultas, usada quando leitura e escrita
+        têm necessidades diferentes.
+      referencia:
+        rotulo: Material oficial · CQRS
+        url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cqrs
+    - termo: Projeção
+      definicao: Modelo de leitura montado a partir dos fatos publicados pelo modelo de comando. Pode ser descartado e reconstruído.
+    - termo: Defasagem
+      definicao: Quantidade de fatos já publicados que a projeção ainda não aplicou. Enquanto ela é maior que zero, a consulta
+        mostra um dado antigo.
+    - termo: ADR (Architecture Decision Record)
+      definicao: Registro de decisão arquitetural. É um documento curto e versionado que registra uma escolha de arquitetura
+        e os motivos dela.
+      referencia:
+        rotulo: Material oficial · Template de ADR
+        url: https://marco-mendes.github.io/arquitetura-software/referencia/template-adr/
+  - tipo: checklist
+    titulo: Ao concluir, você poderá
+    itens:
+    - Reconhecer na trilha de auditoria os passos, as compensações e a coordenação de uma SAGA orquestrada.
+    - Explicar por que uma compensação que falha leva a SAGA ao estado `requer_intervencao`.
+    - Explicar como os comandos idempotentes impedem efeito duplicado quando o orquestrador reenvia comandos.
+    - Ler a defasagem de uma projeção CQRS e reconstruí-la a partir dos fatos.
+  - tipo: faixa
+    estilo: dica
+    titulo: 🧭 Como ter o código na sua máquina
+    texto: O código desta ODA está na pasta `codigo/oda-06/` do repositório `odas-arquitetura-software`, que quem concluiu
+      o Módulo 0 já tem clonado e atualiza com `git pull` dentro da pasta dele. Os programas desta ODA usam só a biblioteca
+      padrão do Python 3.11 ou mais recente e dispensam a instalação de bibliotecas. Os trechos exibidos nas abas vêm do commit
+      `00419ea`, que o botão Ver no GitHub de cada trecho abre no navegador.
+    links:
+    - rotulo: 'Módulo 0: preparação do ambiente'
+      url: https://aulas-marco.github.io/odas-arquitetura-software/modulo-0/
+    - rotulo: Repositório no GitHub, commit 00419ea
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/00419ea
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: Os links abaixo levam às seções do Módulo 3 cobertas por esta ODA. O agendamento com Agenda, Autorização e Preparo
+      de Sala é o exemplo de SAGA da página Padrões e decisões.
+    links:
+    - rotulo: Material oficial · Consistência local e consistência entre serviços
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#consistencia-local-e-consistencia-entre-servicos
+    - rotulo: Material oficial · SAGA
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#saga
+    - rotulo: Material oficial · Coreografia e orquestração
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#coreografia-e-orquestracao
+    - rotulo: Material oficial · CQRS
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cqrs
+- id: conceitos
+  titulo: Conceitos
+  blocos:
+  - tipo: legenda
+    texto: Esta aba retoma os conceitos expostos em aula e associa cada conceito a um trecho do código. Os trechos servem
+      de referência durante o Laboratório.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📂 Onde está o código
+    texto: Os arquivos desta aba ficam em `codigo/oda-06/saga/` e `codigo/oda-06/cqrs/` no repositório `odas-arquitetura-software`.
+      O botão Ver no GitHub de cada trecho abre o arquivo completo no navegador. No VS Code, o atalho Ctrl+P no Windows e
+      no Linux ou Cmd+P no macOS localiza qualquer arquivo pelo caminho exibido no trecho.
+    links:
+    - rotulo: Repositório no GitHub, commit 00419ea
+      url: https://github.com/aulas-marco/odas-arquitetura-software/tree/00419ea
+  - tipo: conceito
+    titulo: Consistência entre serviços
+    texto: Dentro de um serviço, uma transação ACID preserva as invariantes locais. Entre serviços, cada serviço confirma
+      a própria transação local e não existe rollback automático que desfaça o conjunto. Por isso a equipe precisa definir
+      quais estados intermediários são legítimos e de que forma uma divergência entre os serviços será reparada.
+  - tipo: conceito
+    titulo: Passos da SAGA
+    texto: Cada participante executa um passo como transação local no próprio banco, que no programa é um dicionário privado
+      da classe. O participante também guarda os identificadores dos comandos já aplicados, o que torna o passo idempotente
+      quando o mesmo comando chega de novo.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-06/saga/participantes.py
+    commit: 00419ea
+    contexto: O arquivo `participantes.py` concentra a regra comum aos três participantes. Um comando repetido é reconhecido
+      pelo identificador e não altera o banco.
+    inicio: 20
+    linhas:
+    - '    def _aplicar(self, comando_id, operacao, agendamento_id, situacao):'
+    - '        if comando_id in self._processados:'
+    - '            return "comando_repetido_sem_efeito"'
+    - '        if operacao in self._falhar_em:'
+    - '            raise FalhaNoPasso(f"{self.nome} não conseguiu {operacao}")'
+    - '        self._banco[agendamento_id] = situacao  # transação local confirmada'
+    - '        self._processados.add(comando_id)'
+    - '        return situacao'
+    anotacoes:
+    - linha: 21
+      texto: 'Comando já processado: nenhum efeito novo.'
+    - linha: 25
+      texto: Esta linha é a transação local confirmada.
+  - tipo: conceito
+    titulo: Coordenação por orquestração
+    texto: O orquestrador declara a sequência dos passos num lugar só, chama cada passo e registra o resultado numa trilha
+      de auditoria. Quando um passo falha, ele aciona as compensações dos passos já concluídos em ordem inversa à da execução.
+      Se uma compensação também falha, a SAGA para no estado `requer_intervencao` porque desfazer o passo não é garantido.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-06/saga/orquestrador.py
+    commit: 00419ea
+    contexto: O arquivo `orquestrador.py` percorre os passos na ordem declarada e guarda os passos concluídos para compensá-los
+      se um passo posterior falhar.
+    inicio: 19
+    linhas:
+    - '    def executar(self, agendamento_id):'
+    - '        concluidos = []'
+    - '        for passo in self.passos:'
+    - '            comando_id = f"{agendamento_id}:{passo.nome}:executar"'
+    - '            try:'
+    - '                resultado = passo.executar(comando_id, agendamento_id)'
+    - '            except FalhaNoPasso as falha:'
+    - '                self._registrar(agendamento_id, f"falha: {falha}")'
+    - '                return self._compensar(agendamento_id, concluidos)'
+    - '            self._registrar(agendamento_id, f"{passo.nome}: {resultado}")'
+    - '            concluidos.append(passo)'
+    - '        self._registrar(agendamento_id, "situação final: concluida")'
+    - '        return "concluida"'
+    anotacoes:
+    - linha: 22
+      texto: O identificador do comando é estável e permite a idempotência.
+    - linha: 27
+      texto: A falha de um passo dispara as compensações.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-06/saga/orquestrador.py
+    commit: 00419ea
+    contexto: Ainda em `orquestrador.py`, as compensações rodam em ordem inversa e a falha de uma delas encerra a SAGA à espera
+      de intervenção.
+    inicio: 33
+    linhas:
+    - '    def _compensar(self, agendamento_id, concluidos):'
+    - '        for passo in reversed(concluidos):  # ordem inversa à da execução'
+    - '            comando_id = f"{agendamento_id}:{passo.nome}:compensar"'
+    - '            try:'
+    - '                resultado = passo.compensar(comando_id, agendamento_id)'
+    - '            except FalhaNoPasso as falha:'
+    - '                self._registrar(agendamento_id, f"falha na compensação: {falha}")'
+    - '                self._registrar(agendamento_id, "situação final: requer_intervencao")'
+    - '                return "requer_intervencao"'
+    - '            self._registrar(agendamento_id, f"{passo.nome}: {resultado}")'
+    - '        self._registrar(agendamento_id, "situação final: compensada")'
+    - '        return "compensada"'
+    anotacoes:
+    - linha: 34
+      texto: reversed percorre os passos concluídos do último para o primeiro.
+    - linha: 41
+      texto: Compensação que falha exige intervenção operacional.
+  - tipo: diagrama
+    id: D-01
+    tipo_diagrama: Coordenação
+    titulo: SAGA orquestrada do agendamento de exame
+    mermaid: "flowchart TB\n    O[\"Orquestrador de agendamento\"] -->|\"1. reservar horário\"| A[\"Agenda\"]\n    O -->|\"\
+      2. autorizar procedimento\"| B[\"Autorização\"]\n    O -->|\"3. reservar sala\"| C[\"Preparo de Sala\"]\n    C -.->|\"\
+      falha\"| O\n    O -.->|\"compensa 2: cancelar autorização\"| B\n    O -.->|\"compensa 1: liberar horário\"| A"
+  - tipo: comparativo
+    colunas:
+    - Coreografia
+    - Orquestração
+    linhas:
+    - dimensao: Quem conhece a sequência
+      valores:
+      - Ninguém sozinho, ela emerge das assinaturas de eventos
+      - O orquestrador
+    - dimensao: Onde ver o estado de um agendamento
+      valores:
+      - Em vários serviços
+      - Na trilha do orquestrador
+    - dimensao: Componente a manter
+      valores:
+      - Nenhum central
+      - O orquestrador, dependência de todos os passos
+    - dimensao: Indicação do material oficial
+      valores:
+      - Fluxos curtos e estáveis
+      - Fluxos com ramificações e suporte operacional
+  - tipo: conceito
+    titulo: CQRS
+    texto: CQRS separa o modelo que recebe comandos do modelo que atende consultas. O comando expressa uma intenção e preserva
+      as invariantes da solicitação, enquanto a consulta lê uma projeção já pronta para a tela. A separação pode começar dentro
+      do mesmo processo, sem dois bancos e sem mensageria, como no programa desta ODA.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-06/cqrs/comandos.py
+    commit: 00419ea
+    contexto: O arquivo `comandos.py` recusa o cancelamento de uma solicitação que não está solicitada. Cada mudança aceita
+      publica um fato.
+    inicio: 24
+    linhas:
+    - '    def cancelar(self, solicitacao_id):'
+    - '        atual = self._banco.get(solicitacao_id)'
+    - '        if atual is None or atual["situacao"] != "solicitada":'
+    - '            raise ComandoRecusado(f"{solicitacao_id} não pode ser cancelada")'
+    - '        atual["situacao"] = "cancelada"'
+    - '        self.fatos.append({"tipo": "ExameCancelado", "id": solicitacao_id, "unidade": atual["unidade"]})'
+    anotacoes:
+    - linha: 26
+      texto: A invariante é verificada no modelo de comando.
+    - linha: 29
+      texto: O fato publicado alimenta a projeção.
+  - tipo: editor
+    rotulo: arquivo
+    caminho: codigo/oda-06/cqrs/projecao.py
+    commit: 00419ea
+    contexto: O arquivo `projecao.py` aplica os fatos ao painel e guarda a posição do último fato aplicado. A diferença entre
+      o total de fatos e essa posição é a defasagem.
+    inicio: 14
+    linhas:
+    - '    def processar(self, fatos, limite=None):'
+    - '        fim = len(fatos) if limite is None else min(limite, len(fatos))'
+    - '        for fato in fatos[self.posicao:fim]:'
+    - '            unidade = fato["unidade"]'
+    - '            atual = self.ativas_por_unidade.get(unidade, 0)'
+    - '            if fato["tipo"] == "ExameSolicitado":'
+    - '                self.ativas_por_unidade[unidade] = atual + 1'
+    - '            elif fato["tipo"] == "ExameCancelado":'
+    - '                self.ativas_por_unidade[unidade] = atual - 1'
+    - '        self.posicao = max(self.posicao, fim)'
+    anotacoes:
+    - linha: 16
+      texto: Só os fatos ainda não aplicados são processados.
+    - linha: 23
+      texto: A posição permite medir a defasagem e retomar o processamento.
+  - tipo: conceito
+    titulo: SAGA e CQRS resolvem problemas diferentes
+    texto: A SAGA coordena uma mudança que atravessa mais de um dono de dados. O CQRS separa as responsabilidades de ler e
+      de escrever. O material oficial não recomenda nenhum dos dois por padrão e pede que a alternativa de consolidar os passos
+      num serviço com transação local seja avaliada primeiro.
+  - tipo: conceito
+    titulo: ADR
+    texto: ADR é a sigla de Architecture Decision Record, em português registro de decisão arquitetural. O bloco abaixo registra
+      a escolha de coordenação desta ODA, com os campos do template do material oficial.
+  - tipo: adr
+    id: ADR-006
+    titulo: Coordenar o agendamento de exame por orquestração
+    status: Aceita (exemplo didático)
+    contexto: O agendamento atravessa Agenda, Autorização e Preparo de Sala, cada um dono do próprio banco. A equipe de atendimento
+      precisa saber em que situação está cada agendamento.
+    decisao: Usar um orquestrador que declara a sequência, chama os participantes por comandos idempotentes, compensa em ordem
+      inversa e registra cada evento numa trilha de auditoria.
+    alternativas: Coreografia por eventos foi descartada porque a situação do agendamento ficaria espalhada em três serviços.
+      Consolidar os três passos num serviço foi descartado porque os donos de dados são equipes diferentes.
+    consequencias: O orquestrador passa a ser um componente a manter e uma dependência de todos os passos da SAGA. Cada participante
+      precisa de uma compensação testada e o estado `requer_intervencao` precisa de um responsável na operação.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: Os links abaixo levam às seções usadas nesta aba.
+    links:
+    - rotulo: Material oficial · Consistência local e consistência entre serviços
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#consistencia-local-e-consistencia-entre-servicos
+    - rotulo: Material oficial · Os três elementos que toda SAGA declara
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#os-tres-elementos-que-toda-saga-declara
+    - rotulo: Material oficial · Coreografia e orquestração
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#coreografia-e-orquestracao
+    - rotulo: Material oficial · O que a SAGA cobra
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#o-que-a-saga-cobra
+    - rotulo: Material oficial · CQRS
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cqrs
+    - rotulo: Material oficial · Template de ADR
+      url: https://marco-mendes.github.io/arquitetura-software/referencia/template-adr/
+- id: laboratorio
+  titulo: Laboratório
+  blocos:
+  - tipo: legenda
+    texto: O Laboratório executa a SAGA em quatro cenários e a projeção CQRS em quatro momentos. Nenhum arquivo precisa ser
+      alterado durante os 12 minutos previstos para a aba.
+  - tipo: glossario
+    titulo: 📘 Conceitos usados nesta aba
+    texto: Os termos técnicos desta aba estão explicados abaixo na ordem em que aparecem.
+    itens:
+    - termo: Terminal
+      definicao: Programa em que se digitam comandos de texto, chamado PowerShell no Windows e Terminal no macOS e no Linux.
+        O VS Code abre um terminal integrado pelo menu Terminal › Novo Terminal.
+    - termo: Trilha de auditoria
+      definicao: Lista de eventos registrada pelo orquestrador, com uma linha por passo, compensação ou falha.
+    - termo: Banco local
+      definicao: Estado guardado por cada participante. No programa, é um dicionário privado de cada classe.
+    - termo: Fato
+      definicao: Registro de uma mudança aceita pelo modelo de comando, como `ExameSolicitado`.
+    - termo: Defasagem
+      definicao: Número de fatos publicados que a projeção ainda não aplicou.
+  - tipo: faixa
+    estilo: objetivo
+    problema: O agendamento de exame altera três bancos de donos diferentes, sem transação que abranja todos. O painel gerencial
+      precisa de uma consulta que o modelo de comando não atende bem.
+    impacto: Sem compensações, uma falha no último passo deixa horário e autorização presos. Sem medida de defasagem, o painel
+      mostra um número antigo sem que ninguém perceba.
+    mecanismo: O programa `saga/demo.py` executa o orquestrador em quatro cenários e imprime a trilha e os bancos locais.
+      O programa `cqrs/demo.py` consulta o painel antes e depois de processar os fatos.
+    comprovacao: A falha no Preparo de Sala aciona a compensação de Autorização e depois a de Agenda. A compensação que falha
+      deixa a SAGA no estado `requer_intervencao` com a trilha completa. A projeção passa de defasagem 2 para defasagem 0
+      e volta igual depois de reconstruída a partir dos fatos.
+  - tipo: faixa
+    estilo: dica
+    titulo: 💻 Comandos por sistema operacional
+    texto: Os programas desta ODA usam só a biblioteca padrão do Python 3.11 ou mais recente, sem ambiente virtual nem `pip
+      install`. No macOS e no Linux o comando pode ser `python3` em vez de `python`. No Windows, o comando `cd` aceita a barra
+      `/` nos caminhos de pasta também no PowerShell.
+  - tipo: passos
+    itens:
+    - titulo: Abrir o terminal na raiz do repositório
+      texto: No VS Code, abra a pasta `odas-arquitetura-software` pelo menu Arquivo › Abrir Pasta. Em seguida, abra um terminal
+        pelo menu Terminal › Novo Terminal e atualize o repositório.
+      editor:
+        rotulo: terminal
+        linhas:
+        - git pull
+    - titulo: Executar a SAGA
+      texto: Entre na pasta da SAGA e execute a demonstração. Cada cenário cria participantes novos.
+      editor:
+        rotulo: terminal
+        linhas:
+        - cd codigo/oda-06/saga
+        - python demo.py
+  - tipo: editor
+    rotulo: saida
+    origem: executado
+    linhas:
+    - == 1. Agendamento concluído
+    - '[AG-101] Agenda: horario_reservado'
+    - '[AG-101] Autorização: procedimento_autorizado'
+    - '[AG-101] Preparo de Sala: sala_reservada'
+    - '[AG-101] situação final: concluida'
+    - 'Bancos locais:'
+    - '  Agenda: horario_reservado'
+    - '  Autorização: procedimento_autorizado'
+    - '  Preparo de Sala: sala_reservada'
+    - ''
+    - == 2. Falha no Preparo de Sala
+    - '[AG-102] Agenda: horario_reservado'
+    - '[AG-102] Autorização: procedimento_autorizado'
+    - '[AG-102] falha: Preparo de Sala não conseguiu reservar sala'
+    - '[AG-102] Autorização: autorizacao_cancelada'
+    - '[AG-102] Agenda: horario_liberado'
+    - '[AG-102] situação final: compensada'
+    - 'Bancos locais:'
+    - '  Agenda: horario_liberado'
+    - '  Autorização: autorizacao_cancelada'
+    - '  Preparo de Sala: sem registro'
+    - ''
+    - == 3. Falha na compensação
+    - '[AG-103] Agenda: horario_reservado'
+    - '[AG-103] Autorização: procedimento_autorizado'
+    - '[AG-103] falha: Preparo de Sala não conseguiu reservar sala'
+    - '[AG-103] falha na compensação: Autorização não conseguiu cancelar autorização'
+    - '[AG-103] situação final: requer_intervencao'
+    - 'Bancos locais:'
+    - '  Agenda: horario_reservado'
+    - '  Autorização: procedimento_autorizado'
+    - '  Preparo de Sala: sem registro'
+    - ''
+    - == 4. Comandos repetidos
+    - '[AG-104] Agenda: horario_reservado'
+    - '[AG-104] Autorização: procedimento_autorizado'
+    - '[AG-104] Preparo de Sala: sala_reservada'
+    - '[AG-104] situação final: concluida'
+    - '[AG-104] -- orquestrador reiniciado, comandos reenviados --'
+    - '[AG-104] Agenda: comando_repetido_sem_efeito'
+    - '[AG-104] Autorização: comando_repetido_sem_efeito'
+    - '[AG-104] Preparo de Sala: comando_repetido_sem_efeito'
+    - '[AG-104] situação final: concluida'
+    - 'Bancos locais:'
+    - '  Agenda: horario_reservado'
+    - '  Autorização: procedimento_autorizado'
+    - '  Preparo de Sala: sala_reservada'
+  - tipo: faixa
+    estilo: quebra
+    texto: No cenário 3, Agenda e Autorização ficaram com os estados `horario_reservado` e `procedimento_autorizado` sem sala
+      reservada. A trilha mostra o ponto em que a SAGA parou para que alguém da operação decida o reparo. No cenário 4, o
+      reenvio dos comandos pelo orquestrador reiniciado não alterou nenhum banco local.
+  - tipo: passos
+    itens:
+    - titulo: Executar a projeção CQRS
+      texto: Entre na pasta do CQRS e execute a demonstração.
+      editor:
+        rotulo: terminal
+        linhas:
+        - cd ../cqrs
+        - python demo.py
+  - tipo: editor
+    rotulo: saida
+    origem: executado
+    linhas:
+    - 'Comando recusado: EX-2 não pode ser cancelada'
+    - 'Fatos publicados:'
+    - '  1. ExameSolicitado EX-1 (Centro)'
+    - '  2. ExameSolicitado EX-2 (Centro)'
+    - '  3. ExameSolicitado EX-3 (Barreiro)'
+    - '  4. ExameCancelado EX-2 (Centro)'
+    - ''
+    - 'Consulta com atraso: {''Centro'': 2} | fatos aplicados 2 de 4 | defasagem 2'
+    - 'Consulta convergida: {''Barreiro'': 1, ''Centro'': 1} | fatos aplicados 4 de 4 | defasagem 0'
+    - 'Projeção corrompida: {''Centro'': 99} | fatos aplicados 4 de 4 | defasagem 0'
+    - 'Projeção reconstruída: {''Barreiro'': 1, ''Centro'': 1} | fatos aplicados 4 de 4 | defasagem 0'
+  - tipo: faixa
+    estilo: sucesso
+    texto: Com dois de quatro fatos aplicados, o painel mostrava 2 solicitações ativas no Centro, número que já não valia.
+      Depois de aplicar os quatro fatos, o painel convergiu para 1 solicitação no Centro e 1 no Barreiro. A projeção corrompida
+      foi descartada e reconstruída a partir dos fatos com o mesmo resultado.
+  - tipo: faixa
+    estilo: dica
+    titulo: 🎓 Demonstração do professor
+    texto: O professor executa em aula o programa `codigo/oda-06/particao/demo_particao.py`. Três réplicas guardam as alergias
+      de um paciente e uma partição separa a réplica C das réplicas A e B. O programa compara recusar a escrita sem quórum,
+      aceitar dos dois lados com última escrita vence e aceitar com uma regra de mesclagem do domínio.
+    links:
+    - rotulo: Material oficial · CAP sem o triângulo simplista
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cap-sem-o-triangulo-simplista
+    - rotulo: Material oficial · Quando a escolha foi continuar respondendo
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#quando-a-escolha-foi-continuar-respondendo
+  - tipo: faixa
+    estilo: dica
+    titulo: 🖥️ Terminal simulado
+    texto: Quem não conseguiu preparar o ambiente pode digitar os comandos nos terminais simulados abaixo. As saídas simuladas
+      são as saídas reais dos programas no commit citado na aba Objetivo.
+  - tipo: terminal
+    titulo: terminal simulado · pasta codigo/oda-06/saga
+    comandos:
+    - entrada: python demo.py
+      saida: "== 1. Agendamento concluído\n[AG-101] Agenda: horario_reservado\n[AG-101] Autorização: procedimento_autorizado\n\
+        [AG-101] Preparo de Sala: sala_reservada\n[AG-101] situação final: concluida\nBancos locais:\n  Agenda: horario_reservado\n\
+        \  Autorização: procedimento_autorizado\n  Preparo de Sala: sala_reservada\n\n== 2. Falha no Preparo de Sala\n[AG-102]\
+        \ Agenda: horario_reservado\n[AG-102] Autorização: procedimento_autorizado\n[AG-102] falha: Preparo de Sala não conseguiu\
+        \ reservar sala\n[AG-102] Autorização: autorizacao_cancelada\n[AG-102] Agenda: horario_liberado\n[AG-102] situação\
+        \ final: compensada\nBancos locais:\n  Agenda: horario_liberado\n  Autorização: autorizacao_cancelada\n  Preparo de\
+        \ Sala: sem registro\n\n== 3. Falha na compensação\n[AG-103] Agenda: horario_reservado\n[AG-103] Autorização: procedimento_autorizado\n\
+        [AG-103] falha: Preparo de Sala não conseguiu reservar sala\n[AG-103] falha na compensação: Autorização não conseguiu\
+        \ cancelar autorização\n[AG-103] situação final: requer_intervencao\nBancos locais:\n  Agenda: horario_reservado\n\
+        \  Autorização: procedimento_autorizado\n  Preparo de Sala: sem registro\n\n== 4. Comandos repetidos\n[AG-104] Agenda:\
+        \ horario_reservado\n[AG-104] Autorização: procedimento_autorizado\n[AG-104] Preparo de Sala: sala_reservada\n[AG-104]\
+        \ situação final: concluida\n[AG-104] -- orquestrador reiniciado, comandos reenviados --\n[AG-104] Agenda: comando_repetido_sem_efeito\n\
+        [AG-104] Autorização: comando_repetido_sem_efeito\n[AG-104] Preparo de Sala: comando_repetido_sem_efeito\n[AG-104]\
+        \ situação final: concluida\nBancos locais:\n  Agenda: horario_reservado\n  Autorização: procedimento_autorizado\n\
+        \  Preparo de Sala: sala_reservada"
+      origem: executado
+      dica: Executa os quatro cenários da SAGA.
+    cenarios:
+    - rotulo: Executar demo.py
+      comando: python demo.py
+  - tipo: terminal
+    titulo: terminal simulado · pasta codigo/oda-06/cqrs
+    comandos:
+    - entrada: python demo.py
+      saida: "Comando recusado: EX-2 não pode ser cancelada\nFatos publicados:\n  1. ExameSolicitado EX-1 (Centro)\n  2. ExameSolicitado\
+        \ EX-2 (Centro)\n  3. ExameSolicitado EX-3 (Barreiro)\n  4. ExameCancelado EX-2 (Centro)\n\nConsulta com atraso: {'Centro':\
+        \ 2} | fatos aplicados 2 de 4 | defasagem 2\nConsulta convergida: {'Barreiro': 1, 'Centro': 1} | fatos aplicados 4\
+        \ de 4 | defasagem 0\nProjeção corrompida: {'Centro': 99} | fatos aplicados 4 de 4 | defasagem 0\nProjeção reconstruída:\
+        \ {'Barreiro': 1, 'Centro': 1} | fatos aplicados 4 de 4 | defasagem 0"
+      origem: executado
+      dica: Executa a demonstração do CQRS.
+    cenarios:
+    - rotulo: Executar demo.py
+      comando: python demo.py
+  - tipo: terminal
+    titulo: terminal simulado · pasta codigo/oda-06/particao
+    comandos:
+    - entrada: python demo_particao.py
+      saida: '== 1. Recusar sem quórum
+
+        Centro grava dipirona: aceita em A+B
+
+        Barreiro grava penicilina: recusada em C: 1 de 3 réplicas, sem quórum
+
+        Durante a partição: A=[''látex'', ''dipirona''] C=[''látex'']
+
+
+        == 2. Aceitar e aplicar última escrita vence
+
+        Centro grava dipirona: aceita em A+B
+
+        Barreiro grava penicilina: aceita em C
+
+        Durante a partição: A=[''látex'', ''dipirona''] C=[''látex'', ''penicilina'']
+
+        Depois da partição: [''látex'', ''penicilina'']
+
+
+        == 3. Aceitar e mesclar pela regra do domínio
+
+        Centro grava dipirona: aceita em A+B
+
+        Barreiro grava penicilina: aceita em C
+
+        Durante a partição: A=[''látex'', ''dipirona''] C=[''látex'', ''penicilina'']
+
+        Depois da partição: [''dipirona'', ''látex'', ''penicilina'']'
+      origem: executado
+      dica: Executa a demonstração de partição usada pelo professor.
+    cenarios:
+    - rotulo: Executar demo_particao.py
+      comando: python demo_particao.py
+  - tipo: faixa
+    estilo: erro
+    sintoma: O terminal mostra `ModuleNotFoundError` ou `No such file or directory`.
+    causa: O comando foi executado fora da pasta do programa. Nesse caso o Python não encontra os módulos vizinhos.
+    correcao: Volte à raiz do repositório e entre na pasta indicada no passo, como `cd codigo/oda-06/saga`, antes de executar
+      o programa.
+  - tipo: faixa
+    estilo: erro
+    sintoma: O terminal mostra `SyntaxError` ou `TypeError` numa linha do programa.
+    causa: O Python instalado é anterior à versão 3.11.
+    correcao: Confira a versão com `python --version` e instale o Python 3.13 pelo procedimento do Módulo 0.
+  - tipo: checklist
+    titulo: Checklist final
+    itens:
+    - No cenário 2, as compensações rodaram na ordem Autorização e depois Agenda.
+    - No cenário 3, a SAGA terminou em `requer_intervencao`.
+    - No cenário 4, os comandos repetidos não alteraram os bancos locais.
+    - A projeção passou de defasagem 2 para defasagem 0.
+    - A projeção reconstruída ficou igual à convergida.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: Os programas desta aba implementam o exemplo de SAGA e a descrição de CQRS da página Padrões e decisões do Módulo
+      3.
+    links:
+    - rotulo: Material oficial · SAGA
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#saga
+    - rotulo: Material oficial · O que a SAGA cobra
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#o-que-a-saga-cobra
+    - rotulo: Material oficial · CQRS
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cqrs
+- id: verificacao
+  titulo: Verificação
+  blocos:
+  - tipo: legenda
+    texto: As perguntas abaixo tratam do conteúdo do Módulo 3 do material oficial. Cada alternativa exibe uma explicação depois
+      da escolha.
+  - tipo: quiz
+    perguntas:
+    - enunciado: Segundo o material oficial, o que existe entre serviços quando uma etapa posterior falha?
+      alternativas:
+      - texto: Nenhum rollback automático de todas as decisões.
+        correta: true
+        explicacao: Cada serviço já confirmou a própria transação local.
+      - texto: Um rollback automático feito pelo banco.
+        correta: false
+        explicacao: Cada serviço tem o próprio banco.
+      - texto: Uma transação ACID distribuída.
+        correta: false
+        explicacao: O material afirma que a SAGA não é uma transação ACID distribuída.
+    - enunciado: O que uma SAGA coordena?
+      alternativas:
+      - texto: Uma sequência de transações locais, com compensações quando uma etapa posterior falha.
+        correta: true
+        explicacao: É a definição da seção SAGA.
+      - texto: Uma única transação que abrange vários bancos.
+        correta: false
+        explicacao: Esse seria um commit distribuído, que a SAGA evita.
+      - texto: A separação entre leitura e escrita.
+        correta: false
+        explicacao: Esse é o papel do CQRS.
+    - enunciado: Quais são os três elementos que toda SAGA declara?
+      alternativas:
+      - texto: Passos, operações compensatórias e coordenação.
+        correta: true
+        explicacao: A ausência de qualquer um é o defeito mais comum.
+      - texto: Comandos, consultas e projeções.
+        correta: false
+        explicacao: Esses termos pertencem ao CQRS.
+      - texto: Produtor, tópico e consumidor.
+        correta: false
+        explicacao: Esses termos descrevem mensageria.
+    - enunciado: Por que uma compensação não equivale a desfazer o passado?
+      alternativas:
+      - texto: Porque ela não apaga o que ocorreu, pode falhar e outros participantes podem ter visto o estado intermediário.
+        correta: true
+        explicacao: Por isso o programa tem o estado `requer_intervencao`.
+      - texto: Porque ela sempre exige intervenção humana.
+        correta: false
+        explicacao: No cenário 2 as compensações rodaram sem intervenção.
+      - texto: Porque ela só pode ser executada pelo banco.
+        correta: false
+        explicacao: A compensação é uma ação de negócio do participante.
+    - enunciado: Em que ordem o orquestrador aciona as compensações?
+      alternativas:
+      - texto: Em ordem inversa à da execução dos passos.
+        correta: true
+        explicacao: No cenário 2, Autorização foi compensada antes de Agenda.
+      - texto: Na mesma ordem da execução.
+        correta: false
+        explicacao: A ordem inversa desfaz primeiro o efeito mais recente.
+      - texto: Em paralelo, sem ordem.
+        correta: false
+        explicacao: O material descreve a ordem inversa na orquestração.
+    - enunciado: Qual é o custo da orquestração apontado pelo material oficial?
+      alternativas:
+      - texto: Um componente que precisa ser mantido e se torna dependência de todos os passos.
+        correta: true
+        explicacao: Em troca, a sequência fica num lugar auditável.
+      - texto: A sequência fica espalhada entre os serviços.
+        correta: false
+        explicacao: Isso descreve a coreografia.
+      - texto: A impossibilidade de compensar passos.
+        correta: false
+        explicacao: O orquestrador aciona as compensações.
+    - enunciado: Por que os comandos da SAGA precisam ser idempotentes?
+      alternativas:
+      - texto: Porque mensagens podem duplicar e o orquestrador pode reenviar comandos.
+        correta: true
+        explicacao: No cenário 4, o reenvio não alterou os bancos.
+      - texto: Porque idempotência dispensa as compensações.
+        correta: false
+        explicacao: As compensações continuam necessárias na falha.
+      - texto: Porque idempotência torna a SAGA uma transação ACID.
+        correta: false
+        explicacao: A SAGA continua sendo uma sequência de transações locais.
+    - enunciado: O que o CQRS exige, segundo o material oficial?
+      alternativas:
+      - texto: Modelos separados de comando e consulta, sem exigir dois bancos, mensageria ou Event Sourcing.
+        correta: true
+        explicacao: A separação pode começar no mesmo processo.
+      - texto: Dois bancos de dados.
+        correta: false
+        explicacao: O material afirma que o CQRS não exige dois bancos.
+      - texto: Event Sourcing.
+        correta: false
+        explicacao: Event Sourcing é outra decisão, com custos próprios.
+    - enunciado: Que custo um modelo de leitura materializado traz?
+      alternativas:
+      - texto: Atualização, defasagem, reconstrução e monitoramento.
+        correta: true
+        explicacao: No Laboratório, a defasagem e a reconstrução ficaram visíveis.
+      - texto: Perda das invariantes do modelo de comando.
+        correta: false
+        explicacao: As invariantes continuam no modelo de comando.
+      - texto: Nenhum custo, porque a consulta fica mais rápida.
+        correta: false
+        explicacao: O material pede que o CQRS não seja aplicado por padrão.
+    - enunciado: Quando o material oficial considera que a SAGA se justifica?
+      alternativas:
+      - texto: Quando a mudança atravessa mais de um dono de dados e não há como reuni-los.
+        correta: true
+        explicacao: Consolidar num serviço com transação local deve ser avaliado primeiro.
+      - texto: Sempre que houver mais de um serviço.
+        correta: false
+        explicacao: O laboratório de dois passos não precisa de SAGA.
+      - texto: Sempre que houver mensageria.
+        correta: false
+        explicacao: A SAGA pode ser orquestrada sem mensageria.
+  - tipo: resumo
+  - tipo: checklist
+    titulo: Para revisar depois da aula
+    itens:
+    - Ler a tabela O que a SAGA cobra e localizar cada custo na saída de `saga/demo.py`.
+    - Ler a seção CAP sem o triângulo simplista e comparar com a demonstração de partição do professor.
+  - tipo: faixa
+    estilo: dica
+    titulo: 📚 No material oficial
+    texto: Os links abaixo levam às seções do material oficial cobertas pelas perguntas.
+    links:
+    - rotulo: Material oficial · Consistência local e consistência entre serviços
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#consistencia-local-e-consistencia-entre-servicos
+    - rotulo: Material oficial · SAGA
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#saga
+    - rotulo: Material oficial · Os três elementos que toda SAGA declara
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#os-tres-elementos-que-toda-saga-declara
+    - rotulo: Material oficial · Coreografia e orquestração
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#coreografia-e-orquestracao
+    - rotulo: Material oficial · CQRS
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cqrs
