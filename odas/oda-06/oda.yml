@@ -72,8 +72,12 @@ abas:
     estilo: dica
     titulo: 📚 No material oficial
     texto: Os links abaixo levam às seções do Módulo 3 cobertas por esta ODA. O agendamento com Agenda, Autorização e Preparo
-      de Sala é o exemplo de SAGA da página Padrões e decisões.
+      de Sala é o exemplo de SAGA da página Padrões e decisões, que mostra o mesmo código com a saída de uma execução real.
     links:
+    - rotulo: Material oficial · Orquestração do agendamento de exame, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#orquestracao-do-agendamento-de-exame-em-python
+    - rotulo: Material oficial · Comando e projeção no mesmo processo, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#comando-e-projecao-no-mesmo-processo
     - rotulo: Material oficial · Consistência local e consistência entre serviços
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#consistencia-local-e-consistencia-entre-servicos
     - rotulo: Material oficial · SAGA
@@ -447,6 +451,8 @@ abas:
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cap-sem-o-triangulo-simplista
     - rotulo: Material oficial · Quando a escolha foi continuar respondendo
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#quando-a-escolha-foi-continuar-respondendo
+    - rotulo: Material oficial · Partição simulada com três réplicas, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#particao-simulada-com-tres-replicas
   - tipo: faixa
     estilo: dica
     titulo: 🖥️ Terminal simulado
@@ -551,8 +557,13 @@ abas:
     estilo: dica
     titulo: 📚 No material oficial
     texto: Os programas desta aba implementam o exemplo de SAGA e a descrição de CQRS da página Padrões e decisões do Módulo
-      3.
+      3. As seções com código dessa página trazem os trechos de `orquestrador.py`, `participantes.py`, `comandos.py` e `projecao.py`
+      com a saída de cada programa.
     links:
+    - rotulo: Material oficial · Orquestração do agendamento de exame, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#orquestracao-do-agendamento-de-exame-em-python
+    - rotulo: Material oficial · Comando e projeção no mesmo processo, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#comando-e-projecao-no-mesmo-processo
     - rotulo: Material oficial · SAGA
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#saga
     - rotulo: Material oficial · O que a SAGA cobra

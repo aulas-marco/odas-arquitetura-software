@@ -75,7 +75,7 @@ abas:
     titulo: 📚 No material oficial
     texto: Os links abaixo levam às seções do Módulo 3 cobertas por esta ODA. Os programas da pasta `codigo/oda-05` reproduzem
       sem Docker a falha parcial da Oficina de ferramentas e acrescentam as políticas de nova tentativa, idempotência e disjuntor
-      citadas na página de conceitos.
+      citadas na página de conceitos. A página Padrões e decisões mostra o mesmo código com a saída de uma execução real.
     links:
     - rotulo: Material oficial · Chamadas síncronas e falhas parciais
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
@@ -83,6 +83,12 @@ abas:
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#acoplamento
     - rotulo: Material oficial · Chamadas síncronas, orçamento de falha
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#chamadas-sincronas-orcamento-de-falha
+    - rotulo: Material oficial · Prazo de espera e falha parcial, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#prazo-de-espera-e-falha-parcial
+    - rotulo: Material oficial · Nova tentativa e chave de idempotência, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#nova-tentativa-com-espera-exponencial-e-chave-de-idempotencia
+    - rotulo: Material oficial · Disjuntor, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#disjuntor
     - rotulo: Material oficial · Oficina, tornar a falha parcial observável
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#tornar-a-falha-parcial-observavel
 - id: conceitos
@@ -525,8 +531,15 @@ abas:
     estilo: dica
     titulo: 📚 No material oficial
     texto: Os programas desta aba reproduzem a falha parcial da Oficina de ferramentas do Módulo 3 sem Docker e acrescentam
-      as políticas citadas na página de conceitos.
+      as políticas citadas na página de conceitos. As seções com código da página Padrões e decisões trazem os trechos de
+      `exames.py` e `resiliencia.py` e a saída que cada programa imprime.
     links:
+    - rotulo: Material oficial · Prazo de espera e falha parcial, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#prazo-de-espera-e-falha-parcial
+    - rotulo: Material oficial · Nova tentativa e chave de idempotência, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#nova-tentativa-com-espera-exponencial-e-chave-de-idempotencia
+    - rotulo: Material oficial · Disjuntor, com código
+      url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#disjuntor
     - rotulo: Material oficial · Oficina, resultado esperado
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#resultado-esperado
     - rotulo: Material oficial · Oficina, tornar a falha parcial observável
