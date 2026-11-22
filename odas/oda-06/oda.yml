@@ -14,7 +14,7 @@ abas:
     - termo: Transação local
       definicao: Alteração confirmada por um único serviço no próprio banco. Entre serviços não existe rollback automático.
       referencia:
-        rotulo: Material oficial · Consistência local e entre serviços
+        rotulo: Material oficial · Consistência entre serviços
         url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#consistencia-local-e-consistencia-entre-servicos
     - termo: SAGA
       definicao: Sequência de transações locais em serviços diferentes. Se uma etapa posterior falha, operações compensatórias
@@ -74,11 +74,11 @@ abas:
     texto: Os links abaixo levam às seções do Módulo 3 cobertas por esta ODA. O agendamento com Agenda, Autorização e Preparo
       de Sala é o exemplo de SAGA da página Padrões e decisões, que mostra o mesmo código com a saída de uma execução real.
     links:
-    - rotulo: Material oficial · Orquestração do agendamento de exame, com código
+    - rotulo: Material oficial · Exemplo de SAGA orquestrada em Python
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#orquestracao-do-agendamento-de-exame-em-python
-    - rotulo: Material oficial · Comando e projeção no mesmo processo, com código
+    - rotulo: Material oficial · Exemplo de CQRS em Python
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#comando-e-projecao-no-mesmo-processo
-    - rotulo: Material oficial · Consistência local e consistência entre serviços
+    - rotulo: Material oficial · Consistência entre serviços
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#consistencia-local-e-consistencia-entre-servicos
     - rotulo: Material oficial · SAGA
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#saga
@@ -289,13 +289,13 @@ abas:
     titulo: 📚 No material oficial
     texto: Os links abaixo levam às seções usadas nesta aba.
     links:
-    - rotulo: Material oficial · Consistência local e consistência entre serviços
+    - rotulo: Material oficial · Consistência entre serviços
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#consistencia-local-e-consistencia-entre-servicos
-    - rotulo: Material oficial · Os três elementos que toda SAGA declara
+    - rotulo: Material oficial · Elementos de uma SAGA
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#os-tres-elementos-que-toda-saga-declara
     - rotulo: Material oficial · Coreografia e orquestração
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#coreografia-e-orquestracao
-    - rotulo: Material oficial · O que a SAGA cobra
+    - rotulo: Material oficial · Custos da SAGA
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#o-que-a-saga-cobra
     - rotulo: Material oficial · CQRS
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cqrs
@@ -447,11 +447,11 @@ abas:
       de um paciente e uma partição separa a réplica C das réplicas A e B. O programa compara recusar a escrita sem quórum,
       aceitar dos dois lados com última escrita vence e aceitar com uma regra de mesclagem do domínio.
     links:
-    - rotulo: Material oficial · CAP sem o triângulo simplista
+    - rotulo: Material oficial · Teorema CAP
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cap-sem-o-triangulo-simplista
-    - rotulo: Material oficial · Quando a escolha foi continuar respondendo
+    - rotulo: Material oficial · Resolução de conflitos depois da partição
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#quando-a-escolha-foi-continuar-respondendo
-    - rotulo: Material oficial · Partição simulada com três réplicas, com código
+    - rotulo: Material oficial · Exemplo de partição com três réplicas em Python
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#particao-simulada-com-tres-replicas
   - tipo: faixa
     estilo: dica
@@ -560,13 +560,13 @@ abas:
       3. As seções com código dessa página trazem os trechos de `orquestrador.py`, `participantes.py`, `comandos.py` e `projecao.py`
       com a saída de cada programa.
     links:
-    - rotulo: Material oficial · Orquestração do agendamento de exame, com código
+    - rotulo: Material oficial · Exemplo de SAGA orquestrada em Python
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#orquestracao-do-agendamento-de-exame-em-python
-    - rotulo: Material oficial · Comando e projeção no mesmo processo, com código
+    - rotulo: Material oficial · Exemplo de CQRS em Python
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#comando-e-projecao-no-mesmo-processo
     - rotulo: Material oficial · SAGA
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#saga
-    - rotulo: Material oficial · O que a SAGA cobra
+    - rotulo: Material oficial · Custos da SAGA
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#o-que-a-saga-cobra
     - rotulo: Material oficial · CQRS
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#cqrs
@@ -600,7 +600,7 @@ abas:
       - texto: A separação entre leitura e escrita.
         correta: false
         explicacao: Esse é o papel do CQRS.
-    - enunciado: Quais são os três elementos que toda SAGA declara?
+    - enunciado: Quais são os elementos que toda SAGA declara?
       alternativas:
       - texto: Passos, operações compensatórias e coordenação.
         correta: true
@@ -692,18 +692,18 @@ abas:
   - tipo: checklist
     titulo: Para revisar depois da aula
     itens:
-    - Ler a tabela O que a SAGA cobra e localizar cada custo na saída de `saga/demo.py`.
-    - Ler a seção CAP sem o triângulo simplista e comparar com a demonstração de partição do professor.
+    - Ler a tabela Custos da SAGA e localizar cada custo na saída de `saga/demo.py`.
+    - Ler a seção Teorema CAP e comparar com a demonstração de partição do professor.
   - tipo: faixa
     estilo: dica
     titulo: 📚 No material oficial
     texto: Os links abaixo levam às seções do material oficial cobertas pelas perguntas.
     links:
-    - rotulo: Material oficial · Consistência local e consistência entre serviços
+    - rotulo: Material oficial · Consistência entre serviços
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#consistencia-local-e-consistencia-entre-servicos
     - rotulo: Material oficial · SAGA
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#saga
-    - rotulo: Material oficial · Os três elementos que toda SAGA declara
+    - rotulo: Material oficial · Elementos de uma SAGA
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#os-tres-elementos-que-toda-saga-declara
     - rotulo: Material oficial · Coreografia e orquestração
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#coreografia-e-orquestracao

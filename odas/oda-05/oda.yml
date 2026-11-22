@@ -32,7 +32,7 @@ abas:
       definicao: Situação em que uma parte do sistema distribuído funciona e outra não. No exemplo, Exames responde à verificação
         de saúde e não consegue aceitar uma solicitação nova.
       referencia:
-        rotulo: Material oficial · Chamadas síncronas e falhas parciais
+        rotulo: Material oficial · Falha parcial
         url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
     - termo: Prazo de espera (timeout)
       definicao: Tempo máximo que o consumidor aceita esperar pela resposta. Passado o prazo, a chamada é abandonada e tratada
@@ -77,17 +77,17 @@ abas:
       sem Docker a falha parcial da Oficina de ferramentas e acrescentam as políticas de nova tentativa, idempotência e disjuntor
       citadas na página de conceitos. A página Padrões e decisões mostra o mesmo código com a saída de uma execução real.
     links:
-    - rotulo: Material oficial · Chamadas síncronas e falhas parciais
+    - rotulo: Material oficial · Falha parcial
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
     - rotulo: Material oficial · Acoplamento
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#acoplamento
-    - rotulo: Material oficial · Chamadas síncronas, orçamento de falha
+    - rotulo: Material oficial · Resiliência da chamada síncrona
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#chamadas-sincronas-orcamento-de-falha
-    - rotulo: Material oficial · Prazo de espera e falha parcial, com código
+    - rotulo: Material oficial · Prazo de espera e falha parcial
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#prazo-de-espera-e-falha-parcial
-    - rotulo: Material oficial · Nova tentativa e chave de idempotência, com código
+    - rotulo: Material oficial · Nova tentativa e chave de idempotência
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#nova-tentativa-com-espera-exponencial-e-chave-de-idempotencia
-    - rotulo: Material oficial · Disjuntor, com código
+    - rotulo: Material oficial · Disjuntor
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#disjuntor
     - rotulo: Material oficial · Oficina, tornar a falha parcial observável
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#tornar-a-falha-parcial-observavel
@@ -311,11 +311,11 @@ abas:
     links:
     - rotulo: Material oficial · Propriedade dos dados
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#propriedade-dos-dados
-    - rotulo: Material oficial · Chamadas síncronas e falhas parciais
+    - rotulo: Material oficial · Falha parcial
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
-    - rotulo: Material oficial · Chamadas síncronas, orçamento de falha
+    - rotulo: Material oficial · Resiliência da chamada síncrona
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#chamadas-sincronas-orcamento-de-falha
-    - rotulo: Material oficial · Oficina, por que o erro é 503 e não 500
+    - rotulo: Material oficial · Oficina, escolha do status 503
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#por-que-o-erro-e-503-e-nao-500
     - rotulo: Material oficial · Template de ADR
       url: https://marco-mendes.github.io/arquitetura-software/referencia/template-adr/
@@ -534,17 +534,17 @@ abas:
       as políticas citadas na página de conceitos. As seções com código da página Padrões e decisões trazem os trechos de
       `exames.py` e `resiliencia.py` e a saída que cada programa imprime.
     links:
-    - rotulo: Material oficial · Prazo de espera e falha parcial, com código
+    - rotulo: Material oficial · Prazo de espera e falha parcial
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#prazo-de-espera-e-falha-parcial
-    - rotulo: Material oficial · Nova tentativa e chave de idempotência, com código
+    - rotulo: Material oficial · Nova tentativa e chave de idempotência
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#nova-tentativa-com-espera-exponencial-e-chave-de-idempotencia
-    - rotulo: Material oficial · Disjuntor, com código
+    - rotulo: Material oficial · Disjuntor
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#disjuntor
     - rotulo: Material oficial · Oficina, resultado esperado
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#resultado-esperado
     - rotulo: Material oficial · Oficina, tornar a falha parcial observável
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/oficina-de-ferramentas/#tornar-a-falha-parcial-observavel
-    - rotulo: Material oficial · Chamadas síncronas e falhas parciais
+    - rotulo: Material oficial · Falha parcial
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
 - id: verificacao
   titulo: Verificação
@@ -670,7 +670,7 @@ abas:
   - tipo: checklist
     titulo: Para revisar depois da aula
     itens:
-    - Ler a seção Chamadas síncronas e falhas parciais da página de conceitos.
+    - Ler a seção Falha parcial da página de conceitos.
     - Comparar a saída de `demo_falha_parcial.py` com o Resultado esperado da Oficina de ferramentas.
   - tipo: faixa
     estilo: dica
@@ -681,7 +681,7 @@ abas:
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#acoplamento
     - rotulo: Material oficial · Propriedade dos dados
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#propriedade-dos-dados
-    - rotulo: Material oficial · Chamadas síncronas e falhas parciais
+    - rotulo: Material oficial · Falha parcial
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/conceitos/#chamadas-sincronas-e-falhas-parciais
-    - rotulo: Material oficial · Chamadas síncronas, orçamento de falha
+    - rotulo: Material oficial · Resiliência da chamada síncrona
       url: https://marco-mendes.github.io/arquitetura-software/modulo-3-servicos/padroes-e-decisoes/#chamadas-sincronas-orcamento-de-falha
